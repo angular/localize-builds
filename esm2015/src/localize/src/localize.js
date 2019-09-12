@@ -1,0 +1,103 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const PLACEHOLDER_NAME_MARKER = ':';
+/**
+ * Tag a template literal string for localization.
+ *
+ * For example:
+ *
+ * ```ts
+ * $localize `some string to localize`
+ * ```
+ *
+ * **Naming placeholders**
+ *
+ * If the template literal string contains expressions then you can optionally name the placeholder
+ * associated with each expression. Do this by providing the placeholder name wrapped in `:`
+ * characters directly after the expression. These placeholder names are stripped out of the
+ * rendered localized string.
+ *
+ * For example, to name the `item.length` expression placeholder `itemCount` you write:
+ *
+ * ```ts
+ * $localize `There are ${item.length}:itemCount: items`;
+ * ```
+ *
+ * If you need to use a `:` character directly an expression you must either provide a name or you
+ * can escape the `:` by preceding it with a backslash:
+ *
+ * For example:
+ *
+ * ```ts
+ * $localize `${label}:label:: ${}`
+ * // or
+ * $localize `${label}\: ${}`
+ * ```
+ *
+ * **Processing localized strings:**
+ *
+ * There are three scenarios:
+ *
+ * * **compile-time inlining**: the `$localize` tag is transformed at compile time by a transpiler,
+ * removing the tag and replacing the template literal string with a translated literal string
+ * from a collection of translations provided to the transpilation tool.
+ *
+ * * **run-time evaluation**: the `$localize` tag is a run-time function that replaces and reorders
+ * the parts (static strings and expressions) of the template literal string with strings from a
+ * collection of translations loaded at run-time.
+ *
+ * * **pass-through evaluation**: the `$localize` tag is a run-time function that simply evaluates
+ * the original template literal string without applying any translations to the parts. This version
+ * is used during development or where there is no need to translate the localized template
+ * literals.
+ *
+ * @param messageParts a collection of the static parts of the template string.
+ * @param expressions a collection of the values of each placeholder in the template string.
+ * @returns the translated string, with the `messageParts` and `expressions` interleaved together.
+ */
+export const $localize = function (messageParts, ...expressions) {
+    if ($localize.translate) {
+        // Don't use array expansion here to avoid the compiler adding `__read()` helper unnecessarily.
+        const translation = $localize.translate(messageParts, expressions);
+        messageParts = translation[0];
+        expressions = translation[1];
+    }
+    let message = messageParts[0];
+    for (let i = 1; i < messageParts.length; i++) {
+        message += expressions[i - 1] + stripPlaceholderName(messageParts[i], messageParts.raw[i]);
+    }
+    return message;
+};
+/**
+ * Strip the placeholder name from the start of the `messagePart`, if it is found.
+ *
+ * Placeholder marker characters (:) may appear after a substitution that does not provide an
+ * explicit placeholder name. In this case the character must be escaped with a backslash, `\:`.
+ * We can check for this by looking at the `raw` messagePart, which should still contain the
+ * backslash.
+ *
+ * If the template literal was synthesized then its raw array will only contain empty strings.
+ * This is because TS needs the original source code to find the raw text and in the case of
+ * synthesize AST nodes, there is no source code.
+ *
+ * The workaround is to assume that the template literal did not contain an escaped placeholder
+ * name, and fall back on checking the cooked array instead.
+ *
+ * This should be OK because synthesized nodes (from the Angular template compiler) will always
+ * provide explicit placeholder names and so will never need to escape placeholder name markers.
+ *
+ * @param messagePart The cooked message part to process.
+ * @param rawMessagePart The raw message part to check.
+ * @returns the message part with the placeholder name stripped, if found.
+ */
+function stripPlaceholderName(messagePart, rawMessagePart) {
+    return (rawMessagePart || messagePart).charAt(0) === PLACEHOLDER_NAME_MARKER ?
+        messagePart.substring(messagePart.indexOf(PLACEHOLDER_NAME_MARKER, 1) + 1) :
+        messagePart;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibG9jYWxpemUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9sb2NhbGl6ZS9zcmMvbG9jYWxpemUvc3JjL2xvY2FsaXplLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRztBQUVILE1BQU0sdUJBQXVCLEdBQUcsR0FBRyxDQUFDO0FBdUJwQzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7R0FxREc7QUFDSCxNQUFNLENBQUMsTUFBTSxTQUFTLEdBQWUsVUFDakMsWUFBa0MsRUFBRSxHQUFHLFdBQTJCO0lBQ3BFLElBQUksU0FBUyxDQUFDLFNBQVMsRUFBRTtRQUN2QiwrRkFBK0Y7UUFDL0YsTUFBTSxXQUFXLEdBQUcsU0FBUyxDQUFDLFNBQVMsQ0FBQyxZQUFZLEVBQUUsV0FBVyxDQUFDLENBQUM7UUFDbkUsWUFBWSxHQUFHLFdBQVcsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUM5QixXQUFXLEdBQUcsV0FBVyxDQUFDLENBQUMsQ0FBQyxDQUFDO0tBQzlCO0lBQ0QsSUFBSSxPQUFPLEdBQUcsWUFBWSxDQUFDLENBQUMsQ0FBQyxDQUFDO0lBQzlCLEtBQUssSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUMsR0FBRyxZQUFZLENBQUMsTUFBTSxFQUFFLENBQUMsRUFBRSxFQUFFO1FBQzVDLE9BQU8sSUFBSSxXQUFXLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLG9CQUFvQixDQUFDLFlBQVksQ0FBQyxDQUFDLENBQUMsRUFBRSxZQUFZLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7S0FDNUY7SUFDRCxPQUFPLE9BQU8sQ0FBQztBQUNqQixDQUFDLENBQUM7QUFFRjs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0dBcUJHO0FBQ0gsU0FBUyxvQkFBb0IsQ0FBQyxXQUFtQixFQUFFLGNBQXNCO0lBQ3ZFLE9BQU8sQ0FBQyxjQUFjLElBQUksV0FBVyxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQyxLQUFLLHVCQUF1QixDQUFDLENBQUM7UUFDMUUsV0FBVyxDQUFDLFNBQVMsQ0FBQyxXQUFXLENBQUMsT0FBTyxDQUFDLHVCQUF1QixFQUFFLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUM7UUFDNUUsV0FBVyxDQUFDO0FBQ2xCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIEluYy4gQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmNvbnN0IFBMQUNFSE9MREVSX05BTUVfTUFSS0VSID0gJzonO1xuXG5leHBvcnQgaW50ZXJmYWNlIExvY2FsaXplRm4ge1xuICAobWVzc2FnZVBhcnRzOiBUZW1wbGF0ZVN0cmluZ3NBcnJheSwgLi4uZXhwcmVzc2lvbnM6IHJlYWRvbmx5IGFueVtdKTogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBBIGZ1bmN0aW9uIHRoYXQgY29udmVydHMgYW4gaW5wdXQgXCJtZXNzYWdlIHdpdGggZXhwcmVzc2lvbnNcIiBpbnRvIGEgdHJhbnNsYXRlZCBcIm1lc3NhZ2Ugd2l0aFxuICAgKiBleHByZXNzaW9uc1wiLlxuICAgKlxuICAgKiBUaGUgY29udmVyc2lvbiBtYXkgYmUgZG9uZSBpbiBwbGFjZSwgbW9kaWZ5aW5nIHRoZSBhcnJheSBwYXNzZWQgdG8gdGhlIGZ1bmN0aW9uLCBzb1xuICAgKiBkb24ndCBhc3N1bWUgdGhhdCB0aGlzIGhhcyBubyBzaWRlLWVmZmVjdHMuXG4gICAqXG4gICAqIFRoZSBleHByZXNzaW9ucyBtdXN0IGJlIHBhc3NlZCBpbiBzaW5jZSBpdCBtaWdodCBiZSB0aGV5IG5lZWQgdG8gYmUgcmVvcmRlcmVkIGZvclxuICAgKiBkaWZmZXJlbnQgdHJhbnNsYXRpb25zLlxuICAgKi9cbiAgdHJhbnNsYXRlPzogVHJhbnNsYXRlRm47XG59XG5cbmV4cG9ydCBpbnRlcmZhY2UgVHJhbnNsYXRlRm4ge1xuICAobWVzc2FnZVBhcnRzOiBUZW1wbGF0ZVN0cmluZ3NBcnJheSxcbiAgIGV4cHJlc3Npb25zOiByZWFkb25seSBhbnlbXSk6IFtUZW1wbGF0ZVN0cmluZ3NBcnJheSwgcmVhZG9ubHkgYW55W11dO1xufVxuXG4vKipcbiAqIFRhZyBhIHRlbXBsYXRlIGxpdGVyYWwgc3RyaW5nIGZvciBsb2NhbGl6YXRpb24uXG4gKlxuICogRm9yIGV4YW1wbGU6XG4gKlxuICogYGBgdHNcbiAqICRsb2NhbGl6ZSBgc29tZSBzdHJpbmcgdG8gbG9jYWxpemVgXG4gKiBgYGBcbiAqXG4gKiAqKk5hbWluZyBwbGFjZWhvbGRlcnMqKlxuICpcbiAqIElmIHRoZSB0ZW1wbGF0ZSBsaXRlcmFsIHN0cmluZyBjb250YWlucyBleHByZXNzaW9ucyB0aGVuIHlvdSBjYW4gb3B0aW9uYWxseSBuYW1lIHRoZSBwbGFjZWhvbGRlclxuICogYXNzb2NpYXRlZCB3aXRoIGVhY2ggZXhwcmVzc2lvbi4gRG8gdGhpcyBieSBwcm92aWRpbmcgdGhlIHBsYWNlaG9sZGVyIG5hbWUgd3JhcHBlZCBpbiBgOmBcbiAqIGNoYXJhY3RlcnMgZGlyZWN0bHkgYWZ0ZXIgdGhlIGV4cHJlc3Npb24uIFRoZXNlIHBsYWNlaG9sZGVyIG5hbWVzIGFyZSBzdHJpcHBlZCBvdXQgb2YgdGhlXG4gKiByZW5kZXJlZCBsb2NhbGl6ZWQgc3RyaW5nLlxuICpcbiAqIEZvciBleGFtcGxlLCB0byBuYW1lIHRoZSBgaXRlbS5sZW5ndGhgIGV4cHJlc3Npb24gcGxhY2Vob2xkZXIgYGl0ZW1Db3VudGAgeW91IHdyaXRlOlxuICpcbiAqIGBgYHRzXG4gKiAkbG9jYWxpemUgYFRoZXJlIGFyZSAke2l0ZW0ubGVuZ3RofTppdGVtQ291bnQ6IGl0ZW1zYDtcbiAqIGBgYFxuICpcbiAqIElmIHlvdSBuZWVkIHRvIHVzZSBhIGA6YCBjaGFyYWN0ZXIgZGlyZWN0bHkgYW4gZXhwcmVzc2lvbiB5b3UgbXVzdCBlaXRoZXIgcHJvdmlkZSBhIG5hbWUgb3IgeW91XG4gKiBjYW4gZXNjYXBlIHRoZSBgOmAgYnkgcHJlY2VkaW5nIGl0IHdpdGggYSBiYWNrc2xhc2g6XG4gKlxuICogRm9yIGV4YW1wbGU6XG4gKlxuICogYGBgdHNcbiAqICRsb2NhbGl6ZSBgJHtsYWJlbH06bGFiZWw6OiAke31gXG4gKiAvLyBvclxuICogJGxvY2FsaXplIGAke2xhYmVsfVxcOiAke31gXG4gKiBgYGBcbiAqXG4gKiAqKlByb2Nlc3NpbmcgbG9jYWxpemVkIHN0cmluZ3M6KipcbiAqXG4gKiBUaGVyZSBhcmUgdGhyZWUgc2NlbmFyaW9zOlxuICpcbiAqICogKipjb21waWxlLXRpbWUgaW5saW5pbmcqKjogdGhlIGAkbG9jYWxpemVgIHRhZyBpcyB0cmFuc2Zvcm1lZCBhdCBjb21waWxlIHRpbWUgYnkgYSB0cmFuc3BpbGVyLFxuICogcmVtb3ZpbmcgdGhlIHRhZyBhbmQgcmVwbGFjaW5nIHRoZSB0ZW1wbGF0ZSBsaXRlcmFsIHN0cmluZyB3aXRoIGEgdHJhbnNsYXRlZCBsaXRlcmFsIHN0cmluZ1xuICogZnJvbSBhIGNvbGxlY3Rpb24gb2YgdHJhbnNsYXRpb25zIHByb3ZpZGVkIHRvIHRoZSB0cmFuc3BpbGF0aW9uIHRvb2wuXG4gKlxuICogKiAqKnJ1bi10aW1lIGV2YWx1YXRpb24qKjogdGhlIGAkbG9jYWxpemVgIHRhZyBpcyBhIHJ1bi10aW1lIGZ1bmN0aW9uIHRoYXQgcmVwbGFjZXMgYW5kIHJlb3JkZXJzXG4gKiB0aGUgcGFydHMgKHN0YXRpYyBzdHJpbmdzIGFuZCBleHByZXNzaW9ucykgb2YgdGhlIHRlbXBsYXRlIGxpdGVyYWwgc3RyaW5nIHdpdGggc3RyaW5ncyBmcm9tIGFcbiAqIGNvbGxlY3Rpb24gb2YgdHJhbnNsYXRpb25zIGxvYWRlZCBhdCBydW4tdGltZS5cbiAqXG4gKiAqICoqcGFzcy10aHJvdWdoIGV2YWx1YXRpb24qKjogdGhlIGAkbG9jYWxpemVgIHRhZyBpcyBhIHJ1bi10aW1lIGZ1bmN0aW9uIHRoYXQgc2ltcGx5IGV2YWx1YXRlc1xuICogdGhlIG9yaWdpbmFsIHRlbXBsYXRlIGxpdGVyYWwgc3RyaW5nIHdpdGhvdXQgYXBwbHlpbmcgYW55IHRyYW5zbGF0aW9ucyB0byB0aGUgcGFydHMuIFRoaXMgdmVyc2lvblxuICogaXMgdXNlZCBkdXJpbmcgZGV2ZWxvcG1lbnQgb3Igd2hlcmUgdGhlcmUgaXMgbm8gbmVlZCB0byB0cmFuc2xhdGUgdGhlIGxvY2FsaXplZCB0ZW1wbGF0ZVxuICogbGl0ZXJhbHMuXG4gKlxuICogQHBhcmFtIG1lc3NhZ2VQYXJ0cyBhIGNvbGxlY3Rpb24gb2YgdGhlIHN0YXRpYyBwYXJ0cyBvZiB0aGUgdGVtcGxhdGUgc3RyaW5nLlxuICogQHBhcmFtIGV4cHJlc3Npb25zIGEgY29sbGVjdGlvbiBvZiB0aGUgdmFsdWVzIG9mIGVhY2ggcGxhY2Vob2xkZXIgaW4gdGhlIHRlbXBsYXRlIHN0cmluZy5cbiAqIEByZXR1cm5zIHRoZSB0cmFuc2xhdGVkIHN0cmluZywgd2l0aCB0aGUgYG1lc3NhZ2VQYXJ0c2AgYW5kIGBleHByZXNzaW9uc2AgaW50ZXJsZWF2ZWQgdG9nZXRoZXIuXG4gKi9cbmV4cG9ydCBjb25zdCAkbG9jYWxpemU6IExvY2FsaXplRm4gPSBmdW5jdGlvbihcbiAgICBtZXNzYWdlUGFydHM6IFRlbXBsYXRlU3RyaW5nc0FycmF5LCAuLi5leHByZXNzaW9uczogcmVhZG9ubHkgYW55W10pIHtcbiAgaWYgKCRsb2NhbGl6ZS50cmFuc2xhdGUpIHtcbiAgICAvLyBEb24ndCB1c2UgYXJyYXkgZXhwYW5zaW9uIGhlcmUgdG8gYXZvaWQgdGhlIGNvbXBpbGVyIGFkZGluZyBgX19yZWFkKClgIGhlbHBlciB1bm5lY2Vzc2FyaWx5LlxuICAgIGNvbnN0IHRyYW5zbGF0aW9uID0gJGxvY2FsaXplLnRyYW5zbGF0ZShtZXNzYWdlUGFydHMsIGV4cHJlc3Npb25zKTtcbiAgICBtZXNzYWdlUGFydHMgPSB0cmFuc2xhdGlvblswXTtcbiAgICBleHByZXNzaW9ucyA9IHRyYW5zbGF0aW9uWzFdO1xuICB9XG4gIGxldCBtZXNzYWdlID0gbWVzc2FnZVBhcnRzWzBdO1xuICBmb3IgKGxldCBpID0gMTsgaSA8IG1lc3NhZ2VQYXJ0cy5sZW5ndGg7IGkrKykge1xuICAgIG1lc3NhZ2UgKz0gZXhwcmVzc2lvbnNbaSAtIDFdICsgc3RyaXBQbGFjZWhvbGRlck5hbWUobWVzc2FnZVBhcnRzW2ldLCBtZXNzYWdlUGFydHMucmF3W2ldKTtcbiAgfVxuICByZXR1cm4gbWVzc2FnZTtcbn07XG5cbi8qKlxuICogU3RyaXAgdGhlIHBsYWNlaG9sZGVyIG5hbWUgZnJvbSB0aGUgc3RhcnQgb2YgdGhlIGBtZXNzYWdlUGFydGAsIGlmIGl0IGlzIGZvdW5kLlxuICpcbiAqIFBsYWNlaG9sZGVyIG1hcmtlciBjaGFyYWN0ZXJzICg6KSBtYXkgYXBwZWFyIGFmdGVyIGEgc3Vic3RpdHV0aW9uIHRoYXQgZG9lcyBub3QgcHJvdmlkZSBhblxuICogZXhwbGljaXQgcGxhY2Vob2xkZXIgbmFtZS4gSW4gdGhpcyBjYXNlIHRoZSBjaGFyYWN0ZXIgbXVzdCBiZSBlc2NhcGVkIHdpdGggYSBiYWNrc2xhc2gsIGBcXDpgLlxuICogV2UgY2FuIGNoZWNrIGZvciB0aGlzIGJ5IGxvb2tpbmcgYXQgdGhlIGByYXdgIG1lc3NhZ2VQYXJ0LCB3aGljaCBzaG91bGQgc3RpbGwgY29udGFpbiB0aGVcbiAqIGJhY2tzbGFzaC5cbiAqXG4gKiBJZiB0aGUgdGVtcGxhdGUgbGl0ZXJhbCB3YXMgc3ludGhlc2l6ZWQgdGhlbiBpdHMgcmF3IGFycmF5IHdpbGwgb25seSBjb250YWluIGVtcHR5IHN0cmluZ3MuXG4gKiBUaGlzIGlzIGJlY2F1c2UgVFMgbmVlZHMgdGhlIG9yaWdpbmFsIHNvdXJjZSBjb2RlIHRvIGZpbmQgdGhlIHJhdyB0ZXh0IGFuZCBpbiB0aGUgY2FzZSBvZlxuICogc3ludGhlc2l6ZSBBU1Qgbm9kZXMsIHRoZXJlIGlzIG5vIHNvdXJjZSBjb2RlLlxuICpcbiAqIFRoZSB3b3JrYXJvdW5kIGlzIHRvIGFzc3VtZSB0aGF0IHRoZSB0ZW1wbGF0ZSBsaXRlcmFsIGRpZCBub3QgY29udGFpbiBhbiBlc2NhcGVkIHBsYWNlaG9sZGVyXG4gKiBuYW1lLCBhbmQgZmFsbCBiYWNrIG9uIGNoZWNraW5nIHRoZSBjb29rZWQgYXJyYXkgaW5zdGVhZC5cbiAqXG4gKiBUaGlzIHNob3VsZCBiZSBPSyBiZWNhdXNlIHN5bnRoZXNpemVkIG5vZGVzIChmcm9tIHRoZSBBbmd1bGFyIHRlbXBsYXRlIGNvbXBpbGVyKSB3aWxsIGFsd2F5c1xuICogcHJvdmlkZSBleHBsaWNpdCBwbGFjZWhvbGRlciBuYW1lcyBhbmQgc28gd2lsbCBuZXZlciBuZWVkIHRvIGVzY2FwZSBwbGFjZWhvbGRlciBuYW1lIG1hcmtlcnMuXG4gKlxuICogQHBhcmFtIG1lc3NhZ2VQYXJ0IFRoZSBjb29rZWQgbWVzc2FnZSBwYXJ0IHRvIHByb2Nlc3MuXG4gKiBAcGFyYW0gcmF3TWVzc2FnZVBhcnQgVGhlIHJhdyBtZXNzYWdlIHBhcnQgdG8gY2hlY2suXG4gKiBAcmV0dXJucyB0aGUgbWVzc2FnZSBwYXJ0IHdpdGggdGhlIHBsYWNlaG9sZGVyIG5hbWUgc3RyaXBwZWQsIGlmIGZvdW5kLlxuICovXG5mdW5jdGlvbiBzdHJpcFBsYWNlaG9sZGVyTmFtZShtZXNzYWdlUGFydDogc3RyaW5nLCByYXdNZXNzYWdlUGFydDogc3RyaW5nKSB7XG4gIHJldHVybiAocmF3TWVzc2FnZVBhcnQgfHwgbWVzc2FnZVBhcnQpLmNoYXJBdCgwKSA9PT0gUExBQ0VIT0xERVJfTkFNRV9NQVJLRVIgP1xuICAgICAgbWVzc2FnZVBhcnQuc3Vic3RyaW5nKG1lc3NhZ2VQYXJ0LmluZGV4T2YoUExBQ0VIT0xERVJfTkFNRV9NQVJLRVIsIDEpICsgMSkgOlxuICAgICAgbWVzc2FnZVBhcnQ7XG59XG4iXX0=
