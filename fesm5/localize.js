@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.6+74.sha-4c168ed.with-local-changes
+ * @license Angular v9.0.0-next.6+76.sha-252966b.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -59,7 +59,7 @@ function parseMessage(messageParts, expressions) {
     var metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
     var messageString = metadata.text;
     for (var i = 1; i < messageParts.length; i++) {
-        var _a = splitBlock(messageParts[i], messageParts.raw[i]), messagePart = _a.text, _b = _a.block, placeholderName = _b === void 0 ? "ph_" + i : _b;
+        var _a = splitBlock(messageParts[i], messageParts.raw[i]), messagePart = _a.text, _b = _a.block, placeholderName = _b === void 0 ? computePlaceholderName(i) : _b;
         messageString += "{$" + placeholderName + "}" + messagePart;
         if (expressions !== undefined) {
             substitutions[placeholderName] = expressions[i - 1];
@@ -152,6 +152,9 @@ function splitBlock(cooked, raw) {
             text: cooked.substring(endOfBlock + 1),
         };
     }
+}
+function computePlaceholderName(index) {
+    return index === 1 ? 'PH' : "PH_" + (index - 1);
 }
 
 /**
