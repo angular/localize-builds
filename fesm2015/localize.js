@@ -1,8 +1,10 @@
 /**
- * @license Angular v9.0.0-next.6+66.sha-e5a3de5.with-local-changes
+ * @license Angular v9.0.0-next.6+71.sha-b741a1c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
+
+import { computeMsgId } from '@angular/compiler';
 
 /**
  * @license
@@ -12,16 +14,39 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * The character used to mark the start and end of a placeholder name in a `$localize` tagged
- * string.
+ * The character used to mark the start and end of a "block" in a `$localize` tagged string.
+ * A block can indicate metadata about the message or specify a name of a placeholder for a
+ * substitution expressions.
  *
  * For example:
  *
- * ```
+ * ```ts
  * $localize`Hello, ${title}:title:!`;
+ * $localize`:meaning|description@@id:source message text`;
  * ```
  */
-const PLACEHOLDER_NAME_MARKER = ':';
+const BLOCK_MARKER = ':';
+/**
+ * The marker used to separate a message's "meaning" from its "description" in a metadata block.
+ *
+ * For example:
+ *
+ * ```ts
+ * $localize `:correct|Indicates that the user got the answer correct: Right!`;
+ * $localize `:movement|Button label for moving to the right: Right!`;
+ * ```
+ */
+const MEANING_SEPARATOR = '|';
+/**
+ * The marker used to separate a message's custom "id" from its "description" in a metadata block.
+ *
+ * For example:
+ *
+ * ```ts
+ * $localize `:A welcome message on the home page@@myApp-homepage-welcome: Welcome!`;
+ * ```
+ */
+const ID_SEPARATOR = '@@';
 
 /**
  * @license
@@ -36,31 +61,103 @@ const PLACEHOLDER_NAME_MARKER = ':';
  * See `ParsedMessage` for an example.
  */
 function parseMessage(messageParts, expressions) {
-    const replacements = {};
-    let translationKey = messageParts[0];
+    const substitutions = {};
+    const metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
+    let messageString = metadata.text;
     for (let i = 1; i < messageParts.length; i++) {
-        const messagePart = messageParts[i];
-        const expression = expressions[i - 1];
-        // There is a problem with synthesizing template literals in TS.
-        // It is not possible to provide raw values for the `messageParts` and TS is not able to compute
-        // them since this requires access to the string in its original (non-existent) source code.
-        // Therefore we fall back on the non-raw version if the raw string is empty.
-        // This should be OK because synthesized nodes only come from the template compiler and they
-        // will always contain placeholder name information.
-        // So there will be no escaped placeholder marker character (`:`) directly after a substitution.
-        if ((messageParts.raw[i] || messagePart).charAt(0) === PLACEHOLDER_NAME_MARKER) {
-            const endOfPlaceholderName = messagePart.indexOf(PLACEHOLDER_NAME_MARKER, 1);
-            const placeholderName = messagePart.substring(1, endOfPlaceholderName);
-            translationKey += `{$${placeholderName}}${messagePart.substring(endOfPlaceholderName + 1)}`;
-            replacements[placeholderName] = expression;
-        }
-        else {
-            const placeholderName = `ph_${i}`;
-            translationKey += `{$${placeholderName}}${messagePart}`;
-            replacements[placeholderName] = expression;
+        const { text: messagePart, block: placeholderName = `ph_${i}` } = splitBlock(messageParts[i], messageParts.raw[i]);
+        messageString += `{$${placeholderName}}${messagePart}`;
+        if (expressions !== undefined) {
+            substitutions[placeholderName] = expressions[i - 1];
         }
     }
-    return { translationKey, substitutions: replacements };
+    return {
+        messageId: metadata.id || computeMsgId(messageString, metadata.meaning || ''),
+        substitutions,
+        messageString,
+    };
+}
+/**
+ * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
+ *
+ * If the message part has a metadata block this function will extract the `meaning`,
+ * `description` and `id` (if provided) from the block. These metadata properties are serialized in
+ * the string delimited by `|` and `@@` respectively.
+ *
+ * For example:
+ *
+ * ```ts
+ * `:meaning|description@@id`
+ * `:meaning|@@id`
+ * `:meaning|description`
+ * `description@@id`
+ * `meaning|`
+ * `description`
+ * `@@id`
+ * ```
+ *
+ * @param cooked The cooked version of the message part to parse.
+ * @param raw The raw version of the message part to parse.
+ * @returns A object containing any metadata that was parsed from the message part.
+ */
+function parseMetadata(cooked, raw) {
+    const { text, block } = splitBlock(cooked, raw);
+    if (block === undefined) {
+        return { text, meaning: undefined, description: undefined, id: undefined };
+    }
+    else {
+        const [meaningAndDesc, id] = block.split(ID_SEPARATOR, 2);
+        let [meaning, description] = meaningAndDesc.split(MEANING_SEPARATOR, 2);
+        if (description === undefined) {
+            description = meaning;
+            meaning = undefined;
+        }
+        if (description === '') {
+            description = undefined;
+        }
+        return { text, meaning, description, id };
+    }
+}
+/**
+ * Split a message part (`cooked` + `raw`) into an optional delimited "block" off the front and the
+ * rest of the text of the message part.
+ *
+ * Blocks appear at the start of message parts. They are delimited by a colon `:` character at the
+ * start and end of the block.
+ *
+ * If the block is in the first message part then it will be metadata about the whole message:
+ * meaning, description, id.  Otherwise it will be metadata about the immediately preceding
+ * substitution: placeholder name.
+ *
+ * Since blocks are optional, it is possible that the content of a message block actually starts
+ * with a block marker. In this case the marker must be escaped `\:`.
+ *
+ * @param cooked The cooked version of the message part to parse.
+ * @param raw The raw version of the message part to parse.
+ * @returns An object containing the `text` of the message part and the text of the `block`, if it
+ * exists.
+ */
+function splitBlock(cooked, raw) {
+    // Synthesizing AST nodes that represent template literals using the TypeScript API is problematic
+    // because it doesn't allow for the raw value of messageParts to be programmatically set.
+    // The result is that synthesized AST nodes have empty `raw` values.
+    // Normally we rely upon checking the `raw` value to check whether the `BLOCK_MARKER` was escaped
+    // in the original source. If the `raw` value is missing then we cannot do this.
+    // In such a case we fall back on the `cooked` version and assume that the `BLOCK_MARKER` was not
+    // escaped.
+    // This should be OK because synthesized nodes only come from the Angular template compiler, which
+    // always provides full id and placeholder name information so it will never escape `BLOCK_MARKER`
+    // characters.
+    if ((raw || cooked).charAt(0) !== BLOCK_MARKER) {
+        return { text: cooked };
+    }
+    else {
+        const endOfBlock = cooked.indexOf(BLOCK_MARKER, 1);
+        return {
+            block: cooked.substring(1, endOfBlock),
+            text: cooked.substring(endOfBlock + 1),
+        };
+    }
 }
 
 /**
@@ -74,18 +171,18 @@ function parseMessage(messageParts, expressions) {
  * Translate the text of the `$localize` tagged-string (i.e. `messageParts` and
  * `substitutions`) using the given `translations`.
  *
- * The tagged-string is parsed to extract its `translationKey` which is used to find an appropriate
+ * The tagged-string is parsed to extract its `messageId` which is used to find an appropriate
  * `ParsedTranslation`.
  *
  * If one is found then it is used to translate the message into a new set of `messageParts` and
  * `substitutions`.
  * The translation may reorder (or remove) substitutions as appropriate.
  *
- * If no translation matches then the original `messageParts` and `substitutions` are returned
+ * If no translation matches then an error is thrown.
  */
 function translate(translations, messageParts, substitutions) {
     const message = parseMessage(messageParts, substitutions);
-    const translation = translations[message.translationKey];
+    const translation = translations[message.messageId];
     if (translation !== undefined) {
         return [
             translation.messageParts,
@@ -93,7 +190,7 @@ function translate(translations, messageParts, substitutions) {
         ];
     }
     else {
-        return [messageParts, substitutions];
+        throw new Error(`No translation found for "${message.messageId}" ("${message.messageString}").`);
     }
 }
 /**
@@ -112,7 +209,7 @@ function parseTranslation(message) {
         placeholderNames.push(parts[i]);
         messageParts.push(`${parts[i + 1]}`);
     }
-    const rawMessageParts = messageParts.map(part => part.charAt(0) === PLACEHOLDER_NAME_MARKER ? '\\' + part : part);
+    const rawMessageParts = messageParts.map(part => part.charAt(0) === BLOCK_MARKER ? '\\' + part : part);
     return { messageParts: makeTemplateObject(messageParts, rawMessageParts), placeholderNames };
 }
 /**
@@ -129,10 +226,19 @@ function makeTemplateObject(cooked, raw) {
 /**
  * Load translations for `$localize`.
  *
- * The given `translations` are processed and added to a lookup based on their translation key.
- * A new translation will overwrite a previous translation if it has the same key.
+ * The given `translations` are processed and added to a lookup based on their `MessageId`.
+ * A new translation will overwrite a previous translation if it has the same `MessageId`.
+ *
+ * * If a message is generated by the Angular compiler from an `i18n` marker in a template, the
+ *   `MessageId` is passed through to the `$localize` call as a custom `MessageId`. The `MessageId`
+ *   will match what is extracted into translation files.
+ *
+ * * If the translation is from a call to `$localize` in application code, and no custom `MessageId`
+ *   is provided, then the `MessageId` can be generated by passing the tagged string message-parts
+ *   to the `parseMessage()` function (not currently public API).
  *
  * @publicApi
+ *
  */
 function loadTranslations(translations) {
     // Ensure the translate function exists
@@ -160,7 +266,13 @@ function clearTranslations() {
  * This function may reorder (or remove) substitutions as indicated in the matching translation.
  */
 function translate$1(messageParts, substitutions) {
-    return translate($localize.TRANSLATIONS, messageParts, substitutions);
+    try {
+        return translate($localize.TRANSLATIONS, messageParts, substitutions);
+    }
+    catch (e) {
+        console.warn(e.message);
+        return [messageParts, substitutions];
+    }
 }
 
 /**

@@ -1,16 +1,4 @@
-import { SourceMessage } from './messages';
-/**
- * A key used to lookup a `TargetMessage` in a hash map.
- */
-export declare type TranslationKey = SourceMessage;
-/**
- * A string containing a translation target message.
- *
- * I.E. the message that indicates what will be translated to.
- *
- * Uses `{$placeholder-name}` to indicate a placeholder.
- */
-export declare type TargetMessage = string;
+import { MessageId, TargetMessage } from './messages';
 /**
  * A translation message that has been processed to extract the message parts and placeholders.
  */
@@ -21,19 +9,19 @@ export interface ParsedTranslation {
 /**
  * The internal structure used by the runtime localization to translate messages.
  */
-export declare type ParsedTranslations = Record<TranslationKey, ParsedTranslation>;
+export declare type ParsedTranslations = Record<MessageId, ParsedTranslation>;
 /**
  * Translate the text of the `$localize` tagged-string (i.e. `messageParts` and
  * `substitutions`) using the given `translations`.
  *
- * The tagged-string is parsed to extract its `translationKey` which is used to find an appropriate
+ * The tagged-string is parsed to extract its `messageId` which is used to find an appropriate
  * `ParsedTranslation`.
  *
  * If one is found then it is used to translate the message into a new set of `messageParts` and
  * `substitutions`.
  * The translation may reorder (or remove) substitutions as appropriate.
  *
- * If no translation matches then the original `messageParts` and `substitutions` are returned
+ * If no translation matches then an error is thrown.
  */
 export declare function translate(translations: Record<string, ParsedTranslation>, messageParts: TemplateStringsArray, substitutions: readonly any[]): [TemplateStringsArray, readonly any[]];
 /**
