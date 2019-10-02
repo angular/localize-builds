@@ -21,7 +21,9 @@ export declare type ParsedTranslations = Record<MessageId, ParsedTranslation>;
  * `substitutions`.
  * The translation may reorder (or remove) substitutions as appropriate.
  *
- * If no translation matches then an error is thrown.
+ * If there is no translation with a matching message id then an error is thrown.
+ * If a translation contains a placeholder that is not found in the message being translated then an
+ * error is thrown.
  */
 export declare function translate(translations: Record<string, ParsedTranslation>, messageParts: TemplateStringsArray, substitutions: readonly any[]): [TemplateStringsArray, readonly any[]];
 /**

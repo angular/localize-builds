@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.9+9.sha-052cae6.with-local-changes
+ * @license Angular v9.0.0-next.9+15.sha-32e3157.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -259,6 +259,7 @@
             messageId: metadata.id || compiler.computeMsgId(messageString, metadata.meaning || ''),
             substitutions: substitutions,
             messageString: messageString,
+            meaning: metadata.meaning || '',
         };
     }
     /**
@@ -316,27 +317,31 @@
      * Since blocks are optional, it is possible that the content of a message block actually starts
      * with a block marker. In this case the marker must be escaped `\:`.
      *
+     * ---
+     *
+     * If the template literal was synthesized and downleveled by TypeScript to ES5 then its
+     * raw array will only contain empty strings. This is because the current TypeScript compiler uses
+     * the original source code to find the raw text and in the case of synthesized AST nodes, there is
+     * no source code to draw upon.
+     *
+     * The workaround in this function is to assume that the template literal did not contain an escaped
+     * placeholder name, and fall back on checking the cooked array instead.
+     * This is a limitation if compiling to ES5 in TypeScript but is not a problem if the TypeScript
+     * output is ES2015 and the code is downlevelled by a separate tool as happens in the Angular CLI.
+     *
      * @param cooked The cooked version of the message part to parse.
      * @param raw The raw version of the message part to parse.
      * @returns An object containing the `text` of the message part and the text of the `block`, if it
      * exists.
+     * @throws an error if the `block` is unterminated
      */
     function splitBlock(cooked, raw) {
-        // Synthesizing AST nodes that represent template literals using the TypeScript API is problematic
-        // because it doesn't allow for the raw value of messageParts to be programmatically set.
-        // The result is that synthesized AST nodes have empty `raw` values.
-        // Normally we rely upon checking the `raw` value to check whether the `BLOCK_MARKER` was escaped
-        // in the original source. If the `raw` value is missing then we cannot do this.
-        // In such a case we fall back on the `cooked` version and assume that the `BLOCK_MARKER` was not
-        // escaped.
-        // This should be OK because synthesized nodes only come from the Angular template compiler, which
-        // always provides full id and placeholder name information so it will never escape `BLOCK_MARKER`
-        // characters.
-        if ((raw || cooked).charAt(0) !== BLOCK_MARKER) {
+        raw = raw || cooked;
+        if (raw.charAt(0) !== BLOCK_MARKER) {
             return { text: cooked };
         }
         else {
-            var endOfBlock = cooked.indexOf(BLOCK_MARKER, 1);
+            var endOfBlock = findEndOfBlock(cooked, raw);
             return {
                 block: cooked.substring(1, endOfBlock),
                 text: cooked.substring(endOfBlock + 1),
@@ -345,6 +350,30 @@
     }
     function computePlaceholderName(index) {
         return index === 1 ? 'PH' : "PH_" + (index - 1);
+    }
+    /**
+     * Find the end of a "marked block" indicated by the first non-escaped colon.
+     *
+     * @param cooked The cooked string (where escaped chars have been processed)
+     * @param raw The raw string (where escape sequences are still in place)
+     *
+     * @returns the index of the end of block marker
+     * @throws an error if the block is unterminated
+     */
+    function findEndOfBlock(cooked, raw) {
+        /************************************************************************************************
+        * This function is repeated in `src/localize/src/localize.ts` and the two should be kept in sync.
+        * (See that file for more explanation of why.)
+        ************************************************************************************************/
+        for (var cookedIndex = 1, rawIndex = 1; cookedIndex < cooked.length; cookedIndex++, rawIndex++) {
+            if (raw[rawIndex] === '\\') {
+                rawIndex++;
+            }
+            else if (cooked[cookedIndex] === BLOCK_MARKER) {
+                return cookedIndex;
+            }
+        }
+        throw new Error("Unterminated $localize metadata block in \"" + raw + "\".");
     }
 
     /**
@@ -365,19 +394,27 @@
      * `substitutions`.
      * The translation may reorder (or remove) substitutions as appropriate.
      *
-     * If no translation matches then an error is thrown.
+     * If there is no translation with a matching message id then an error is thrown.
+     * If a translation contains a placeholder that is not found in the message being translated then an
+     * error is thrown.
      */
     function translate(translations, messageParts, substitutions) {
         var message = parseMessage(messageParts, substitutions);
         var translation = translations[message.messageId];
         if (translation !== undefined) {
             return [
-                translation.messageParts,
-                translation.placeholderNames.map(function (placeholder) { return message.substitutions[placeholder]; })
+                translation.messageParts, translation.placeholderNames.map(function (placeholder) {
+                    if (message.substitutions.hasOwnProperty(placeholder)) {
+                        return message.substitutions[placeholder];
+                    }
+                    else {
+                        throw new Error("No placeholder found with name " + placeholder + " in message " + describeMessage(message) + ".");
+                    }
+                })
             ];
         }
         else {
-            throw new Error("No translation found for \"" + message.messageId + "\" (\"" + message.messageString + "\").");
+            throw new Error("No translation found for " + describeMessage(message) + ".");
         }
     }
     /**
@@ -408,6 +445,10 @@
     function makeTemplateObject(cooked, raw) {
         Object.defineProperty(cooked, 'raw', { value: raw });
         return cooked;
+    }
+    function describeMessage(message) {
+        var meaningString = message.meaning && " - \"" + message.meaning + "\"";
+        return "\"" + message.messageId + "\" (\"" + message.messageString + "\"" + meaningString + ")";
     }
 
     /**
