@@ -60,6 +60,18 @@ export interface ParsedMessage {
      * The meaning of the `message`, used to distinguish identical `messageString`s.
      */
     meaning: string;
+    /**
+     * The description of the `message`, used to aid translation.
+     */
+    description: string;
+    /**
+     * The static parts of the message.
+     */
+    messageParts: string[];
+    /**
+     * The names of the placeholders that will be replaced with substitutions.
+     */
+    placeholderNames: string[];
 }
 /**
  * Parse a `$localize` tagged string into a structure that can be used for translation.

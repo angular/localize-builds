@@ -1,4 +1,4 @@
-import { MessageId, TargetMessage } from './messages';
+import { MessageId, ParsedMessage, TargetMessage } from './messages';
 /**
  * A translation message that has been processed to extract the message parts and placeholders.
  */
@@ -10,6 +10,12 @@ export interface ParsedTranslation {
  * The internal structure used by the runtime localization to translate messages.
  */
 export declare type ParsedTranslations = Record<MessageId, ParsedTranslation>;
+export declare class MissingTranslationError extends Error {
+    readonly parsedMessage: ParsedMessage;
+    private readonly type;
+    constructor(parsedMessage: ParsedMessage);
+}
+export declare function isMissingTranslationError(e: any): e is MissingTranslationError;
 /**
  * Translate the text of the `$localize` tagged-string (i.e. `messageParts` and
  * `substitutions`) using the given `translations`.
@@ -35,6 +41,13 @@ export declare function translate(translations: Record<string, ParsedTranslation
  * @param message the message to be parsed.
  */
 export declare function parseTranslation(message: TargetMessage): ParsedTranslation;
+/**
+ * Create a `ParsedTranslation` from a set of `messageParts` and `placeholderNames`.
+ *
+ * @param messageParts The message parts to appear in the ParsedTranslation.
+ * @param placeholderNames The names of the placeholders to intersperse between the `messageParts`.
+ */
+export declare function makeParsedTranslation(messageParts: string[], placeholderNames?: string[]): ParsedTranslation;
 /**
  * Create the specialized array that is passed to tagged-string tag functions.
  *
