@@ -1,11 +1,12 @@
 /**
- * @license Angular v9.0.0-next.9+76.sha-b2b917d.with-local-changes
+ * @license Angular v9.0.0-next.9+81.sha-305f368.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { __read } from 'tslib';
+import { __read, __extends } from 'tslib';
 import { computeMsgId } from '@angular/compiler';
+export { computeMsgId as ɵcomputeMsgId } from '@angular/compiler';
 
 /**
  * @license
@@ -57,6 +58,8 @@ var ID_SEPARATOR = '@@';
 function parseMessage(messageParts, expressions) {
     var substitutions = {};
     var metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
+    var cleanedMessageParts = [metadata.text];
+    var placeholderNames = [];
     var messageString = metadata.text;
     for (var i = 1; i < messageParts.length; i++) {
         var _a = splitBlock(messageParts[i], messageParts.raw[i]), messagePart = _a.text, _b = _a.block, placeholderName = _b === void 0 ? computePlaceholderName(i) : _b;
@@ -64,12 +67,16 @@ function parseMessage(messageParts, expressions) {
         if (expressions !== undefined) {
             substitutions[placeholderName] = expressions[i - 1];
         }
+        placeholderNames.push(placeholderName);
+        cleanedMessageParts.push(messagePart);
     }
     return {
         messageId: metadata.id || computeMsgId(messageString, metadata.meaning || ''),
         substitutions: substitutions,
         messageString: messageString,
         meaning: metadata.meaning || '',
+        description: metadata.description || '',
+        messageParts: cleanedMessageParts, placeholderNames: placeholderNames,
     };
 }
 /**
@@ -186,13 +193,19 @@ function findEndOfBlock(cooked, raw) {
     throw new Error("Unterminated $localize metadata block in \"" + raw + "\".");
 }
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
+var MissingTranslationError = /** @class */ (function (_super) {
+    __extends(MissingTranslationError, _super);
+    function MissingTranslationError(parsedMessage) {
+        var _this = _super.call(this, "No translation found for " + describeMessage(parsedMessage) + ".") || this;
+        _this.parsedMessage = parsedMessage;
+        _this.type = 'MissingTranslationError';
+        return _this;
+    }
+    return MissingTranslationError;
+}(Error));
+function isMissingTranslationError(e) {
+    return e.type === 'MissingTranslationError';
+}
 /**
  * Translate the text of the `$localize` tagged-string (i.e. `messageParts` and
  * `substitutions`) using the given `translations`.
@@ -211,21 +224,19 @@ function findEndOfBlock(cooked, raw) {
 function translate(translations, messageParts, substitutions) {
     var message = parseMessage(messageParts, substitutions);
     var translation = translations[message.messageId];
-    if (translation !== undefined) {
-        return [
-            translation.messageParts, translation.placeholderNames.map(function (placeholder) {
-                if (message.substitutions.hasOwnProperty(placeholder)) {
-                    return message.substitutions[placeholder];
-                }
-                else {
-                    throw new Error("No placeholder found with name " + placeholder + " in message " + describeMessage(message) + ".");
-                }
-            })
-        ];
+    if (translation === undefined) {
+        throw new MissingTranslationError(message);
     }
-    else {
-        throw new Error("No translation found for " + describeMessage(message) + ".");
-    }
+    return [
+        translation.messageParts, translation.placeholderNames.map(function (placeholder) {
+            if (message.substitutions.hasOwnProperty(placeholder)) {
+                return message.substitutions[placeholder];
+            }
+            else {
+                throw new Error("No placeholder found with name " + placeholder + " in message " + describeMessage(message) + ".");
+            }
+        })
+    ];
 }
 /**
  * Parse the `messageParts` and `placeholderNames` out of a target `message`.
@@ -247,6 +258,16 @@ function parseTranslation(message) {
     return { messageParts: makeTemplateObject(messageParts, rawMessageParts), placeholderNames: placeholderNames };
 }
 /**
+ * Create a `ParsedTranslation` from a set of `messageParts` and `placeholderNames`.
+ *
+ * @param messageParts The message parts to appear in the ParsedTranslation.
+ * @param placeholderNames The names of the placeholders to intersperse between the `messageParts`.
+ */
+function makeParsedTranslation(messageParts, placeholderNames) {
+    if (placeholderNames === void 0) { placeholderNames = []; }
+    return { messageParts: makeTemplateObject(messageParts, messageParts), placeholderNames: placeholderNames };
+}
+/**
  * Create the specialized array that is passed to tagged-string tag functions.
  *
  * @param cooked The message parts with their escape codes processed.
@@ -260,6 +281,14 @@ function describeMessage(message) {
     var meaningString = message.meaning && " - \"" + message.meaning + "\"";
     return "\"" + message.messageId + "\" (\"" + message.messageString + "\"" + meaningString + ")";
 }
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 
 /**
  * Load translations for `$localize`.
@@ -329,5 +358,13 @@ function translate$1(messageParts, substitutions) {
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { clearTranslations, loadTranslations };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+export { clearTranslations, loadTranslations, MissingTranslationError as ɵMissingTranslationError, findEndOfBlock as ɵfindEndOfBlock, isMissingTranslationError as ɵisMissingTranslationError, makeParsedTranslation as ɵmakeParsedTranslation, makeTemplateObject as ɵmakeTemplateObject, parseMessage as ɵparseMessage, parseMetadata as ɵparseMetadata, parseTranslation as ɵparseTranslation, splitBlock as ɵsplitBlock, translate as ɵtranslate };
 //# sourceMappingURL=localize.js.map

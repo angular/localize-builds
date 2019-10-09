@@ -1,4 +1,4 @@
-import { MessageId, TargetMessage } from './utils/messages';
+import { MessageId, TargetMessage } from './utils';
 /**
  * Load translations for `$localize`.
  *
