@@ -10,7 +10,9 @@ import { TranslatePluginOptions } from './source_file_utils';
  */
 export declare class SourceFileTranslationHandler implements TranslationHandler {
     private translationOptions;
+    private sourceLocaleOptions;
     constructor(translationOptions?: TranslatePluginOptions);
-    canTranslate(relativeFilePath: string, contents: Buffer): boolean;
-    translate(diagnostics: Diagnostics, sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[]): void;
+    canTranslate(relativeFilePath: string, _contents: Buffer): boolean;
+    translate(diagnostics: Diagnostics, sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    private translateFile;
 }
