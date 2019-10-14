@@ -10,5 +10,6 @@ export interface TranslateFilesOptions {
     outputPathFn: OutputPathFn;
     diagnostics: Diagnostics;
     missingTranslation: MissingTranslationStrategy;
+    sourceLocale?: string;
 }
-export declare function translateFiles({ sourceRootPath, sourceFilePaths, translationFilePaths, outputPathFn, diagnostics, missingTranslation }: TranslateFilesOptions): void;
+export declare function translateFiles({ sourceRootPath, sourceFilePaths, translationFilePaths, outputPathFn, diagnostics, missingTranslation, sourceLocale }: TranslateFilesOptions): void;

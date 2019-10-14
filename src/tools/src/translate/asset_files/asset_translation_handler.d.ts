@@ -15,5 +15,5 @@ import { TranslationBundle, TranslationHandler } from '../translator';
  */
 export declare class AssetTranslationHandler implements TranslationHandler {
     canTranslate(_relativeFilePath: string, _contents: Buffer): boolean;
-    translate(diagnostics: Diagnostics, _sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[]): void;
+    translate(diagnostics: Diagnostics, _sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
 }

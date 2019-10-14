@@ -44,8 +44,11 @@ export interface TranslationHandler {
      * @param outputPathFn A function that returns an absolute path where the output file should be
      * written.
      * @param translations A collection of translations to apply to this file.
+     * @param sourceLocale The locale of the original application source. If provided then an
+     * additional copy of the application is created under this locale just with the `$localize` calls
+     * stripped out.
      */
-    translate(diagnostics: Diagnostics, sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[]): void;
+    translate(diagnostics: Diagnostics, sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
 }
 /**
  * Translate each file (e.g. source file or static asset) using the given `TranslationHandler`s.
@@ -55,5 +58,5 @@ export declare class Translator {
     private resourceHandlers;
     private diagnostics;
     constructor(resourceHandlers: TranslationHandler[], diagnostics: Diagnostics);
-    translateFiles(inputPaths: string[], rootPath: string, outputPathFn: OutputPathFn, translations: TranslationBundle[]): void;
+    translateFiles(inputPaths: string[], rootPath: string, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
 }
