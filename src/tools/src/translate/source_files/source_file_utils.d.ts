@@ -34,7 +34,7 @@ export declare function buildLocalizeReplacement(messageParts: TemplateStringsAr
 *
 * @param call The AST node of the call to process.
 */
-export declare function unwrapMessagePartsFromLocalizeCall(call: t.CallExpression): TemplateStringsArray;
+export declare function unwrapMessagePartsFromLocalizeCall(call: NodePath<t.CallExpression>): TemplateStringsArray;
 export declare function unwrapSubstitutionsFromLocalizeCall(call: t.CallExpression): t.Expression[];
 export declare function unwrapMessagePartsFromTemplateLiteral(elements: t.TemplateElement[]): TemplateStringsArray;
 /**
@@ -50,6 +50,23 @@ export declare function wrapInParensIfNecessary(expression: t.Expression): t.Exp
 * @param array The array to unwrap.
 */
 export declare function unwrapStringLiteralArray(array: t.Expression): string[];
+/**
+ * This expression is believed to be a call to a "lazy-load" template object helper function.
+ * This is expected to be of the form:
+ *
+ * ```ts
+ *  function _templateObject() {
+ *    var e = _taggedTemplateLiteral(['cooked string', 'raw string']);
+ *    return _templateObject = function() { return e }, e
+ *  }
+ * ```
+ *
+ * We unwrap this to return the call to `_taggedTemplateLiteral()`.
+ *
+ * @param call the call expression to unwrap
+ * @returns the  call expression
+ */
+export declare function unwrapLazyLoadHelperCall(call: NodePath<t.CallExpression>): NodePath<t.CallExpression>;
 /**
 * Is the given `node` an array of literal strings?
 *
