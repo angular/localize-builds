@@ -14,7 +14,7 @@ import { Diagnostics } from '../../diagnostics';
  * Is the given `expression` an identifier with the correct name
  * @param expression The expression to check.
  */
-export declare function isNamedIdentifier(expression: NodePath, name: string): expression is NodePath<t.Identifier>;
+export declare function isNamedIdentifier(expression: NodePath<t.Expression>, name: string): expression is NodePath<t.Identifier>;
 /**
 * Is the given `identifier` declared globally.
 * @param identifier The identifier to check.
@@ -96,8 +96,8 @@ export declare type MissingTranslationStrategy = 'error' | 'warning' | 'ignore';
  */
 export declare function translate(diagnostics: Diagnostics, translations: Record<string, ɵParsedTranslation>, messageParts: TemplateStringsArray, substitutions: readonly any[], missingTranslation: MissingTranslationStrategy): [TemplateStringsArray, readonly any[]];
 export declare class BabelParseError extends Error {
-    node: t.Node;
+    node: t.BaseNode;
     private readonly type;
-    constructor(node: t.Node, message: string);
+    constructor(node: t.BaseNode, message: string);
 }
 export declare function isBabelParseError(e: any): e is BabelParseError;
