@@ -1,5 +1,4 @@
 /// <amd-module name="@angular/localize/src/tools/src/file_utils" />
-/// <reference types="node" />
 export declare class FileUtils {
     static readFile(absolutePath: string): string;
     static readFileBuffer(absolutePath: string): Buffer;

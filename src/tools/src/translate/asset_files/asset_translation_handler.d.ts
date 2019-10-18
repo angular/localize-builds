@@ -1,5 +1,4 @@
 /// <amd-module name="@angular/localize/src/tools/src/translate/asset_files/asset_translation_handler" />
-/// <reference types="node" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
