@@ -1,5 +1,4 @@
 /// <amd-module name="@angular/localize/src/tools/src/translate/source_files/source_file_translation_handler" />
-/// <reference types="node" />
 import { Diagnostics } from '../../diagnostics';
 import { OutputPathFn } from '../output_path';
 import { TranslationBundle, TranslationHandler } from '../translator';
