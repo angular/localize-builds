@@ -18,6 +18,22 @@ export interface LocalizeFn {
      * different translations.
      */
     translate?: TranslateFn;
+    /**
+     * The current locale of the translated messages.
+     *
+     * The compile-time translation inliner is able to replace the following code:
+     *
+     * ```
+     * typeof $localize !== "undefined" && $localize.locale
+     * ```
+     *
+     * with a string literal of the current locale. E.g.
+     *
+     * ```
+     * "fr"
+     * ```
+     */
+    locale?: string;
 }
 export interface TranslateFn {
     (messageParts: TemplateStringsArray, expressions: readonly any[]): [TemplateStringsArray, readonly any[]];
