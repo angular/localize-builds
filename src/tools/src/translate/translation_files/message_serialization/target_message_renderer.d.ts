@@ -1,4 +1,4 @@
-/// <amd-module name="@angular/localize/src/tools/src/translate/message_renderers/target_message_renderer" />
+/// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/message_serialization/target_message_renderer" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
