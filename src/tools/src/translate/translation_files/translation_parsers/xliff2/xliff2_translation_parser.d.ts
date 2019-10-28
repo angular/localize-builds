@@ -1,6 +1,5 @@
 /// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/translation_parsers/xliff2/xliff2_translation_parser" />
-import { TranslationBundle } from '../../../translator';
-import { TranslationParser } from '../translation_parser';
+import { ParsedTranslationBundle, TranslationParser } from '../translation_parser';
 /**
  * A translation parser that can load translations from XLIFF 2 files.
  *
@@ -9,5 +8,5 @@ import { TranslationParser } from '../translation_parser';
  */
 export declare class Xliff2TranslationParser implements TranslationParser {
     canParse(filePath: string, contents: string): boolean;
-    parse(filePath: string, contents: string): TranslationBundle;
+    parse(filePath: string, contents: string): ParsedTranslationBundle;
 }
