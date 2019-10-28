@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/localize/src/tools/src/translate/message_renderers/message_renderer" />
+/// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/message_serialization/message_renderer" />
 export interface MessageRenderer<T> {
     message: T;
     startRender(): void;

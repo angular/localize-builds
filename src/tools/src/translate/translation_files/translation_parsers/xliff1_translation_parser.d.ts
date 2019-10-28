@@ -1,5 +1,5 @@
-/// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/translation_parsers/xliff1/xliff1_translation_parser" />
-import { ParsedTranslationBundle, TranslationParser } from '../translation_parser';
+/// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/translation_parsers/xliff1_translation_parser" />
+import { ParsedTranslationBundle, TranslationParser } from './translation_parser';
 /**
  * A translation parser that can load XLIFF 1.2 files.
  *
