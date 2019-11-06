@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+77.sha-2ed04ff.with-local-changes
+ * @license Angular v9.0.0-rc.0+69.sha-41560b4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/compiler')) :
     typeof define === 'function' && define.amd ? define('@angular/localize', ['exports', '@angular/compiler'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.localize = {}), global.ng.compiler));
-}(this, (function (exports, compiler) { 'use strict';
+}(this, function (exports, compiler) { 'use strict';
 
     /**
      * @license
@@ -565,12 +565,7 @@
      * found in the LICENSE file at https://angular.io/license
      */
 
-    Object.defineProperty(exports, 'ɵcomputeMsgId', {
-        enumerable: true,
-        get: function () {
-            return compiler.computeMsgId;
-        }
-    });
+    exports.ɵcomputeMsgId = compiler.computeMsgId;
     exports.clearTranslations = clearTranslations;
     exports.loadTranslations = loadTranslations;
     exports.ɵMissingTranslationError = MissingTranslationError;
@@ -586,5 +581,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=localize.umd.js.map
