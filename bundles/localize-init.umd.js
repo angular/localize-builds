@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+69.sha-41560b4.with-local-changes
+ * @license Angular v9.0.0-rc.0+78.sha-a20979d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 (function (factory) {
     typeof define === 'function' && define.amd ? define('@angular/localize/init', factory) :
     factory();
-}(function () { 'use strict';
+}((function () { 'use strict';
 
     /**
      * @license
@@ -218,5 +218,5 @@
     // Attach $localize to the global context, as a side-effect of this module.
     _global.$localize = $localize;
 
-}));
+})));
 //# sourceMappingURL=localize-init.umd.js.map
