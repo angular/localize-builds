@@ -1,6 +1,5 @@
-/// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/translation_parsers/simple_json/simple_json_translation_parser" />
-import { TranslationBundle } from '../../../translator';
-import { TranslationParser } from '../translation_parser';
+/// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/translation_parsers/simple_json_translation_parser" />
+import { ParsedTranslationBundle, TranslationParser } from './translation_parser';
 /**
  * A translation parser that can parse JSON that has the form:
  *
@@ -16,5 +15,5 @@ import { TranslationParser } from '../translation_parser';
  */
 export declare class SimpleJsonTranslationParser implements TranslationParser {
     canParse(filePath: string, _contents: string): boolean;
-    parse(_filePath: string, contents: string): TranslationBundle;
+    parse(_filePath: string, contents: string): ParsedTranslationBundle;
 }

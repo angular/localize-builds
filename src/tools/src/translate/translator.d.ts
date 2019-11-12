@@ -10,8 +10,7 @@ import { ɵMessageId, ɵParsedTranslation } from '@angular/localize';
 import { Diagnostics } from '../diagnostics';
 import { OutputPathFn } from './output_path';
 /**
- * An object that holds translations that have been loaded
- * from a translation file.
+ * An object that holds information to be used to translate files.
  */
 export interface TranslationBundle {
     locale: string;
