@@ -25,7 +25,6 @@ export declare class TargetMessageRenderer implements MessageRenderer<ɵParsedTr
     closeContainer(): void;
     startIcu(): void;
     endIcu(): void;
-    private normalizePlaceholderName;
     private renderPlaceholder;
     private storeMessagePart;
 }
