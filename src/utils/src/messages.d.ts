@@ -49,6 +49,17 @@ export interface ParsedMessage {
      */
     messageId: MessageId;
     /**
+     * Legacy message ids, if provided.
+     *
+     * In legacy message formats the message id can only be computed directly from the original
+     * template source.
+     *
+     * Since this information is not available in `$localize` calls, the legacy message ids may be
+     * attached by the compiler to the `$localize` metablock so it can be used if needed at the point
+     * of translation if the translations are encoded using the legacy message id.
+     */
+    legacyIds: MessageId[];
+    /**
      * A mapping of placeholder names to substitution values.
      */
     substitutions: Record<string, any>;
@@ -84,24 +95,28 @@ export interface MessageMetadata {
     meaning: string | undefined;
     description: string | undefined;
     id: string | undefined;
+    legacyIds: string[];
 }
 /**
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *
  * If the message part has a metadata block this function will extract the `meaning`,
- * `description` and `id` (if provided) from the block. These metadata properties are serialized in
- * the string delimited by `|` and `@@` respectively.
+ * `description`, `customId` and `legacyId` (if provided) from the block. These metadata properties
+ * are serialized in the string delimited by `|`, `@@` and `␟` respectively.
+ *
+ * (Note that `␟` is the `LEGACY_ID_INDICATOR` - see `constants.ts`.)
  *
  * For example:
  *
  * ```ts
- * `:meaning|description@@id`
- * `:meaning|@@id`
+ * `:meaning|description@@custom-id`
+ * `:meaning|@@custom-id`
  * `:meaning|description`
- * `description@@id`
+ * `description@@custom-id`
  * `meaning|`
  * `description`
- * `@@id`
+ * `@@custom-id`
+ * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2`
  * ```
  *
  * @param cooked The cooked version of the message part to parse.
@@ -122,18 +137,6 @@ export declare function parseMetadata(cooked: string, raw: string): MessageMetad
  *
  * Since blocks are optional, it is possible that the content of a message block actually starts
  * with a block marker. In this case the marker must be escaped `\:`.
- *
- * ---
- *
- * If the template literal was synthesized and downleveled by TypeScript to ES5 then its
- * raw array will only contain empty strings. This is because the current TypeScript compiler uses
- * the original source code to find the raw text and in the case of synthesized AST nodes, there is
- * no source code to draw upon.
- *
- * The workaround in this function is to assume that the template literal did not contain an escaped
- * placeholder name, and fall back on checking the cooked array instead.
- * This is a limitation if compiling to ES5 in TypeScript but is not a problem if the TypeScript
- * output is ES2015 and the code is downlevelled by a separate tool as happens in the Angular CLI.
  *
  * @param cooked The cooked version of the message part to parse.
  * @param raw The raw version of the message part to parse.
