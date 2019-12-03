@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.4+28.sha-716fc84.with-local-changes
+ * @license Angular v9.0.0-rc.4+51.sha-d2538ca.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -48,6 +48,22 @@ const MEANING_SEPARATOR = '|';
  * ```
  */
 const ID_SEPARATOR = '@@';
+/**
+ * The marker used to separate legacy message ids from the rest of a metadata block.
+ *
+ * For example:
+ *
+ * ```ts
+ * $localize `:@@custom-id␟2df64767cd895a8fabe3e18b94b5b6b6f9e2e3f0: Welcome!`;
+ * ```
+ *
+ * Note that this character is the "symbol for the unit separator" (␟) not the "unit separator
+ * character" itself, since that has no visual representation. See https://graphemica.com/%E2%90%9F.
+ *
+ * Here is some background for the original "unit separator character":
+ * https://stackoverflow.com/questions/8695118/whats-the-file-group-record-unit-separator-control-characters-and-its-usage
+ */
+const LEGACY_ID_INDICATOR = '\u241F';
 
 /**
  * @license
@@ -76,8 +92,11 @@ function parseMessage(messageParts, expressions) {
         placeholderNames.push(placeholderName);
         cleanedMessageParts.push(messagePart);
     }
+    const messageId = metadata.id || computeMsgId(messageString, metadata.meaning || '');
+    const legacyIds = metadata.legacyIds.filter(id => id !== messageId);
     return {
-        messageId: metadata.id || computeMsgId(messageString, metadata.meaning || ''),
+        messageId,
+        legacyIds,
         substitutions,
         messageString,
         meaning: metadata.meaning || '',
@@ -89,19 +108,22 @@ function parseMessage(messageParts, expressions) {
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *
  * If the message part has a metadata block this function will extract the `meaning`,
- * `description` and `id` (if provided) from the block. These metadata properties are serialized in
- * the string delimited by `|` and `@@` respectively.
+ * `description`, `customId` and `legacyId` (if provided) from the block. These metadata properties
+ * are serialized in the string delimited by `|`, `@@` and `␟` respectively.
+ *
+ * (Note that `␟` is the `LEGACY_ID_INDICATOR` - see `constants.ts`.)
  *
  * For example:
  *
  * ```ts
- * `:meaning|description@@id`
- * `:meaning|@@id`
+ * `:meaning|description@@custom-id`
+ * `:meaning|@@custom-id`
  * `:meaning|description`
- * `description@@id`
+ * `description@@custom-id`
  * `meaning|`
  * `description`
- * `@@id`
+ * `@@custom-id`
+ * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2`
  * ```
  *
  * @param cooked The cooked version of the message part to parse.
@@ -111,10 +133,11 @@ function parseMessage(messageParts, expressions) {
 function parseMetadata(cooked, raw) {
     const { text, block } = splitBlock(cooked, raw);
     if (block === undefined) {
-        return { text, meaning: undefined, description: undefined, id: undefined };
+        return { text, meaning: undefined, description: undefined, id: undefined, legacyIds: [] };
     }
     else {
-        const [meaningAndDesc, id] = block.split(ID_SEPARATOR, 2);
+        const [meaningDescAndId, ...legacyIds] = block.split(LEGACY_ID_INDICATOR);
+        const [meaningAndDesc, id] = meaningDescAndId.split(ID_SEPARATOR, 2);
         let [meaning, description] = meaningAndDesc.split(MEANING_SEPARATOR, 2);
         if (description === undefined) {
             description = meaning;
@@ -123,7 +146,7 @@ function parseMetadata(cooked, raw) {
         if (description === '') {
             description = undefined;
         }
-        return { text, meaning, description, id };
+        return { text, meaning, description, id, legacyIds };
     }
 }
 /**
@@ -140,18 +163,6 @@ function parseMetadata(cooked, raw) {
  * Since blocks are optional, it is possible that the content of a message block actually starts
  * with a block marker. In this case the marker must be escaped `\:`.
  *
- * ---
- *
- * If the template literal was synthesized and downleveled by TypeScript to ES5 then its
- * raw array will only contain empty strings. This is because the current TypeScript compiler uses
- * the original source code to find the raw text and in the case of synthesized AST nodes, there is
- * no source code to draw upon.
- *
- * The workaround in this function is to assume that the template literal did not contain an escaped
- * placeholder name, and fall back on checking the cooked array instead.
- * This is a limitation if compiling to ES5 in TypeScript but is not a problem if the TypeScript
- * output is ES2015 and the code is downlevelled by a separate tool as happens in the Angular CLI.
- *
  * @param cooked The cooked version of the message part to parse.
  * @param raw The raw version of the message part to parse.
  * @returns An object containing the `text` of the message part and the text of the `block`, if it
@@ -159,7 +170,6 @@ function parseMetadata(cooked, raw) {
  * @throws an error if the `block` is unterminated
  */
 function splitBlock(cooked, raw) {
-    raw = raw || cooked;
     if (raw.charAt(0) !== BLOCK_MARKER) {
         return { text: cooked };
     }
@@ -221,7 +231,8 @@ function isMissingTranslationError(e) {
  * `substitutions`) using the given `translations`.
  *
  * The tagged-string is parsed to extract its `messageId` which is used to find an appropriate
- * `ParsedTranslation`.
+ * `ParsedTranslation`. If this doesn't match and there are legacy ids then try matching a
+ * translation using those.
  *
  * If one is found then it is used to translate the message into a new set of `messageParts` and
  * `substitutions`.
@@ -233,7 +244,12 @@ function isMissingTranslationError(e) {
  */
 function translate(translations, messageParts, substitutions) {
     const message = parseMessage(messageParts, substitutions);
-    const translation = translations[message.messageId];
+    // Look up the translation using the messageId, and then the legacyId if available.
+    let translation = translations[message.messageId];
+    // If the messageId did not match a translation, try matching the legacy ids instead
+    for (let i = 0; i < message.legacyIds.length && translation === undefined; i++) {
+        translation = translations[message.legacyIds[i]];
+    }
     if (translation === undefined) {
         throw new MissingTranslationError(message);
     }
