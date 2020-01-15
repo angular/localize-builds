@@ -15,7 +15,7 @@ export declare class Diagnostics {
         type: 'warning' | 'error';
         message: string;
     }[];
-    readonly hasErrors: boolean;
+    get hasErrors(): boolean;
     warn(message: string): void;
     error(message: string): void;
 }
