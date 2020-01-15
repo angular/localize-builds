@@ -14,7 +14,7 @@ import { MessageRenderer } from './message_renderer';
 export declare class TargetMessageRenderer implements MessageRenderer<ɵParsedTranslation> {
     private current;
     private icuDepth;
-    readonly message: ɵParsedTranslation;
+    get message(): ɵParsedTranslation;
     startRender(): void;
     endRender(): void;
     text(text: string): void;
