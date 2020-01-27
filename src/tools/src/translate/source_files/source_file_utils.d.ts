@@ -110,3 +110,4 @@ export declare class BabelParseError extends Error {
     constructor(node: t.Node, message: string);
 }
 export declare function isBabelParseError(e: any): e is BabelParseError;
+export declare function buildCodeFrameError(path: NodePath, e: BabelParseError): string;
