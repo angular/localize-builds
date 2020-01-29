@@ -1,6 +1,6 @@
 {
   "name": "@angular/localize",
-  "version": "9.0.0-rc.1+847.sha-53c4c8d",
+  "version": "9.0.0-rc.1+848.sha-fb852f7",
   "description": "Angular - library for localizing messages",
   "main": "./bundles/localize.umd.js",
   "module": "./fesm5/localize.js",
@@ -51,7 +51,7 @@
     "node": ">=8.0"
   },
   "dependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "7.8.3",
     "glob": "7.1.2",
     "yargs": "13.1.0"
   },
