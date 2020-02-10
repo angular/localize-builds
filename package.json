@@ -1,6 +1,6 @@
 {
   "name": "@angular/localize",
-  "version": "9.0.0+40.sha-bfcf6d0",
+  "version": "9.0.0+41.sha-d9fcfd3",
   "description": "Angular - library for localizing messages",
   "main": "./bundles/localize.umd.js",
   "module": "./fesm5/localize.js",
