@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.1+43.sha-a7d5c55
+ * @license Angular v9.1.0-next.1+45.sha-71b5970
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -259,7 +259,8 @@ function translate(translations, messageParts, substitutions) {
                 return message.substitutions[placeholder];
             }
             else {
-                throw new Error(`No placeholder found with name ${placeholder} in message ${describeMessage(message)}.`);
+                throw new Error(`There is a placeholder name mismatch with the translation provided for the message ${describeMessage(message)}.\n` +
+                    `The translation contains a placeholder with name ${placeholder}, which does not exist in the message.`);
             }
         })
     ];
