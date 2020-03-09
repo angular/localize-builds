@@ -18,4 +18,5 @@ export declare class Diagnostics {
     get hasErrors(): boolean;
     warn(message: string): void;
     error(message: string): void;
+    formatDiagnostics(message: string): string;
 }
