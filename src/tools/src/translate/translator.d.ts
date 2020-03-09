@@ -15,6 +15,7 @@ import { OutputPathFn } from './output_path';
 export interface TranslationBundle {
     locale: string;
     translations: Record<ɵMessageId, ɵParsedTranslation>;
+    diagnostics?: Diagnostics;
 }
 /**
  * Implement this interface to provide a class that can handle translation for the given resource in
