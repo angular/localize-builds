@@ -14,8 +14,9 @@ import { TranslationParser } from './translation_parsers/translation_parser';
  */
 export declare class TranslationLoader {
     private translationParsers;
-    private diagnostics;
-    constructor(translationParsers: TranslationParser[], diagnostics: Diagnostics);
+    /** @deprecated */ private diagnostics?;
+    constructor(translationParsers: TranslationParser<any>[], 
+    /** @deprecated */ diagnostics?: Diagnostics | undefined);
     /**
      * Load and parse the translation files into a collection of `TranslationBundles`.
      *
