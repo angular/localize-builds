@@ -25,39 +25,39 @@ export declare function isLocalize(expression: NodePath, localizeName: string): 
  */
 export declare function isNamedIdentifier(expression: NodePath, name: string): expression is NodePath<t.Identifier>;
 /**
-* Is the given `identifier` declared globally.
-* @param identifier The identifier to check.
-*/
+ * Is the given `identifier` declared globally.
+ * @param identifier The identifier to check.
+ */
 export declare function isGlobalIdentifier(identifier: NodePath<t.Identifier>): boolean;
 /**
-* Build a translated expression to replace the call to `$localize`.
-* @param messageParts The static parts of the message.
-* @param substitutions The expressions to substitute into the message.
-*/
+ * Build a translated expression to replace the call to `$localize`.
+ * @param messageParts The static parts of the message.
+ * @param substitutions The expressions to substitute into the message.
+ */
 export declare function buildLocalizeReplacement(messageParts: TemplateStringsArray, substitutions: readonly t.Expression[]): t.Expression;
 /**
-* Extract the message parts from the given `call` (to `$localize`).
-*
-* The message parts will either by the first argument to the `call` or it will be wrapped in call
-* to a helper function like `__makeTemplateObject`.
-*
-* @param call The AST node of the call to process.
-*/
+ * Extract the message parts from the given `call` (to `$localize`).
+ *
+ * The message parts will either by the first argument to the `call` or it will be wrapped in call
+ * to a helper function like `__makeTemplateObject`.
+ *
+ * @param call The AST node of the call to process.
+ */
 export declare function unwrapMessagePartsFromLocalizeCall(call: NodePath<t.CallExpression>): TemplateStringsArray;
 export declare function unwrapSubstitutionsFromLocalizeCall(call: t.CallExpression): t.Expression[];
 export declare function unwrapMessagePartsFromTemplateLiteral(elements: t.TemplateElement[]): TemplateStringsArray;
 /**
-* Wrap the given `expression` in parentheses if it is a binary expression.
-*
-* This ensures that this expression is evaluated correctly if it is embedded in another expression.
-*
-* @param expression The expression to potentially wrap.
-*/
+ * Wrap the given `expression` in parentheses if it is a binary expression.
+ *
+ * This ensures that this expression is evaluated correctly if it is embedded in another expression.
+ *
+ * @param expression The expression to potentially wrap.
+ */
 export declare function wrapInParensIfNecessary(expression: t.Expression): t.Expression;
 /**
-* Extract the string values from an `array` of string literals.
-* @param array The array to unwrap.
-*/
+ * Extract the string values from an `array` of string literals.
+ * @param array The array to unwrap.
+ */
 export declare function unwrapStringLiteralArray(array: t.Expression): string[];
 /**
  * This expression is believed to be a call to a "lazy-load" template object helper function.
@@ -77,17 +77,17 @@ export declare function unwrapStringLiteralArray(array: t.Expression): string[];
  */
 export declare function unwrapLazyLoadHelperCall(call: NodePath<t.CallExpression>): NodePath<t.CallExpression>;
 /**
-* Is the given `node` an array of literal strings?
-*
-* @param node The node to test.
-*/
+ * Is the given `node` an array of literal strings?
+ *
+ * @param node The node to test.
+ */
 export declare function isStringLiteralArray(node: t.Node): node is t.Expression & {
     elements: t.StringLiteral[];
 };
 /**
-* Are all the given `nodes` expressions?
-* @param nodes The nodes to test.
-*/
+ * Are all the given `nodes` expressions?
+ * @param nodes The nodes to test.
+ */
 export declare function isArrayOfExpressions(nodes: t.Node[]): nodes is t.Expression[];
 /** Options that affect how the `makeEsXXXTranslatePlugin()` functions work. */
 export interface TranslatePluginOptions {

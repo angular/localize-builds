@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.1+36.sha-c8f2ca2
+ * @license Angular v9.1.1+40.sha-26f4915
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -101,7 +101,8 @@ function parseMessage(messageParts, expressions) {
         messageString,
         meaning: metadata.meaning || '',
         description: metadata.description || '',
-        messageParts: cleanedMessageParts, placeholderNames,
+        messageParts: cleanedMessageParts,
+        placeholderNames,
     };
 }
 /**
@@ -195,9 +196,9 @@ function computePlaceholderName(index) {
  */
 function findEndOfBlock(cooked, raw) {
     /************************************************************************************************
-    * This function is repeated in `src/localize/src/localize.ts` and the two should be kept in sync.
-    * (See that file for more explanation of why.)
-    ************************************************************************************************/
+     * This function is repeated in `src/localize/src/localize.ts` and the two should be kept in sync.
+     * (See that file for more explanation of why.)
+     ************************************************************************************************/
     for (let cookedIndex = 1, rawIndex = 1; cookedIndex < cooked.length; cookedIndex++, rawIndex++) {
         if (raw[rawIndex] === '\\') {
             rawIndex++;
