@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.3+1.sha-781f561
+ * @license Angular v10.0.0-next.3+2.sha-47f9867
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -306,7 +306,8 @@ function makeTemplateObject(cooked, raw) {
 }
 function describeMessage(message) {
     const meaningString = message.meaning && ` - "${message.meaning}"`;
-    return `"${message.messageId}" ("${message.messageString}"${meaningString})`;
+    const legacy = message.legacyIds.length > 0 ? ` [${message.legacyIds.map(l => `"${l}"`).join(', ')}]` : '';
+    return `"${message.messageId}"${legacy} ("${message.messageString}"${meaningString})`;
 }
 
 /**
