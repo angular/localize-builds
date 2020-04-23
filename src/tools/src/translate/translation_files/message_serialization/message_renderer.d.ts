@@ -19,4 +19,3 @@ export interface MessageRenderer<T> {
     startIcu(): void;
     endIcu(): void;
 }
-export declare function stripInterpolationMarkers(interpolation: string): string;

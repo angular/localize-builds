@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { PluginObj } from '@babel/core';
-import { TranslatePluginOptions } from './source_file_utils';
+import { TranslatePluginOptions } from '../../source_file_utils';
 /**
  * This Babel plugin will replace the following code forms with a string literal containing the
  * given `locale`.
