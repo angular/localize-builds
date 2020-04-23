@@ -13,7 +13,7 @@ import { ParsedTranslationBundle, TranslationParser } from './translation_parser
  * }
  * ```
  */
-export declare class SimpleJsonTranslationParser implements TranslationParser {
-    canParse(filePath: string, _contents: string): boolean;
-    parse(_filePath: string, contents: string): ParsedTranslationBundle;
+export declare class SimpleJsonTranslationParser implements TranslationParser<Object> {
+    canParse(filePath: string, contents: string): Object | false;
+    parse(_filePath: string, contents: string, json?: Object): ParsedTranslationBundle;
 }

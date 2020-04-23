@@ -24,6 +24,56 @@ export declare type TargetMessage = string;
  */
 export declare type MessageId = string;
 /**
+ * The location of the message
+ */
+export interface SourceLocation {
+    start: {
+        line: number;
+        column: number;
+    };
+    end: {
+        line: number;
+        column: number;
+    };
+    file: string;
+}
+/**
+ * Additional information that can be associated with a message.
+ */
+export interface MessageMetadata {
+    /**
+     * A human readable rendering of the message
+     */
+    text: string;
+    /**
+     * A unique identifier for this message.
+     */
+    id?: MessageId;
+    /**
+     * Legacy message ids, if provided.
+     *
+     * In legacy message formats the message id can only be computed directly from the original
+     * template source.
+     *
+     * Since this information is not available in `$localize` calls, the legacy message ids may be
+     * attached by the compiler to the `$localize` metablock so it can be used if needed at the point
+     * of translation if the translations are encoded using the legacy message id.
+     */
+    legacyIds?: string[];
+    /**
+     * The meaning of the `message`, used to distinguish identical `messageString`s.
+     */
+    meaning?: string;
+    /**
+     * The description of the `message`, used to aid translation.
+     */
+    description?: string;
+    /**
+     * The location of the message in the source.
+     */
+    location?: SourceLocation;
+}
+/**
  * Information parsed from a `$localize` tagged string that is used to translate it.
  *
  * For example:
@@ -37,44 +87,23 @@ export declare type MessageId = string;
  *
  * ```
  * {
- *   messageId: '6998194507597730591',
+ *   id: '6998194507597730591',
  *   substitutions: { title: 'Jo Bloggs' },
  *   messageString: 'Hello {$title}!',
  * }
  * ```
  */
-export interface ParsedMessage {
+export interface ParsedMessage extends MessageMetadata {
     /**
      * The key used to look up the appropriate translation target.
-     */
-    messageId: MessageId;
-    /**
-     * Legacy message ids, if provided.
      *
-     * In legacy message formats the message id can only be computed directly from the original
-     * template source.
-     *
-     * Since this information is not available in `$localize` calls, the legacy message ids may be
-     * attached by the compiler to the `$localize` metablock so it can be used if needed at the point
-     * of translation if the translations are encoded using the legacy message id.
+     * In `ParsedMessage` this is a required field, whereas it is optional in `MessageMetadata`.
      */
-    legacyIds: MessageId[];
+    id: MessageId;
     /**
      * A mapping of placeholder names to substitution values.
      */
     substitutions: Record<string, any>;
-    /**
-     * A human readable rendering of the message
-     */
-    messageString: string;
-    /**
-     * The meaning of the `message`, used to distinguish identical `messageString`s.
-     */
-    meaning: string;
-    /**
-     * The description of the `message`, used to aid translation.
-     */
-    description: string;
     /**
      * The static parts of the message.
      */
@@ -89,14 +118,7 @@ export interface ParsedMessage {
  *
  * See `ParsedMessage` for an example.
  */
-export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[]): ParsedMessage;
-export interface MessageMetadata {
-    text: string;
-    meaning: string | undefined;
-    description: string | undefined;
-    id: string | undefined;
-    legacyIds: string[];
-}
+export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[], location?: SourceLocation): ParsedMessage;
 /**
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *
