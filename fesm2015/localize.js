@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.3+28.sha-0f389fa
+ * @license Angular v9.1.3+34.sha-0ce96f1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -77,7 +77,7 @@ const LEGACY_ID_INDICATOR = '\u241F';
  *
  * See `ParsedMessage` for an example.
  */
-function parseMessage(messageParts, expressions) {
+function parseMessage(messageParts, expressions, location) {
     const substitutions = {};
     const metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
     const cleanedMessageParts = [metadata.text];
@@ -93,16 +93,17 @@ function parseMessage(messageParts, expressions) {
         cleanedMessageParts.push(messagePart);
     }
     const messageId = metadata.id || computeMsgId(messageString, metadata.meaning || '');
-    const legacyIds = metadata.legacyIds.filter(id => id !== messageId);
+    const legacyIds = metadata.legacyIds && metadata.legacyIds.filter(id => id !== messageId);
     return {
-        messageId,
+        id: messageId,
         legacyIds,
         substitutions,
-        messageString,
+        text: messageString,
         meaning: metadata.meaning || '',
         description: metadata.description || '',
         messageParts: cleanedMessageParts,
         placeholderNames,
+        location,
     };
 }
 /**
@@ -132,9 +133,9 @@ function parseMessage(messageParts, expressions) {
  * @returns A object containing any metadata that was parsed from the message part.
  */
 function parseMetadata(cooked, raw) {
-    const { text, block } = splitBlock(cooked, raw);
+    const { text: messageString, block } = splitBlock(cooked, raw);
     if (block === undefined) {
-        return { text, meaning: undefined, description: undefined, id: undefined, legacyIds: [] };
+        return { text: messageString };
     }
     else {
         const [meaningDescAndId, ...legacyIds] = block.split(LEGACY_ID_INDICATOR);
@@ -147,7 +148,7 @@ function parseMetadata(cooked, raw) {
         if (description === '') {
             description = undefined;
         }
-        return { text, meaning, description, id, legacyIds };
+        return { text: messageString, meaning, description, id, legacyIds };
     }
 }
 /**
@@ -246,10 +247,12 @@ function isMissingTranslationError(e) {
 function translate(translations, messageParts, substitutions) {
     const message = parseMessage(messageParts, substitutions);
     // Look up the translation using the messageId, and then the legacyId if available.
-    let translation = translations[message.messageId];
+    let translation = translations[message.id];
     // If the messageId did not match a translation, try matching the legacy ids instead
-    for (let i = 0; i < message.legacyIds.length && translation === undefined; i++) {
-        translation = translations[message.legacyIds[i]];
+    if (message.legacyIds !== undefined) {
+        for (let i = 0; i < message.legacyIds.length && translation === undefined; i++) {
+            translation = translations[message.legacyIds[i]];
+        }
     }
     if (translation === undefined) {
         throw new MissingTranslationError(message);
@@ -274,8 +277,8 @@ function translate(translations, messageParts, substitutions) {
  *
  * @param message the message to be parsed.
  */
-function parseTranslation(message) {
-    const parts = message.split(/{\$([^}]*)}/);
+function parseTranslation(messageString) {
+    const parts = messageString.split(/{\$([^}]*)}/);
     const messageParts = [parts[0]];
     const placeholderNames = [];
     for (let i = 1; i < parts.length - 1; i += 2) {
@@ -283,7 +286,11 @@ function parseTranslation(message) {
         messageParts.push(`${parts[i + 1]}`);
     }
     const rawMessageParts = messageParts.map(part => part.charAt(0) === BLOCK_MARKER ? '\\' + part : part);
-    return { messageParts: makeTemplateObject(messageParts, rawMessageParts), placeholderNames };
+    return {
+        text: messageString,
+        messageParts: makeTemplateObject(messageParts, rawMessageParts),
+        placeholderNames,
+    };
 }
 /**
  * Create a `ParsedTranslation` from a set of `messageParts` and `placeholderNames`.
@@ -292,7 +299,15 @@ function parseTranslation(message) {
  * @param placeholderNames The names of the placeholders to intersperse between the `messageParts`.
  */
 function makeParsedTranslation(messageParts, placeholderNames = []) {
-    return { messageParts: makeTemplateObject(messageParts, messageParts), placeholderNames };
+    let messageString = messageParts[0];
+    for (let i = 0; i < placeholderNames.length - 1; i++) {
+        messageString += `{$${placeholderNames[i]}}${messageParts[i + 1]}`;
+    }
+    return {
+        text: messageString,
+        messageParts: makeTemplateObject(messageParts, messageParts),
+        placeholderNames
+    };
 }
 /**
  * Create the specialized array that is passed to tagged-string tag functions.
@@ -306,8 +321,10 @@ function makeTemplateObject(cooked, raw) {
 }
 function describeMessage(message) {
     const meaningString = message.meaning && ` - "${message.meaning}"`;
-    const legacy = message.legacyIds.length > 0 ? ` [${message.legacyIds.map(l => `"${l}"`).join(', ')}]` : '';
-    return `"${message.messageId}"${legacy} ("${message.messageString}"${meaningString})`;
+    const legacy = message.legacyIds && message.legacyIds.length > 0 ?
+        ` [${message.legacyIds.map(l => `"${l}"`).join(', ')}]` :
+        '';
+    return `"${message.id}"${legacy} ("${message.text}"${meaningString})`;
 }
 
 /**

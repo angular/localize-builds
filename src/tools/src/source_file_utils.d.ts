@@ -1,4 +1,4 @@
-/// <amd-module name="@angular/localize/src/tools/src/translate/source_files/source_file_utils" />
+/// <amd-module name="@angular/localize/src/tools/src/source_file_utils" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -6,10 +6,10 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ɵParsedTranslation } from '@angular/localize';
+import { ɵParsedTranslation, ɵSourceLocation } from '@angular/localize';
 import { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
-import { Diagnostics } from '../../diagnostics';
+import { Diagnostics } from './diagnostics';
 /**
  * Is the given `expression` the global `$localize` identifier?
  *
@@ -111,3 +111,4 @@ export declare class BabelParseError extends Error {
 }
 export declare function isBabelParseError(e: any): e is BabelParseError;
 export declare function buildCodeFrameError(path: NodePath, e: BabelParseError): string;
+export declare function getLocation(path: NodePath): ɵSourceLocation | undefined;

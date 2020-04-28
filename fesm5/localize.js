@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.3+28.sha-0f389fa
+ * @license Angular v9.1.3+34.sha-0ce96f1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -71,7 +71,7 @@ var LEGACY_ID_INDICATOR = '\u241F';
  *
  * See `ParsedMessage` for an example.
  */
-function parseMessage(messageParts, expressions) {
+function parseMessage(messageParts, expressions, location) {
     var substitutions = {};
     var metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
     var cleanedMessageParts = [metadata.text];
@@ -87,16 +87,17 @@ function parseMessage(messageParts, expressions) {
         cleanedMessageParts.push(messagePart);
     }
     var messageId = metadata.id || computeMsgId(messageString, metadata.meaning || '');
-    var legacyIds = metadata.legacyIds.filter(function (id) { return id !== messageId; });
+    var legacyIds = metadata.legacyIds && metadata.legacyIds.filter(function (id) { return id !== messageId; });
     return {
-        messageId: messageId,
+        id: messageId,
         legacyIds: legacyIds,
         substitutions: substitutions,
-        messageString: messageString,
+        text: messageString,
         meaning: metadata.meaning || '',
         description: metadata.description || '',
         messageParts: cleanedMessageParts,
         placeholderNames: placeholderNames,
+        location: location,
     };
 }
 /**
@@ -126,9 +127,9 @@ function parseMessage(messageParts, expressions) {
  * @returns A object containing any metadata that was parsed from the message part.
  */
 function parseMetadata(cooked, raw) {
-    var _a = splitBlock(cooked, raw), text = _a.text, block = _a.block;
+    var _a = splitBlock(cooked, raw), messageString = _a.text, block = _a.block;
     if (block === undefined) {
-        return { text: text, meaning: undefined, description: undefined, id: undefined, legacyIds: [] };
+        return { text: messageString };
     }
     else {
         var _b = __read(block.split(LEGACY_ID_INDICATOR)), meaningDescAndId = _b[0], legacyIds = _b.slice(1);
@@ -141,7 +142,7 @@ function parseMetadata(cooked, raw) {
         if (description === '') {
             description = undefined;
         }
-        return { text: text, meaning: meaning, description: description, id: id, legacyIds: legacyIds };
+        return { text: messageString, meaning: meaning, description: description, id: id, legacyIds: legacyIds };
     }
 }
 /**
@@ -236,10 +237,12 @@ function isMissingTranslationError(e) {
 function translate(translations, messageParts, substitutions) {
     var message = parseMessage(messageParts, substitutions);
     // Look up the translation using the messageId, and then the legacyId if available.
-    var translation = translations[message.messageId];
+    var translation = translations[message.id];
     // If the messageId did not match a translation, try matching the legacy ids instead
-    for (var i = 0; i < message.legacyIds.length && translation === undefined; i++) {
-        translation = translations[message.legacyIds[i]];
+    if (message.legacyIds !== undefined) {
+        for (var i = 0; i < message.legacyIds.length && translation === undefined; i++) {
+            translation = translations[message.legacyIds[i]];
+        }
     }
     if (translation === undefined) {
         throw new MissingTranslationError(message);
@@ -264,8 +267,8 @@ function translate(translations, messageParts, substitutions) {
  *
  * @param message the message to be parsed.
  */
-function parseTranslation(message) {
-    var parts = message.split(/{\$([^}]*)}/);
+function parseTranslation(messageString) {
+    var parts = messageString.split(/{\$([^}]*)}/);
     var messageParts = [parts[0]];
     var placeholderNames = [];
     for (var i = 1; i < parts.length - 1; i += 2) {
@@ -273,7 +276,11 @@ function parseTranslation(message) {
         messageParts.push("" + parts[i + 1]);
     }
     var rawMessageParts = messageParts.map(function (part) { return part.charAt(0) === BLOCK_MARKER ? '\\' + part : part; });
-    return { messageParts: makeTemplateObject(messageParts, rawMessageParts), placeholderNames: placeholderNames };
+    return {
+        text: messageString,
+        messageParts: makeTemplateObject(messageParts, rawMessageParts),
+        placeholderNames: placeholderNames,
+    };
 }
 /**
  * Create a `ParsedTranslation` from a set of `messageParts` and `placeholderNames`.
@@ -283,7 +290,15 @@ function parseTranslation(message) {
  */
 function makeParsedTranslation(messageParts, placeholderNames) {
     if (placeholderNames === void 0) { placeholderNames = []; }
-    return { messageParts: makeTemplateObject(messageParts, messageParts), placeholderNames: placeholderNames };
+    var messageString = messageParts[0];
+    for (var i = 0; i < placeholderNames.length - 1; i++) {
+        messageString += "{$" + placeholderNames[i] + "}" + messageParts[i + 1];
+    }
+    return {
+        text: messageString,
+        messageParts: makeTemplateObject(messageParts, messageParts),
+        placeholderNames: placeholderNames
+    };
 }
 /**
  * Create the specialized array that is passed to tagged-string tag functions.
@@ -297,8 +312,10 @@ function makeTemplateObject(cooked, raw) {
 }
 function describeMessage(message) {
     var meaningString = message.meaning && " - \"" + message.meaning + "\"";
-    var legacy = message.legacyIds.length > 0 ? " [" + message.legacyIds.map(function (l) { return "\"" + l + "\""; }).join(', ') + "]" : '';
-    return "\"" + message.messageId + "\"" + legacy + " (\"" + message.messageString + "\"" + meaningString + ")";
+    var legacy = message.legacyIds && message.legacyIds.length > 0 ?
+        " [" + message.legacyIds.map(function (l) { return "\"" + l + "\""; }).join(', ') + "]" :
+        '';
+    return "\"" + message.id + "\"" + legacy + " (\"" + message.text + "\"" + meaningString + ")";
 }
 
 /**
