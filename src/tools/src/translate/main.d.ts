@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /// <amd-module name="@angular/localize/src/tools/src/translate/main" />
-import { Diagnostics } from '../diagnostics';
-import { MissingTranslationStrategy } from '../source_file_utils';
 import { OutputPathFn } from './output_path';
+import { MissingTranslationStrategy } from './source_files/source_file_utils';
+import { Diagnostics } from '../diagnostics';
 export interface TranslateFilesOptions {
     /**
      * The root path of the files to translate, either absolute or relative to the current working

@@ -1,8 +1,8 @@
 /// <amd-module name="@angular/localize/src/tools/src/translate/source_files/source_file_translation_handler" />
 import { Diagnostics } from '../../diagnostics';
-import { TranslatePluginOptions } from '../../source_file_utils';
 import { OutputPathFn } from '../output_path';
 import { TranslationBundle, TranslationHandler } from '../translator';
+import { TranslatePluginOptions } from './source_file_utils';
 /**
  * Translate a file by inlining all messages tagged by `$localize` with the appropriate translated
  * message.

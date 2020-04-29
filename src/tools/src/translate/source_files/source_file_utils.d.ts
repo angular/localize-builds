@@ -1,4 +1,4 @@
-/// <amd-module name="@angular/localize/src/tools/src/source_file_utils" />
+/// <amd-module name="@angular/localize/src/tools/src/translate/source_files/source_file_utils" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -9,7 +9,7 @@
 import { ɵParsedTranslation, ɵSourceLocation } from '@angular/localize';
 import { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
-import { Diagnostics } from './diagnostics';
+import { Diagnostics } from '../../diagnostics';
 /**
  * Is the given `expression` the global `$localize` identifier?
  *

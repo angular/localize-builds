@@ -9,5 +9,5 @@
 import { ɵParsedTranslation } from '@angular/localize';
 import { PluginObj } from '@babel/core';
 import { Diagnostics } from '../../diagnostics';
-import { TranslatePluginOptions } from '../../source_file_utils';
+import { TranslatePluginOptions } from './source_file_utils';
 export declare function makeEs2015TranslatePlugin(diagnostics: Diagnostics, translations: Record<string, ɵParsedTranslation>, { missingTranslation, localizeName }?: TranslatePluginOptions): PluginObj;
