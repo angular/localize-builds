@@ -7,6 +7,10 @@
  */
 /// <amd-module name="@angular/localize/src/tools/src/diagnostics" />
 /**
+ * How to handle potential diagnostics.
+ */
+export declare type DiagnosticHandlingStrategy = 'error' | 'warning' | 'ignore';
+/**
  * This class is used to collect and then report warnings and errors that occur during the execution
  * of the tools.
  */
@@ -16,7 +20,9 @@ export declare class Diagnostics {
         message: string;
     }[];
     get hasErrors(): boolean;
+    add(type: DiagnosticHandlingStrategy, message: string): void;
     warn(message: string): void;
     error(message: string): void;
+    merge(other: Diagnostics): void;
     formatDiagnostics(message: string): string;
 }
