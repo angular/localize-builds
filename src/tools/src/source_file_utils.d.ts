@@ -9,7 +9,7 @@
 import { ɵParsedTranslation, ɵSourceLocation } from '@angular/localize';
 import { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
-import { Diagnostics } from './diagnostics';
+import { DiagnosticHandlingStrategy, Diagnostics } from './diagnostics';
 /**
  * Is the given `expression` the global `$localize` identifier?
  *
@@ -91,19 +91,15 @@ export declare function isStringLiteralArray(node: t.Node): node is t.Expression
 export declare function isArrayOfExpressions(nodes: t.Node[]): nodes is t.Expression[];
 /** Options that affect how the `makeEsXXXTranslatePlugin()` functions work. */
 export interface TranslatePluginOptions {
-    missingTranslation?: MissingTranslationStrategy;
+    missingTranslation?: DiagnosticHandlingStrategy;
     localizeName?: string;
 }
-/**
- * How to handle missing translations.
- */
-export declare type MissingTranslationStrategy = 'error' | 'warning' | 'ignore';
 /**
  * Translate the text of the given message, using the given translations.
  *
  * Logs as warning if the translation is not available
  */
-export declare function translate(diagnostics: Diagnostics, translations: Record<string, ɵParsedTranslation>, messageParts: TemplateStringsArray, substitutions: readonly any[], missingTranslation: MissingTranslationStrategy): [TemplateStringsArray, readonly any[]];
+export declare function translate(diagnostics: Diagnostics, translations: Record<string, ɵParsedTranslation>, messageParts: TemplateStringsArray, substitutions: readonly any[], missingTranslation: DiagnosticHandlingStrategy): [TemplateStringsArray, readonly any[]];
 export declare class BabelParseError extends Error {
     node: t.Node;
     private readonly type;
