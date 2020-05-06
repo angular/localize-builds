@@ -1,15 +1,7 @@
 {
   "name": "@angular/localize",
-  "version": "10.0.0-next.5+45.sha-fafa50d",
+  "version": "10.0.0-next.5+53.sha-3c6c00d",
   "description": "Angular - library for localizing messages",
-  "main": "./bundles/localize.umd.js",
-  "module": "./fesm5/localize.js",
-  "es2015": "./fesm2015/localize.js",
-  "esm5": "./esm5/index.js",
-  "esm2015": "./esm2015/index.js",
-  "fesm5": "./fesm5/localize.js",
-  "fesm2015": "./fesm2015/localize.js",
-  "typings": "./index.d.ts",
   "bin": {
     "localize-translate": "./src/tools/src/translate/main.js"
   },
@@ -57,5 +49,11 @@
   },
   "publishConfig": {
     "registry": "https://wombat-dressing-room.appspot.com"
-  }
+  },
+  "main": "./bundles/localize.umd.js",
+  "fesm2015": "./fesm2015/localize.js",
+  "esm2015": "./esm2015/index.js",
+  "typings": "./index.d.ts",
+  "module": "./fesm2015/localize.js",
+  "es2015": "./fesm2015/localize.js"
 }
