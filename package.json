@@ -1,6 +1,6 @@
 {
   "name": "@angular/localize",
-  "version": "10.0.0-next.6+6.sha-178e750",
+  "version": "10.0.0-next.6+8.sha-de0c71c",
   "description": "Angular - library for localizing messages",
   "bin": {
     "localize-translate": "./src/tools/src/translate/main.js"
