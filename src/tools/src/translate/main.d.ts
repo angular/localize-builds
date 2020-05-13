@@ -41,9 +41,8 @@ export interface TranslateFilesOptions {
      */
     translationFileLocales: (string | undefined)[];
     /**
-     * A function that computes the output path of where the translated files will be
-     * written. The marker `{{LOCALE}}` will be replaced with the target locale. E.g.
-     * `dist/{{LOCALE}}`.
+     * A function that computes the output path of where the translated files will be written.
+     * The marker `{{LOCALE}}` will be replaced with the target locale. E.g. `dist/{{LOCALE}}`.
      */
     outputPathFn: OutputPathFn;
     /**
