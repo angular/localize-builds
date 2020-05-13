@@ -1,4 +1,12 @@
 /// <amd-module name="@angular/localize/src/tools/src/translate/source_files/source_file_translation_handler" />
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { AbsoluteFsPath, FileSystem, PathSegment } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { Diagnostics } from '../../diagnostics';
 import { TranslatePluginOptions } from '../../source_file_utils';
 import { OutputPathFn } from '../output_path';
@@ -8,10 +16,12 @@ import { TranslationBundle, TranslationHandler } from '../translator';
  * message.
  */
 export declare class SourceFileTranslationHandler implements TranslationHandler {
+    private fs;
     private translationOptions;
     private sourceLocaleOptions;
-    constructor(translationOptions?: TranslatePluginOptions);
-    canTranslate(relativeFilePath: string, _contents: Buffer): boolean;
-    translate(diagnostics: Diagnostics, sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    constructor(fs: FileSystem, translationOptions?: TranslatePluginOptions);
+    canTranslate(relativeFilePath: PathSegment, _contents: Buffer): boolean;
+    translate(diagnostics: Diagnostics, sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
     private translateFile;
+    private writeSourceFile;
 }
