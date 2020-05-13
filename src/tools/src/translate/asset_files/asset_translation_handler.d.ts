@@ -6,6 +6,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { AbsoluteFsPath, FileSystem, PathSegment } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { Diagnostics } from '../../diagnostics';
 import { OutputPathFn } from '../output_path';
 import { TranslationBundle, TranslationHandler } from '../translator';
@@ -13,6 +14,9 @@ import { TranslationBundle, TranslationHandler } from '../translator';
  * Translate an asset file by simply copying it to the appropriate translation output paths.
  */
 export declare class AssetTranslationHandler implements TranslationHandler {
-    canTranslate(_relativeFilePath: string, _contents: Buffer): boolean;
-    translate(diagnostics: Diagnostics, _sourceRoot: string, relativeFilePath: string, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    private fs;
+    constructor(fs: FileSystem);
+    canTranslate(_relativeFilePath: PathSegment, _contents: Buffer): boolean;
+    translate(diagnostics: Diagnostics, _sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    private writeAssetFile;
 }

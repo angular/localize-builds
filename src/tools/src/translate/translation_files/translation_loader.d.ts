@@ -6,6 +6,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { AbsoluteFsPath, FileSystem } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { DiagnosticHandlingStrategy, Diagnostics } from '../../diagnostics';
 import { TranslationBundle } from '../translator';
 import { TranslationParser } from './translation_parsers/translation_parser';
@@ -13,10 +14,11 @@ import { TranslationParser } from './translation_parsers/translation_parser';
  * Use this class to load a collection of translation files from disk.
  */
 export declare class TranslationLoader {
+    private fs;
     private translationParsers;
     private duplicateTranslation;
     /** @deprecated */ private diagnostics?;
-    constructor(translationParsers: TranslationParser<any>[], duplicateTranslation: DiagnosticHandlingStrategy, 
+    constructor(fs: FileSystem, translationParsers: TranslationParser<any>[], duplicateTranslation: DiagnosticHandlingStrategy, 
     /** @deprecated */ diagnostics?: Diagnostics | undefined);
     /**
      * Load and parse the translation files into a collection of `TranslationBundles`.
@@ -40,7 +42,7 @@ export declare class TranslationLoader {
      * If there are both a provided locale and a locale parsed from the file, and they are not the
      * same, then a warning is reported.
      */
-    loadBundles(translationFilePaths: string[][], translationFileLocales: (string | undefined)[]): TranslationBundle[];
+    loadBundles(translationFilePaths: AbsoluteFsPath[][], translationFileLocales: (string | undefined)[]): TranslationBundle[];
     /**
      * Load all the translations from the file at the given `filePath`.
      */
