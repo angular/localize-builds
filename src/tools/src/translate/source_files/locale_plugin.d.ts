@@ -1,7 +1,7 @@
 /// <amd-module name="@angular/localize/src/tools/src/translate/source_files/locale_plugin" />
 /**
  * @license
- * Copyright Google LLC All Rights Reserved.
+ * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
