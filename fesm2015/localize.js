@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+247.sha-2b2146b
+ * @license Angular v10.0.0-rc.0+255.sha-9318e23
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -93,7 +93,7 @@ function parseMessage(messageParts, expressions, location) {
         cleanedMessageParts.push(messagePart);
     }
     const messageId = metadata.id || computeMsgId(messageString, metadata.meaning || '');
-    const legacyIds = metadata.legacyIds && metadata.legacyIds.filter(id => id !== messageId);
+    const legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(id => id !== messageId) : [];
     return {
         id: messageId,
         legacyIds,

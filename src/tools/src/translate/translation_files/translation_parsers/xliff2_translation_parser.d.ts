@@ -6,6 +6,7 @@ import { XmlTranslationParserHint } from './translation_utils';
  *
  * http://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html
  *
+ * @see Xliff2TranslationSerializer
  */
 export declare class Xliff2TranslationParser implements TranslationParser<XmlTranslationParserHint> {
     canParse(filePath: string, contents: string): XmlTranslationParserHint | false;

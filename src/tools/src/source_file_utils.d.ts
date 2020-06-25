@@ -1,11 +1,4 @@
 /// <amd-module name="@angular/localize/src/tools/src/source_file_utils" />
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { ɵParsedTranslation, ɵSourceLocation } from '@angular/localize';
 import { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
@@ -107,4 +100,4 @@ export declare class BabelParseError extends Error {
 }
 export declare function isBabelParseError(e: any): e is BabelParseError;
 export declare function buildCodeFrameError(path: NodePath, e: BabelParseError): string;
-export declare function getLocation(path: NodePath): ɵSourceLocation | undefined;
+export declare function getLocation(startPath: NodePath, endPath?: NodePath): ɵSourceLocation | undefined;
