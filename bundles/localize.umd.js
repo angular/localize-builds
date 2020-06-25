@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+247.sha-2b2146b
+ * @license Angular v10.0.0-rc.0+255.sha-9318e23
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -390,7 +390,7 @@
             cleanedMessageParts.push(messagePart);
         }
         var messageId = metadata.id || compiler.computeMsgId(messageString, metadata.meaning || '');
-        var legacyIds = metadata.legacyIds && metadata.legacyIds.filter(function (id) { return id !== messageId; });
+        var legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(function (id) { return id !== messageId; }) : [];
         return {
             id: messageId,
             legacyIds: legacyIds,

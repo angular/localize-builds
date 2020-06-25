@@ -1,3 +1,4 @@
+import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
 /**
  * Re-export this helper function so that users of `@angular/localize` don't need to actively import
  * from `@angular/compiler`.
@@ -24,7 +25,9 @@ export declare type TargetMessage = string;
  */
 export declare type MessageId = string;
 /**
- * The location of the message
+ * The location of the message in the source file.
+ *
+ * The `line` and `column` values for the `start` and `end` properties are zero-based.
  */
 export interface SourceLocation {
     start: {
@@ -35,7 +38,7 @@ export interface SourceLocation {
         line: number;
         column: number;
     };
-    file: string;
+    file: AbsoluteFsPath;
 }
 /**
  * Additional information that can be associated with a message.
