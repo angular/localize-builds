@@ -48,8 +48,8 @@ export declare class TranslationLoader {
      */
     private loadBundle;
     /**
-     * There is more than one `filePath` for this locale, so load each as a bundle and then merge them
-     * all together.
+     * There is more than one `filePath` for this locale, so load each as a bundle and then merge
+     * them all together.
      */
     private mergeBundles;
 }
