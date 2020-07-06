@@ -8,6 +8,7 @@
  */
 import { Element, Node, ParseError, ParseErrorLevel, ParseSourceSpan } from '@angular/compiler';
 import { Diagnostics } from '../../../diagnostics';
+import { ParseAnalysis } from './translation_parser';
 export declare function getAttrOrThrow(element: Element, attrName: string): string;
 export declare function getAttribute(element: Element, attrName: string): string | undefined;
 /**
@@ -40,7 +41,7 @@ export interface XmlTranslationParserHint {
  * @returns The `XmlTranslationParserHint` object for use by `TranslationParser.parse()` if the XML
  * document has the expected format.
  */
-export declare function canParseXml(filePath: string, contents: string, rootNodeName: string, attributes: Record<string, string>): XmlTranslationParserHint | false;
+export declare function canParseXml(filePath: string, contents: string, rootNodeName: string, attributes: Record<string, string>): ParseAnalysis<XmlTranslationParserHint>;
 /**
  * Create a predicate, which can be used by things like `Array.filter()`, that will match a named
  * XML Element from a collection of XML Nodes.
