@@ -9,6 +9,7 @@
  */
 import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { Logger } from '@angular/compiler-cli/src/ngtsc/logging';
+import { DiagnosticHandlingStrategy } from '../diagnostics';
 import { TranslationSerializer } from './translation_files/translation_serializer';
 export interface ExtractTranslationsOptions {
     /**
@@ -46,6 +47,10 @@ export interface ExtractTranslationsOptions {
      * Whether to use the legacy id format for messages that were extracted from Angular templates
      */
     useLegacyIds: boolean;
+    /**
+     * How to handle messages with the same id but not the same text.
+     */
+    duplicateMessageHandling: DiagnosticHandlingStrategy;
 }
-export declare function extractTranslations({ rootPath, sourceFilePaths, sourceLocale, format, outputPath: output, logger, useSourceMaps, useLegacyIds }: ExtractTranslationsOptions): void;
+export declare function extractTranslations({ rootPath, sourceFilePaths, sourceLocale, format, outputPath: output, logger, useSourceMaps, useLegacyIds, duplicateMessageHandling, }: ExtractTranslationsOptions): void;
 export declare function getSerializer(format: string, sourceLocale: string, rootPath: AbsoluteFsPath, useLegacyIds: boolean): TranslationSerializer;
