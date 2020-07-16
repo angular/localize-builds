@@ -101,3 +101,4 @@ export declare class BabelParseError extends Error {
 export declare function isBabelParseError(e: any): e is BabelParseError;
 export declare function buildCodeFrameError(path: NodePath, e: BabelParseError): string;
 export declare function getLocation(startPath: NodePath, endPath?: NodePath): ɵSourceLocation | undefined;
+export declare function serializeLocationPosition(location: ɵSourceLocation): string;
