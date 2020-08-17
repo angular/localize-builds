@@ -20,9 +20,12 @@ export declare class Xliff2TranslationSerializer implements TranslationSerialize
     private sourceLocale;
     private basePath;
     private useLegacyIds;
+    private currentPlaceholderId;
     constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
+    private serializeTextPart;
+    private serializePlaceholder;
     private serializeNote;
     /**
      * Get the id for the given `message`.

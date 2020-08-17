@@ -24,6 +24,7 @@ export declare class Xliff1TranslationSerializer implements TranslationSerialize
     constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
+    private serializeTextPart;
     private serializeNote;
     private serializeLocation;
     private renderContext;
