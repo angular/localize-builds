@@ -23,6 +23,7 @@ export declare class XmbTranslationSerializer implements TranslationSerializer {
     serialize(messages: ɵParsedMessage[]): string;
     private serializeLocation;
     private serializeMessage;
+    private serializeTextPart;
     /**
      * Get the id for the given `message`.
      *
