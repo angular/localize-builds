@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.11
+ * @license Angular v10.0.11+5.sha-5528536
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -300,7 +300,7 @@ function parseTranslation(messageString) {
  */
 function makeParsedTranslation(messageParts, placeholderNames = []) {
     let messageString = messageParts[0];
-    for (let i = 0; i < placeholderNames.length - 1; i++) {
+    for (let i = 0; i < placeholderNames.length; i++) {
         messageString += `{$${placeholderNames[i]}}${messageParts[i + 1]}`;
     }
     return {
