@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.7+7.sha-f245c6b
+ * @license Angular v10.1.0-next.7+8.sha-ac461e1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -73,7 +73,8 @@ const LEGACY_ID_INDICATOR = '\u241F';
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Parse a `$localize` tagged string into a structure that can be used for translation.
+ * Parse a `$localize` tagged string into a structure that can be used for translation or
+ * extraction.
  *
  * See `ParsedMessage` for an example.
  */
@@ -92,13 +93,14 @@ function parseMessage(messageParts, expressions, location) {
         placeholderNames.push(placeholderName);
         cleanedMessageParts.push(messagePart);
     }
-    const messageId = metadata.id || computeMsgId(messageString, metadata.meaning || '');
+    const messageId = metadata.customId || computeMsgId(messageString, metadata.meaning || '');
     const legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(id => id !== messageId) : [];
     return {
         id: messageId,
         legacyIds,
         substitutions,
         text: messageString,
+        customId: metadata.customId,
         meaning: metadata.meaning || '',
         description: metadata.description || '',
         messageParts: cleanedMessageParts,
@@ -139,7 +141,7 @@ function parseMetadata(cooked, raw) {
     }
     else {
         const [meaningDescAndId, ...legacyIds] = block.split(LEGACY_ID_INDICATOR);
-        const [meaningAndDesc, id] = meaningDescAndId.split(ID_SEPARATOR, 2);
+        const [meaningAndDesc, customId] = meaningDescAndId.split(ID_SEPARATOR, 2);
         let [meaning, description] = meaningAndDesc.split(MEANING_SEPARATOR, 2);
         if (description === undefined) {
             description = meaning;
@@ -148,7 +150,7 @@ function parseMetadata(cooked, raw) {
         if (description === '') {
             description = undefined;
         }
-        return { text: messageString, meaning, description, id, legacyIds };
+        return { text: messageString, meaning, description, customId, legacyIds };
     }
 }
 /**

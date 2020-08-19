@@ -49,10 +49,6 @@ export interface MessageMetadata {
      */
     text: string;
     /**
-     * A unique identifier for this message.
-     */
-    id?: MessageId;
-    /**
      * Legacy message ids, if provided.
      *
      * In legacy message formats the message id can only be computed directly from the original
@@ -63,6 +59,12 @@ export interface MessageMetadata {
      * of translation if the translations are encoded using the legacy message id.
      */
     legacyIds?: string[];
+    /**
+     * The id of the `message` if a custom one was specified explicitly.
+     *
+     * This id overrides any computed or legacy ids.
+     */
+    customId?: string;
     /**
      * The meaning of the `message`, used to distinguish identical `messageString`s.
      */
@@ -99,8 +101,6 @@ export interface MessageMetadata {
 export interface ParsedMessage extends MessageMetadata {
     /**
      * The key used to look up the appropriate translation target.
-     *
-     * In `ParsedMessage` this is a required field, whereas it is optional in `MessageMetadata`.
      */
     id: MessageId;
     /**
@@ -117,7 +117,8 @@ export interface ParsedMessage extends MessageMetadata {
     placeholderNames: string[];
 }
 /**
- * Parse a `$localize` tagged string into a structure that can be used for translation.
+ * Parse a `$localize` tagged string into a structure that can be used for translation or
+ * extraction.
  *
  * See `ParsedMessage` for an example.
  */

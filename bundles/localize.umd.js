@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.7+7.sha-f245c6b
+ * @license Angular v10.1.0-next.7+8.sha-ac461e1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -370,7 +370,8 @@
     }
 
     /**
-     * Parse a `$localize` tagged string into a structure that can be used for translation.
+     * Parse a `$localize` tagged string into a structure that can be used for translation or
+     * extraction.
      *
      * See `ParsedMessage` for an example.
      */
@@ -389,13 +390,14 @@
             placeholderNames.push(placeholderName);
             cleanedMessageParts.push(messagePart);
         }
-        var messageId = metadata.id || compiler.computeMsgId(messageString, metadata.meaning || '');
+        var messageId = metadata.customId || compiler.computeMsgId(messageString, metadata.meaning || '');
         var legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(function (id) { return id !== messageId; }) : [];
         return {
             id: messageId,
             legacyIds: legacyIds,
             substitutions: substitutions,
             text: messageString,
+            customId: metadata.customId,
             meaning: metadata.meaning || '',
             description: metadata.description || '',
             messageParts: cleanedMessageParts,
@@ -436,7 +438,7 @@
         }
         else {
             var _b = __read(block.split(LEGACY_ID_INDICATOR)), meaningDescAndId = _b[0], legacyIds = _b.slice(1);
-            var _c = __read(meaningDescAndId.split(ID_SEPARATOR, 2), 2), meaningAndDesc = _c[0], id = _c[1];
+            var _c = __read(meaningDescAndId.split(ID_SEPARATOR, 2), 2), meaningAndDesc = _c[0], customId = _c[1];
             var _d = __read(meaningAndDesc.split(MEANING_SEPARATOR, 2), 2), meaning = _d[0], description = _d[1];
             if (description === undefined) {
                 description = meaning;
@@ -445,7 +447,7 @@
             if (description === '') {
                 description = undefined;
             }
-            return { text: messageString, meaning: meaning, description: description, id: id, legacyIds: legacyIds };
+            return { text: messageString, meaning: meaning, description: description, customId: customId, legacyIds: legacyIds };
         }
     }
     /**
