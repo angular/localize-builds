@@ -30,6 +30,8 @@ export declare class Xliff2TranslationSerializer implements TranslationSerialize
     /**
      * Get the id for the given `message`.
      *
+     * If there was a custom id provided, use that.
+     *
      * If we have requested legacy message ids, then try to return the appropriate id
      * from the list of legacy ids that were extracted.
      *
