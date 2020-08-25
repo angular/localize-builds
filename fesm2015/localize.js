@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.7+31.sha-94a3e0e
+ * @license Angular v10.1.0-next.8+10.sha-14e90be
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -78,8 +78,9 @@ const LEGACY_ID_INDICATOR = '\u241F';
  *
  * See `ParsedMessage` for an example.
  */
-function parseMessage(messageParts, expressions, location) {
+function parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations = []) {
     const substitutions = {};
+    const substitutionLocations = {};
     const metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
     const cleanedMessageParts = [metadata.text];
     const placeholderNames = [];
@@ -89,6 +90,7 @@ function parseMessage(messageParts, expressions, location) {
         messageString += `{$${placeholderName}}${messagePart}`;
         if (expressions !== undefined) {
             substitutions[placeholderName] = expressions[i - 1];
+            substitutionLocations[placeholderName] = expressionLocations[i - 1];
         }
         placeholderNames.push(placeholderName);
         cleanedMessageParts.push(messagePart);
@@ -99,11 +101,13 @@ function parseMessage(messageParts, expressions, location) {
         id: messageId,
         legacyIds,
         substitutions,
+        substitutionLocations,
         text: messageString,
         customId: metadata.customId,
         meaning: metadata.meaning || '',
         description: metadata.description || '',
         messageParts: cleanedMessageParts,
+        messagePartLocations,
         placeholderNames,
         location,
     };

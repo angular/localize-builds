@@ -25,6 +25,7 @@ export declare class Xliff1TranslationSerializer implements TranslationSerialize
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
     private serializeTextPart;
+    private serializePlaceholder;
     private serializeNote;
     private serializeLocation;
     private renderContext;
