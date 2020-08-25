@@ -36,9 +36,22 @@ export declare function buildLocalizeReplacement(messageParts: TemplateStringsAr
  *
  * @param call The AST node of the call to process.
  */
-export declare function unwrapMessagePartsFromLocalizeCall(call: NodePath<t.CallExpression>): TemplateStringsArray;
-export declare function unwrapSubstitutionsFromLocalizeCall(call: t.CallExpression): t.Expression[];
-export declare function unwrapMessagePartsFromTemplateLiteral(elements: t.TemplateElement[]): TemplateStringsArray;
+export declare function unwrapMessagePartsFromLocalizeCall(call: NodePath<t.CallExpression>): [
+    TemplateStringsArray,
+    (ɵSourceLocation | undefined)[]
+];
+export declare function unwrapSubstitutionsFromLocalizeCall(call: NodePath<t.CallExpression>): [
+    t.Expression[],
+    (ɵSourceLocation | undefined)[]
+];
+export declare function unwrapMessagePartsFromTemplateLiteral(elements: NodePath<t.TemplateElement>[]): [
+    TemplateStringsArray,
+    (ɵSourceLocation | undefined)[]
+];
+export declare function unwrapExpressionsFromTemplateLiteral(quasi: NodePath<t.TemplateLiteral>): [
+    t.Expression[],
+    (ɵSourceLocation | undefined)[]
+];
 /**
  * Wrap the given `expression` in parentheses if it is a binary expression.
  *
@@ -51,7 +64,10 @@ export declare function wrapInParensIfNecessary(expression: t.Expression): t.Exp
  * Extract the string values from an `array` of string literals.
  * @param array The array to unwrap.
  */
-export declare function unwrapStringLiteralArray(array: t.Expression): string[];
+export declare function unwrapStringLiteralArray(array: NodePath<t.Expression>): [
+    string[],
+    (ɵSourceLocation | undefined)[]
+];
 /**
  * This expression is believed to be a call to a "lazy-load" template object helper function.
  * This is expected to be of the form:
@@ -81,7 +97,7 @@ export declare function isStringLiteralArray(node: t.Node): node is t.Expression
  * Are all the given `nodes` expressions?
  * @param nodes The nodes to test.
  */
-export declare function isArrayOfExpressions(nodes: t.Node[]): nodes is t.Expression[];
+export declare function isArrayOfExpressions(paths: NodePath<t.Node>[]): paths is NodePath<t.Expression>[];
 /** Options that affect how the `makeEsXXXTranslatePlugin()` functions work. */
 export interface TranslatePluginOptions {
     missingTranslation?: DiagnosticHandlingStrategy;

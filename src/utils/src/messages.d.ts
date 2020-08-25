@@ -39,6 +39,7 @@ export interface SourceLocation {
         column: number;
     };
     file: AbsoluteFsPath;
+    text?: string;
 }
 /**
  * Additional information that can be associated with a message.
@@ -108,9 +109,17 @@ export interface ParsedMessage extends MessageMetadata {
      */
     substitutions: Record<string, any>;
     /**
+     * An optional mapping of placeholder names to source locations
+     */
+    substitutionLocations?: Record<string, SourceLocation | undefined>;
+    /**
      * The static parts of the message.
      */
     messageParts: string[];
+    /**
+     * An optional mapping of message parts to source locations
+     */
+    messagePartLocations?: (SourceLocation | undefined)[];
     /**
      * The names of the placeholders that will be replaced with substitutions.
      */
@@ -122,7 +131,7 @@ export interface ParsedMessage extends MessageMetadata {
  *
  * See `ParsedMessage` for an example.
  */
-export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[], location?: SourceLocation): ParsedMessage;
+export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[], location?: SourceLocation, messagePartLocations?: (SourceLocation | undefined)[], expressionLocations?: (SourceLocation | undefined)[]): ParsedMessage;
 /**
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *
