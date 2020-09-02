@@ -15,6 +15,4 @@ export declare class TranslationParseError extends Error {
     msg: string;
     level: ParseErrorLevel;
     constructor(span: ParseSourceSpan, msg: string, level?: ParseErrorLevel);
-    contextualMessage(): string;
-    toString(): string;
 }
