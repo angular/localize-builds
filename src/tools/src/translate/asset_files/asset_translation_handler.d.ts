@@ -16,7 +16,7 @@ import { TranslationBundle, TranslationHandler } from '../translator';
 export declare class AssetTranslationHandler implements TranslationHandler {
     private fs;
     constructor(fs: FileSystem);
-    canTranslate(_relativeFilePath: PathSegment | AbsoluteFsPath, _contents: Buffer): boolean;
-    translate(diagnostics: Diagnostics, _sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment | AbsoluteFsPath, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    canTranslate(_relativeFilePath: PathSegment | AbsoluteFsPath, _contents: Uint8Array): boolean;
+    translate(diagnostics: Diagnostics, _sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment | AbsoluteFsPath, contents: Uint8Array, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
     private writeAssetFile;
 }
