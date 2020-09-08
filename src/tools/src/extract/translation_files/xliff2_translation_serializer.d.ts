@@ -8,6 +8,7 @@
  */
 import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { ɵParsedMessage } from '@angular/localize';
+import { FormatOptions } from './format_options';
 import { TranslationSerializer } from './translation_serializer';
 /**
  * A translation serializer that can write translations in XLIFF 2 format.
@@ -20,8 +21,9 @@ export declare class Xliff2TranslationSerializer implements TranslationSerialize
     private sourceLocale;
     private basePath;
     private useLegacyIds;
+    private formatOptions;
     private currentPlaceholderId;
-    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean);
+    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions: FormatOptions);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
     private serializeTextPart;
