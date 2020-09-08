@@ -32,7 +32,7 @@ export interface TranslationHandler {
      * @param relativeFilePath A relative path from the sourceRoot to the resource file to handle.
      * @param contents The contents of the file to handle.
      */
-    canTranslate(relativeFilePath: PathSegment | AbsoluteFsPath, contents: Buffer): boolean;
+    canTranslate(relativeFilePath: PathSegment | AbsoluteFsPath, contents: Uint8Array): boolean;
     /**
      * Translate the file at `relativeFilePath` containing `contents`, using the given `translations`,
      * and write the translated content to the path computed by calling `outputPathFn()`.
@@ -48,7 +48,7 @@ export interface TranslationHandler {
      * additional copy of the application is created under this locale just with the `$localize` calls
      * stripped out.
      */
-    translate(diagnostics: Diagnostics, sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment | AbsoluteFsPath, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    translate(diagnostics: Diagnostics, sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment | AbsoluteFsPath, contents: Uint8Array, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
 }
 /**
  * Translate each file (e.g. source file or static asset) using the given `TranslationHandler`s.
