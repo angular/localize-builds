@@ -11,6 +11,7 @@ import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { Logger } from '@angular/compiler-cli/src/ngtsc/logging';
 import { DiagnosticHandlingStrategy } from '../diagnostics';
 import { TranslationSerializer } from './translation_files/translation_serializer';
+import { FormatOptions } from './translation_files/format_options';
 export interface ExtractTranslationsOptions {
     /**
      * The locale of the source being processed.
@@ -51,6 +52,10 @@ export interface ExtractTranslationsOptions {
      * How to handle messages with the same id but not the same text.
      */
     duplicateMessageHandling: DiagnosticHandlingStrategy;
+    /**
+     * A collection of formatting options to pass to the translation file serializer.
+     */
+    formatOptions?: FormatOptions;
 }
-export declare function extractTranslations({ rootPath, sourceFilePaths, sourceLocale, format, outputPath: output, logger, useSourceMaps, useLegacyIds, duplicateMessageHandling, }: ExtractTranslationsOptions): void;
-export declare function getSerializer(format: string, sourceLocale: string, rootPath: AbsoluteFsPath, useLegacyIds: boolean): TranslationSerializer;
+export declare function extractTranslations({ rootPath, sourceFilePaths, sourceLocale, format, outputPath: output, logger, useSourceMaps, useLegacyIds, duplicateMessageHandling, formatOptions, }: ExtractTranslationsOptions): void;
+export declare function getSerializer(format: string, sourceLocale: string, rootPath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions: FormatOptions): TranslationSerializer;
