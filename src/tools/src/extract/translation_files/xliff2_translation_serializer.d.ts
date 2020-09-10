@@ -23,7 +23,7 @@ export declare class Xliff2TranslationSerializer implements TranslationSerialize
     private useLegacyIds;
     private formatOptions;
     private currentPlaceholderId;
-    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions: FormatOptions);
+    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions?: FormatOptions);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
     private serializeTextPart;
