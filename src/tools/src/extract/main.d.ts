@@ -58,4 +58,4 @@ export interface ExtractTranslationsOptions {
     formatOptions?: FormatOptions;
 }
 export declare function extractTranslations({ rootPath, sourceFilePaths, sourceLocale, format, outputPath: output, logger, useSourceMaps, useLegacyIds, duplicateMessageHandling, formatOptions, }: ExtractTranslationsOptions): void;
-export declare function getSerializer(format: string, sourceLocale: string, rootPath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions: FormatOptions): TranslationSerializer;
+export declare function getSerializer(format: string, sourceLocale: string, rootPath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions?: FormatOptions): TranslationSerializer;
