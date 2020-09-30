@@ -8,6 +8,7 @@ import { XmlTranslationParserHint } from './translation_utils';
  * http://docs.oasis-open.org/xliff/v1.2/xliff-profile-html/xliff-profile-html-1.2.html
  *
  * @see Xliff1TranslationSerializer
+ * @publicApi used by CLI
  */
 export declare class Xliff1TranslationParser implements TranslationParser<XmlTranslationParserHint> {
     /**
