@@ -6,7 +6,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
+import { AbsoluteFsPath, FileSystem } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { ɵParsedMessage } from '@angular/localize';
 import { FormatOptions } from './format_options';
 import { TranslationSerializer } from './translation_serializer';
@@ -17,13 +17,15 @@ import { TranslationSerializer } from './translation_serializer';
  * http://docs.oasis-open.org/xliff/v1.2/xliff-profile-html/xliff-profile-html-1.2.html
  *
  * @see Xliff1TranslationParser
+ * @publicApi used by CLI
  */
 export declare class Xliff1TranslationSerializer implements TranslationSerializer {
     private sourceLocale;
     private basePath;
     private useLegacyIds;
     private formatOptions;
-    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions?: FormatOptions);
+    private fs;
+    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions?: FormatOptions, fs?: FileSystem);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
     private serializeTextPart;
