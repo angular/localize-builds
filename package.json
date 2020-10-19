@@ -1,6 +1,6 @@
 {
   "name": "@angular/localize",
-  "version": "11.0.0-next.6+36.sha-d30911c",
+  "version": "11.0.0-next.6+37.sha-726c5ef",
   "description": "Angular - library for localizing messages",
   "bin": {
     "localize-translate": "./src/tools/src/translate/main.js",
@@ -50,8 +50,8 @@
     "yargs": "15.3.0"
   },
   "peerDependencies": {
-    "@angular/compiler": "11.0.0-next.6+36.sha-d30911c",
-    "@angular/compiler-cli": "11.0.0-next.6+36.sha-d30911c"
+    "@angular/compiler": "11.0.0-next.6+37.sha-726c5ef",
+    "@angular/compiler-cli": "11.0.0-next.6+37.sha-726c5ef"
   },
   "publishConfig": {
     "registry": "https://wombat-dressing-room.appspot.com"
