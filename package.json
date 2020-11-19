@@ -1,6 +1,6 @@
 {
   "name": "@angular/localize",
-  "version": "9.1.12+9.sha-2d0bf68",
+  "version": "9.1.12+10.sha-5b38050",
   "description": "Angular - library for localizing messages",
   "main": "./bundles/localize.umd.js",
   "module": "./fesm5/localize.js",
@@ -53,7 +53,7 @@
   "dependencies": {
     "@babel/core": "7.8.3",
     "glob": "7.1.2",
-    "yargs": "15.3.0"
+    "yargs": "^16.1.1"
   },
   "publishConfig": {
     "registry": "https://wombat-dressing-room.appspot.com"
