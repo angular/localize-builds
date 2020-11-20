@@ -13,8 +13,8 @@ import { TranslationSerializer } from './translation_serializer';
 /**
  * A translation serializer that can write XLIFF 1.2 formatted files.
  *
- * http://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html
- * http://docs.oasis-open.org/xliff/v1.2/xliff-profile-html/xliff-profile-html-1.2.html
+ * https://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html
+ * https://docs.oasis-open.org/xliff/v1.2/xliff-profile-html/xliff-profile-html-1.2.html
  *
  * @see Xliff1TranslationParser
  * @publicApi used by CLI

@@ -13,7 +13,7 @@ import { TranslationSerializer } from './translation_serializer';
 /**
  * A translation serializer that can write translations in XLIFF 2 format.
  *
- * http://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html
+ * https://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html
  *
  * @see Xliff2TranslationParser
  * @publicApi used by CLI
