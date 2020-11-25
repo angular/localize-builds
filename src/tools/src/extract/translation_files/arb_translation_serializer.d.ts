@@ -1,0 +1,52 @@
+/// <amd-module name="@angular/localize/src/tools/src/extract/translation_files/arb_translation_serializer" />
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { AbsoluteFsPath, FileSystem } from '@angular/compiler-cli/src/ngtsc/file_system';
+import { ɵParsedMessage } from '@angular/localize';
+import { TranslationSerializer } from './translation_serializer';
+/**
+ * A translation serializer that can render JSON formatted as an Application Resource Bundle (ARB).
+ *
+ * See https://github.com/google/app-resource-bundle/wiki/ApplicationResourceBundleSpecification
+ *
+ * ```
+ * {
+ *   "@@locale": "en-US",
+ *   "message-id": "Target message string",
+ *   "@message-id": {
+ *     "type": "text",
+ *     "description": "Some description text",
+ *     "x-locations": [
+ *       {
+ *         "start": {"line": 23, "column": 145},
+ *         "end": {"line": 24, "column": 53},
+ *         "file": "some/file.ts"
+ *       },
+ *       ...
+ *     ]
+ *   },
+ *   ...
+ * }
+ * ```
+ */
+/**
+ * This is a semi-public bespoke serialization format that is used for testing and sometimes as a
+ * format for storing translations that will be inlined at runtime.
+ *
+ * @see ArbTranslationParser
+ */
+export declare class ArbTranslationSerializer implements TranslationSerializer {
+    private sourceLocale;
+    private basePath;
+    private fs;
+    constructor(sourceLocale: string, basePath: AbsoluteFsPath, fs: FileSystem);
+    serialize(messages: ɵParsedMessage[]): string;
+    private serializeMessage;
+    private serializeMeta;
+    private serializeLocation;
+}
