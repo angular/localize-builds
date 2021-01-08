@@ -6,7 +6,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AbsoluteFsPath, FileSystem } from '@angular/compiler-cli/src/ngtsc/file_system';
+import { AbsoluteFsPath, PathManipulation } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { ɵParsedMessage } from '@angular/localize';
 import { TranslationSerializer } from './translation_serializer';
 /**
@@ -44,7 +44,7 @@ export declare class ArbTranslationSerializer implements TranslationSerializer {
     private sourceLocale;
     private basePath;
     private fs;
-    constructor(sourceLocale: string, basePath: AbsoluteFsPath, fs: FileSystem);
+    constructor(sourceLocale: string, basePath: AbsoluteFsPath, fs: PathManipulation);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
     private serializeMeta;
