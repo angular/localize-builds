@@ -34,12 +34,6 @@ import { TranslationSerializer } from './translation_serializer';
  * }
  * ```
  */
-/**
- * This is a semi-public bespoke serialization format that is used for testing and sometimes as a
- * format for storing translations that will be inlined at runtime.
- *
- * @see ArbTranslationParser
- */
 export declare class ArbTranslationSerializer implements TranslationSerializer {
     private sourceLocale;
     private basePath;
