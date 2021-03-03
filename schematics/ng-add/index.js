@@ -100,7 +100,7 @@
             dependencies_1.addPackageJsonDependency(host, {
                 name: '@angular/localize',
                 type: dependencies_1.NodeDependencyType.Default,
-                version: "~11.2.3+46.sha-e4774da"
+                version: "~11.2.3+48.sha-6dd5497"
             });
             // Add a task to run the package manager. This is necessary because we updated
             // "package.json" and we want lock files to reflect this.
