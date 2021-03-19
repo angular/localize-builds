@@ -1,10 +1,11 @@
 {
   "name": "@angular/localize",
-  "version": "10.1.0-next.4+26.sha-6248d6c",
+  "version": "12.0.0-next.5+9.sha-bff0d8f",
   "description": "Angular - library for localizing messages",
   "bin": {
     "localize-translate": "./src/tools/src/translate/main.js",
-    "localize-extract": "./src/tools/src/extract/main.js"
+    "localize-extract": "./src/tools/src/extract/main.js",
+    "localize-migrate": "./src/tools/src/migrate/main.js"
   },
   "author": "angular",
   "license": "MIT",
@@ -26,14 +27,15 @@
       "@angular/platform-browser-dynamic",
       "@angular/forms",
       "@angular/platform-server",
-      "@angular/platform-webworker",
-      "@angular/platform-webworker-dynamic",
       "@angular/upgrade",
       "@angular/router",
       "@angular/language-service",
       "@angular/localize",
       "@angular/service-worker"
     ]
+  },
+  "ng-add": {
+    "save": "devDependencies"
   },
   "sideEffects": [
     "**/init/index.js",
@@ -46,11 +48,11 @@
   "dependencies": {
     "@babel/core": "7.8.3",
     "glob": "7.1.2",
-    "yargs": "15.3.0"
+    "yargs": "^16.1.1"
   },
   "peerDependencies": {
-    "@angular/compiler": "10.1.0-next.4+26.sha-6248d6c",
-    "@angular/compiler-cli": "10.1.0-next.4+26.sha-6248d6c"
+    "@angular/compiler": "12.0.0-next.5+9.sha-bff0d8f",
+    "@angular/compiler-cli": "12.0.0-next.5+9.sha-bff0d8f"
   },
   "publishConfig": {
     "registry": "https://wombat-dressing-room.appspot.com"

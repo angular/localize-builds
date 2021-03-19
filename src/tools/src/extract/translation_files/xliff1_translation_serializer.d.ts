@@ -6,29 +6,37 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
+import { AbsoluteFsPath, PathManipulation } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { ɵParsedMessage } from '@angular/localize';
+import { FormatOptions } from './format_options';
 import { TranslationSerializer } from './translation_serializer';
 /**
  * A translation serializer that can write XLIFF 1.2 formatted files.
  *
- * http://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html
- * http://docs.oasis-open.org/xliff/v1.2/xliff-profile-html/xliff-profile-html-1.2.html
+ * https://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html
+ * https://docs.oasis-open.org/xliff/v1.2/xliff-profile-html/xliff-profile-html-1.2.html
  *
  * @see Xliff1TranslationParser
+ * @publicApi used by CLI
  */
 export declare class Xliff1TranslationSerializer implements TranslationSerializer {
     private sourceLocale;
     private basePath;
     private useLegacyIds;
-    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean);
+    private formatOptions;
+    private fs;
+    constructor(sourceLocale: string, basePath: AbsoluteFsPath, useLegacyIds: boolean, formatOptions?: FormatOptions, fs?: PathManipulation);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeMessage;
+    private serializeTextPart;
+    private serializePlaceholder;
     private serializeNote;
     private serializeLocation;
     private renderContext;
     /**
      * Get the id for the given `message`.
+     *
+     * If there was a custom id provided, use that.
      *
      * If we have requested legacy message ids, then try to return the appropriate id
      * from the list of legacy ids that were extracted.

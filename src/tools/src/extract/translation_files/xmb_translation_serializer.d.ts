@@ -6,7 +6,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
+import { AbsoluteFsPath, PathManipulation } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { ɵParsedMessage } from '@angular/localize';
 import { TranslationSerializer } from './translation_serializer';
 /**
@@ -15,16 +15,21 @@ import { TranslationSerializer } from './translation_serializer';
  * http://cldr.unicode.org/development/development-process/design-proposals/xmb
  *
  * @see XmbTranslationParser
+ * @publicApi used by CLI
  */
 export declare class XmbTranslationSerializer implements TranslationSerializer {
     private basePath;
     private useLegacyIds;
-    constructor(basePath: AbsoluteFsPath, useLegacyIds: boolean);
+    private fs;
+    constructor(basePath: AbsoluteFsPath, useLegacyIds: boolean, fs?: PathManipulation);
     serialize(messages: ɵParsedMessage[]): string;
     private serializeLocation;
     private serializeMessage;
+    private serializeTextPart;
     /**
      * Get the id for the given `message`.
+     *
+     * If there was a custom id provided, use that.
      *
      * If we have requested legacy message ids, then try to return the appropriate id
      * from the list of legacy ids that were extracted.

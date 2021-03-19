@@ -39,6 +39,7 @@ export interface SourceLocation {
         column: number;
     };
     file: AbsoluteFsPath;
+    text?: string;
 }
 /**
  * Additional information that can be associated with a message.
@@ -48,10 +49,6 @@ export interface MessageMetadata {
      * A human readable rendering of the message
      */
     text: string;
-    /**
-     * A unique identifier for this message.
-     */
-    id?: MessageId;
     /**
      * Legacy message ids, if provided.
      *
@@ -63,6 +60,12 @@ export interface MessageMetadata {
      * of translation if the translations are encoded using the legacy message id.
      */
     legacyIds?: string[];
+    /**
+     * The id of the `message` if a custom one was specified explicitly.
+     *
+     * This id overrides any computed or legacy ids.
+     */
+    customId?: string;
     /**
      * The meaning of the `message`, used to distinguish identical `messageString`s.
      */
@@ -99,8 +102,6 @@ export interface MessageMetadata {
 export interface ParsedMessage extends MessageMetadata {
     /**
      * The key used to look up the appropriate translation target.
-     *
-     * In `ParsedMessage` this is a required field, whereas it is optional in `MessageMetadata`.
      */
     id: MessageId;
     /**
@@ -108,20 +109,29 @@ export interface ParsedMessage extends MessageMetadata {
      */
     substitutions: Record<string, any>;
     /**
+     * An optional mapping of placeholder names to source locations
+     */
+    substitutionLocations?: Record<string, SourceLocation | undefined>;
+    /**
      * The static parts of the message.
      */
     messageParts: string[];
+    /**
+     * An optional mapping of message parts to source locations
+     */
+    messagePartLocations?: (SourceLocation | undefined)[];
     /**
      * The names of the placeholders that will be replaced with substitutions.
      */
     placeholderNames: string[];
 }
 /**
- * Parse a `$localize` tagged string into a structure that can be used for translation.
+ * Parse a `$localize` tagged string into a structure that can be used for translation or
+ * extraction.
  *
  * See `ParsedMessage` for an example.
  */
-export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[], location?: SourceLocation): ParsedMessage;
+export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[], location?: SourceLocation, messagePartLocations?: (SourceLocation | undefined)[], expressionLocations?: (SourceLocation | undefined)[]): ParsedMessage;
 /**
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *

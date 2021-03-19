@@ -6,7 +6,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AbsoluteFsPath, FileSystem, PathSegment } from '@angular/compiler-cli/src/ngtsc/file_system';
+import { AbsoluteFsPath, PathSegment, ReadonlyFileSystem } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { ɵMessageId, ɵParsedTranslation } from '@angular/localize';
 import { Diagnostics } from '../diagnostics';
 import { OutputPathFn } from './output_path';
@@ -32,7 +32,7 @@ export interface TranslationHandler {
      * @param relativeFilePath A relative path from the sourceRoot to the resource file to handle.
      * @param contents The contents of the file to handle.
      */
-    canTranslate(relativeFilePath: PathSegment | AbsoluteFsPath, contents: Buffer): boolean;
+    canTranslate(relativeFilePath: PathSegment | AbsoluteFsPath, contents: Uint8Array): boolean;
     /**
      * Translate the file at `relativeFilePath` containing `contents`, using the given `translations`,
      * and write the translated content to the path computed by calling `outputPathFn()`.
@@ -48,7 +48,7 @@ export interface TranslationHandler {
      * additional copy of the application is created under this locale just with the `$localize` calls
      * stripped out.
      */
-    translate(diagnostics: Diagnostics, sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment | AbsoluteFsPath, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    translate(diagnostics: Diagnostics, sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment | AbsoluteFsPath, contents: Uint8Array, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
 }
 /**
  * Translate each file (e.g. source file or static asset) using the given `TranslationHandler`s.
@@ -58,6 +58,6 @@ export declare class Translator {
     private fs;
     private resourceHandlers;
     private diagnostics;
-    constructor(fs: FileSystem, resourceHandlers: TranslationHandler[], diagnostics: Diagnostics);
+    constructor(fs: ReadonlyFileSystem, resourceHandlers: TranslationHandler[], diagnostics: Diagnostics);
     translateFiles(inputPaths: PathSegment[], rootPath: AbsoluteFsPath, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
 }

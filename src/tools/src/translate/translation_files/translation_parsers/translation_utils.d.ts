@@ -6,9 +6,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Element, Node, ParseError, ParseErrorLevel, ParseSourceSpan } from '@angular/compiler';
+import { Element, Node, ParseError, ParseErrorLevel, ParseSourceSpan, ParseTreeResult } from '@angular/compiler';
 import { Diagnostics } from '../../../diagnostics';
-import { ParseAnalysis } from './translation_parser';
+import { ParseAnalysis, ParsedTranslationBundle } from './translation_parser';
 export declare function getAttrOrThrow(element: Element, attrName: string): string;
 export declare function getAttribute(element: Element, attrName: string): string | undefined;
 /**
@@ -17,9 +17,10 @@ export declare function getAttribute(element: Element, attrName: string): string
  * This would be equivalent to parsing the `innerHTML` string of an HTML document.
  *
  * @param element The element whose inner range we want to parse.
- * @returns a collection of XML `Node` objects that were parsed from the element's contents.
+ * @returns a collection of XML `Node` objects and any errors that were parsed from the element's
+ *     contents.
  */
-export declare function parseInnerRange(element: Element): Node[];
+export declare function parseInnerRange(element: Element): ParseTreeResult;
 /**
  * This "hint" object is used to pass information from `canParse()` to `parse()` for
  * `TranslationParser`s that expect XML contents.
@@ -58,3 +59,7 @@ export declare function addParseDiagnostic(diagnostics: Diagnostics, sourceSpan:
  * object.
  */
 export declare function addParseError(diagnostics: Diagnostics, parseError: ParseError): void;
+/**
+ * Add the provided `errors` to the `bundle` diagnostics.
+ */
+export declare function addErrorsToBundle(bundle: ParsedTranslationBundle, errors: ParseError[]): void;

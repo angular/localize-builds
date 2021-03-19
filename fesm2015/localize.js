@@ -1,6 +1,6 @@
 /**
- * @license Angular v10.1.0-next.4+26.sha-6248d6c
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.5+9.sha-bff0d8f
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -73,12 +73,14 @@ const LEGACY_ID_INDICATOR = '\u241F';
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Parse a `$localize` tagged string into a structure that can be used for translation.
+ * Parse a `$localize` tagged string into a structure that can be used for translation or
+ * extraction.
  *
  * See `ParsedMessage` for an example.
  */
-function parseMessage(messageParts, expressions, location) {
+function parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations = []) {
     const substitutions = {};
+    const substitutionLocations = {};
     const metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
     const cleanedMessageParts = [metadata.text];
     const placeholderNames = [];
@@ -88,20 +90,24 @@ function parseMessage(messageParts, expressions, location) {
         messageString += `{$${placeholderName}}${messagePart}`;
         if (expressions !== undefined) {
             substitutions[placeholderName] = expressions[i - 1];
+            substitutionLocations[placeholderName] = expressionLocations[i - 1];
         }
         placeholderNames.push(placeholderName);
         cleanedMessageParts.push(messagePart);
     }
-    const messageId = metadata.id || computeMsgId(messageString, metadata.meaning || '');
+    const messageId = metadata.customId || computeMsgId(messageString, metadata.meaning || '');
     const legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(id => id !== messageId) : [];
     return {
         id: messageId,
         legacyIds,
         substitutions,
+        substitutionLocations,
         text: messageString,
+        customId: metadata.customId,
         meaning: metadata.meaning || '',
         description: metadata.description || '',
         messageParts: cleanedMessageParts,
+        messagePartLocations,
         placeholderNames,
         location,
     };
@@ -139,7 +145,7 @@ function parseMetadata(cooked, raw) {
     }
     else {
         const [meaningDescAndId, ...legacyIds] = block.split(LEGACY_ID_INDICATOR);
-        const [meaningAndDesc, id] = meaningDescAndId.split(ID_SEPARATOR, 2);
+        const [meaningAndDesc, customId] = meaningDescAndId.split(ID_SEPARATOR, 2);
         let [meaning, description] = meaningAndDesc.split(MEANING_SEPARATOR, 2);
         if (description === undefined) {
             description = meaning;
@@ -148,7 +154,7 @@ function parseMetadata(cooked, raw) {
         if (description === '') {
             description = undefined;
         }
-        return { text: messageString, meaning, description, id, legacyIds };
+        return { text: messageString, meaning, description, customId, legacyIds };
     }
 }
 /**
@@ -300,7 +306,7 @@ function parseTranslation(messageString) {
  */
 function makeParsedTranslation(messageParts, placeholderNames = []) {
     let messageString = messageParts[0];
-    for (let i = 0; i < placeholderNames.length - 1; i++) {
+    for (let i = 0; i < placeholderNames.length; i++) {
         messageString += `{$${placeholderNames[i]}}${messageParts[i + 1]}`;
     }
     return {

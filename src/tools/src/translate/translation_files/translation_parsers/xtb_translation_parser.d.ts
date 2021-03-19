@@ -7,6 +7,7 @@ import { XmlTranslationParserHint } from './translation_utils';
  * http://cldr.unicode.org/development/development-process/design-proposals/xmb
  *
  * @see XmbTranslationSerializer
+ * @publicApi used by CLI
  */
 export declare class XtbTranslationParser implements TranslationParser<XmlTranslationParserHint> {
     /**

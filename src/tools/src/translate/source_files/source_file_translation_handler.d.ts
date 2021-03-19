@@ -20,8 +20,8 @@ export declare class SourceFileTranslationHandler implements TranslationHandler 
     private translationOptions;
     private sourceLocaleOptions;
     constructor(fs: FileSystem, translationOptions?: TranslatePluginOptions);
-    canTranslate(relativeFilePath: PathSegment | AbsoluteFsPath, _contents: Buffer): boolean;
-    translate(diagnostics: Diagnostics, sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment, contents: Buffer, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
+    canTranslate(relativeFilePath: PathSegment | AbsoluteFsPath, _contents: Uint8Array): boolean;
+    translate(diagnostics: Diagnostics, sourceRoot: AbsoluteFsPath, relativeFilePath: PathSegment, contents: Uint8Array, outputPathFn: OutputPathFn, translations: TranslationBundle[], sourceLocale?: string): void;
     private translateFile;
     private writeSourceFile;
 }

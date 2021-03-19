@@ -1,6 +1,6 @@
 /**
- * @license Angular v10.1.0-next.4+26.sha-6248d6c
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.5+9.sha-bff0d8f
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -87,11 +87,13 @@
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b)
-                if (b.hasOwnProperty(p))
+                if (Object.prototype.hasOwnProperty.call(b, p))
                     d[p] = b[p]; };
         return extendStatics(d, b);
     };
     function __extends(d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -234,10 +236,10 @@
             k2 = k;
         o[k2] = m[k];
     });
-    function __exportStar(m, exports) {
+    function __exportStar(m, o) {
         for (var p in m)
-            if (p !== "default" && !exports.hasOwnProperty(p))
-                __createBinding(exports, m, p);
+            if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p))
+                __createBinding(o, m, p);
     }
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -277,11 +279,13 @@
         }
         return ar;
     }
+    /** @deprecated */
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
+    /** @deprecated */
     function __spreadArrays() {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++)
             s += arguments[i].length;
@@ -290,7 +294,11 @@
                 r[k] = a[j];
         return r;
     }
-    ;
+    function __spreadArray(to, from) {
+        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+            to[j] = from[i];
+        return to;
+    }
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
@@ -347,7 +355,7 @@
         var result = {};
         if (mod != null)
             for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k))
+                if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
                     __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
@@ -370,12 +378,15 @@
     }
 
     /**
-     * Parse a `$localize` tagged string into a structure that can be used for translation.
+     * Parse a `$localize` tagged string into a structure that can be used for translation or
+     * extraction.
      *
      * See `ParsedMessage` for an example.
      */
-    function parseMessage(messageParts, expressions, location) {
+    function parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations) {
+        if (expressionLocations === void 0) { expressionLocations = []; }
         var substitutions = {};
+        var substitutionLocations = {};
         var metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
         var cleanedMessageParts = [metadata.text];
         var placeholderNames = [];
@@ -385,20 +396,24 @@
             messageString += "{$" + placeholderName + "}" + messagePart;
             if (expressions !== undefined) {
                 substitutions[placeholderName] = expressions[i - 1];
+                substitutionLocations[placeholderName] = expressionLocations[i - 1];
             }
             placeholderNames.push(placeholderName);
             cleanedMessageParts.push(messagePart);
         }
-        var messageId = metadata.id || compiler.computeMsgId(messageString, metadata.meaning || '');
+        var messageId = metadata.customId || compiler.computeMsgId(messageString, metadata.meaning || '');
         var legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(function (id) { return id !== messageId; }) : [];
         return {
             id: messageId,
             legacyIds: legacyIds,
             substitutions: substitutions,
+            substitutionLocations: substitutionLocations,
             text: messageString,
+            customId: metadata.customId,
             meaning: metadata.meaning || '',
             description: metadata.description || '',
             messageParts: cleanedMessageParts,
+            messagePartLocations: messagePartLocations,
             placeholderNames: placeholderNames,
             location: location,
         };
@@ -436,7 +451,7 @@
         }
         else {
             var _b = __read(block.split(LEGACY_ID_INDICATOR)), meaningDescAndId = _b[0], legacyIds = _b.slice(1);
-            var _c = __read(meaningDescAndId.split(ID_SEPARATOR, 2), 2), meaningAndDesc = _c[0], id = _c[1];
+            var _c = __read(meaningDescAndId.split(ID_SEPARATOR, 2), 2), meaningAndDesc = _c[0], customId = _c[1];
             var _d = __read(meaningAndDesc.split(MEANING_SEPARATOR, 2), 2), meaning = _d[0], description = _d[1];
             if (description === undefined) {
                 description = meaning;
@@ -445,7 +460,7 @@
             if (description === '') {
                 description = undefined;
             }
-            return { text: messageString, meaning: meaning, description: description, id: id, legacyIds: legacyIds };
+            return { text: messageString, meaning: meaning, description: description, customId: customId, legacyIds: legacyIds };
         }
     }
     /**
@@ -595,7 +610,7 @@
     function makeParsedTranslation(messageParts, placeholderNames) {
         if (placeholderNames === void 0) { placeholderNames = []; }
         var messageString = messageParts[0];
-        for (var i = 0; i < placeholderNames.length - 1; i++) {
+        for (var i = 0; i < placeholderNames.length; i++) {
             messageString += "{$" + placeholderNames[i] + "}" + messageParts[i + 1];
         }
         return {

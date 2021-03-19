@@ -9,7 +9,7 @@
 import { Element, Expansion, ExpansionCase, Node, Text } from '@angular/compiler';
 import { BaseVisitor } from '../base_visitor';
 import { MessageRenderer } from './message_renderer';
-interface MessageSerializerConfig {
+export interface MessageSerializerConfig {
     inlineElements: string[];
     placeholder?: {
         elementName: string;
@@ -41,4 +41,3 @@ export declare class MessageSerializer<T> extends BaseVisitor {
     visitPlaceholderContainer(startName: string, children: Node[], closeName: string): void;
     private isPlaceholderContainer;
 }
-export {};
