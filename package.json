@@ -1,20 +1,17 @@
 {
   "name": "@angular/localize",
-  "version": "9.0.0-next.12+69.sha-1f498ab.with-local-changes",
+  "version": "12.0.0-next.8+121.sha-72c4288",
   "description": "Angular - library for localizing messages",
-  "main": "./bundles/localize.umd.js",
-  "module": "./fesm5/localize.js",
-  "es2015": "./fesm2015/localize.js",
-  "esm5": "./esm5/index.js",
-  "esm2015": "./esm2015/index.js",
-  "fesm5": "./fesm5/localize.js",
-  "fesm2015": "./fesm2015/localize.js",
-  "typings": "./index.d.ts",
   "bin": {
-    "localize-translate": "./src/tools/src/translate/main.js"
+    "localize-translate": "./src/tools/src/translate/main.js",
+    "localize-extract": "./src/tools/src/extract/main.js",
+    "localize-migrate": "./src/tools/src/migrate/main.js"
   },
   "author": "angular",
   "license": "MIT",
+  "engines": {
+    "node": ">=12.14.1 <16.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/angular/angular.git"
@@ -33,25 +30,37 @@
       "@angular/platform-browser-dynamic",
       "@angular/forms",
       "@angular/platform-server",
-      "@angular/platform-webworker",
-      "@angular/platform-webworker-dynamic",
       "@angular/upgrade",
       "@angular/router",
       "@angular/language-service",
+      "@angular/localize",
       "@angular/service-worker"
     ]
+  },
+  "ng-add": {
+    "save": "devDependencies"
   },
   "sideEffects": [
     "**/init/index.js",
     "**/init.js",
     "**/localize-init.umd.js"
   ],
-  "engines": {
-    "node": ">=8.0"
-  },
   "dependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "7.8.3",
     "glob": "7.1.2",
-    "yargs": "13.1.0"
-  }
+    "yargs": "^16.2.0"
+  },
+  "peerDependencies": {
+    "@angular/compiler": "12.0.0-next.8+121.sha-72c4288",
+    "@angular/compiler-cli": "12.0.0-next.8+121.sha-72c4288"
+  },
+  "publishConfig": {
+    "registry": "https://wombat-dressing-room.appspot.com"
+  },
+  "main": "./bundles/localize.umd.js",
+  "fesm2015": "./fesm2015/localize.js",
+  "esm2015": "./esm2015/index.js",
+  "typings": "./index.d.ts",
+  "module": "./fesm2015/localize.js",
+  "es2015": "./fesm2015/localize.js"
 }

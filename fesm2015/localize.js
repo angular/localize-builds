@@ -1,6 +1,6 @@
 /**
- * @license Angular v9.0.0-next.12+69.sha-1f498ab.with-local-changes
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+121.sha-72c4288
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -9,7 +9,7 @@ export { computeMsgId as ɵcomputeMsgId } from '@angular/compiler';
 
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
@@ -48,21 +48,39 @@ const MEANING_SEPARATOR = '|';
  * ```
  */
 const ID_SEPARATOR = '@@';
+/**
+ * The marker used to separate legacy message ids from the rest of a metadata block.
+ *
+ * For example:
+ *
+ * ```ts
+ * $localize `:@@custom-id␟2df64767cd895a8fabe3e18b94b5b6b6f9e2e3f0: Welcome!`;
+ * ```
+ *
+ * Note that this character is the "symbol for the unit separator" (␟) not the "unit separator
+ * character" itself, since that has no visual representation. See https://graphemica.com/%E2%90%9F.
+ *
+ * Here is some background for the original "unit separator character":
+ * https://stackoverflow.com/questions/8695118/whats-the-file-group-record-unit-separator-control-characters-and-its-usage
+ */
+const LEGACY_ID_INDICATOR = '\u241F';
 
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Parse a `$localize` tagged string into a structure that can be used for translation.
+ * Parse a `$localize` tagged string into a structure that can be used for translation or
+ * extraction.
  *
  * See `ParsedMessage` for an example.
  */
-function parseMessage(messageParts, expressions) {
+function parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations = []) {
     const substitutions = {};
+    const substitutionLocations = {};
     const metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
     const cleanedMessageParts = [metadata.text];
     const placeholderNames = [];
@@ -72,36 +90,48 @@ function parseMessage(messageParts, expressions) {
         messageString += `{$${placeholderName}}${messagePart}`;
         if (expressions !== undefined) {
             substitutions[placeholderName] = expressions[i - 1];
+            substitutionLocations[placeholderName] = expressionLocations[i - 1];
         }
         placeholderNames.push(placeholderName);
         cleanedMessageParts.push(messagePart);
     }
+    const messageId = metadata.customId || computeMsgId(messageString, metadata.meaning || '');
+    const legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(id => id !== messageId) : [];
     return {
-        messageId: metadata.id || computeMsgId(messageString, metadata.meaning || ''),
+        id: messageId,
+        legacyIds,
         substitutions,
-        messageString,
+        substitutionLocations,
+        text: messageString,
+        customId: metadata.customId,
         meaning: metadata.meaning || '',
         description: metadata.description || '',
-        messageParts: cleanedMessageParts, placeholderNames,
+        messageParts: cleanedMessageParts,
+        messagePartLocations,
+        placeholderNames,
+        location,
     };
 }
 /**
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *
  * If the message part has a metadata block this function will extract the `meaning`,
- * `description` and `id` (if provided) from the block. These metadata properties are serialized in
- * the string delimited by `|` and `@@` respectively.
+ * `description`, `customId` and `legacyId` (if provided) from the block. These metadata properties
+ * are serialized in the string delimited by `|`, `@@` and `␟` respectively.
+ *
+ * (Note that `␟` is the `LEGACY_ID_INDICATOR` - see `constants.ts`.)
  *
  * For example:
  *
  * ```ts
- * `:meaning|description@@id`
- * `:meaning|@@id`
+ * `:meaning|description@@custom-id`
+ * `:meaning|@@custom-id`
  * `:meaning|description`
- * `description@@id`
+ * `description@@custom-id`
  * `meaning|`
  * `description`
- * `@@id`
+ * `@@custom-id`
+ * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2`
  * ```
  *
  * @param cooked The cooked version of the message part to parse.
@@ -109,12 +139,13 @@ function parseMessage(messageParts, expressions) {
  * @returns A object containing any metadata that was parsed from the message part.
  */
 function parseMetadata(cooked, raw) {
-    const { text, block } = splitBlock(cooked, raw);
+    const { text: messageString, block } = splitBlock(cooked, raw);
     if (block === undefined) {
-        return { text, meaning: undefined, description: undefined, id: undefined };
+        return { text: messageString };
     }
     else {
-        const [meaningAndDesc, id] = block.split(ID_SEPARATOR, 2);
+        const [meaningDescAndId, ...legacyIds] = block.split(LEGACY_ID_INDICATOR);
+        const [meaningAndDesc, customId] = meaningDescAndId.split(ID_SEPARATOR, 2);
         let [meaning, description] = meaningAndDesc.split(MEANING_SEPARATOR, 2);
         if (description === undefined) {
             description = meaning;
@@ -123,7 +154,7 @@ function parseMetadata(cooked, raw) {
         if (description === '') {
             description = undefined;
         }
-        return { text, meaning, description, id };
+        return { text: messageString, meaning, description, customId, legacyIds };
     }
 }
 /**
@@ -140,18 +171,6 @@ function parseMetadata(cooked, raw) {
  * Since blocks are optional, it is possible that the content of a message block actually starts
  * with a block marker. In this case the marker must be escaped `\:`.
  *
- * ---
- *
- * If the template literal was synthesized and downleveled by TypeScript to ES5 then its
- * raw array will only contain empty strings. This is because the current TypeScript compiler uses
- * the original source code to find the raw text and in the case of synthesized AST nodes, there is
- * no source code to draw upon.
- *
- * The workaround in this function is to assume that the template literal did not contain an escaped
- * placeholder name, and fall back on checking the cooked array instead.
- * This is a limitation if compiling to ES5 in TypeScript but is not a problem if the TypeScript
- * output is ES2015 and the code is downlevelled by a separate tool as happens in the Angular CLI.
- *
  * @param cooked The cooked version of the message part to parse.
  * @param raw The raw version of the message part to parse.
  * @returns An object containing the `text` of the message part and the text of the `block`, if it
@@ -159,7 +178,6 @@ function parseMetadata(cooked, raw) {
  * @throws an error if the `block` is unterminated
  */
 function splitBlock(cooked, raw) {
-    raw = raw || cooked;
     if (raw.charAt(0) !== BLOCK_MARKER) {
         return { text: cooked };
     }
@@ -185,9 +203,9 @@ function computePlaceholderName(index) {
  */
 function findEndOfBlock(cooked, raw) {
     /************************************************************************************************
-    * This function is repeated in `src/localize/src/localize.ts` and the two should be kept in sync.
-    * (See that file for more explanation of why.)
-    ************************************************************************************************/
+     * This function is repeated in `src/localize/src/localize.ts` and the two should be kept in sync.
+     * (See that file for more explanation of why.)
+     ************************************************************************************************/
     for (let cookedIndex = 1, rawIndex = 1; cookedIndex < cooked.length; cookedIndex++, rawIndex++) {
         if (raw[rawIndex] === '\\') {
             rawIndex++;
@@ -201,7 +219,7 @@ function findEndOfBlock(cooked, raw) {
 
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
@@ -221,7 +239,8 @@ function isMissingTranslationError(e) {
  * `substitutions`) using the given `translations`.
  *
  * The tagged-string is parsed to extract its `messageId` which is used to find an appropriate
- * `ParsedTranslation`.
+ * `ParsedTranslation`. If this doesn't match and there are legacy ids then try matching a
+ * translation using those.
  *
  * If one is found then it is used to translate the message into a new set of `messageParts` and
  * `substitutions`.
@@ -233,7 +252,14 @@ function isMissingTranslationError(e) {
  */
 function translate(translations, messageParts, substitutions) {
     const message = parseMessage(messageParts, substitutions);
-    const translation = translations[message.messageId];
+    // Look up the translation using the messageId, and then the legacyId if available.
+    let translation = translations[message.id];
+    // If the messageId did not match a translation, try matching the legacy ids instead
+    if (message.legacyIds !== undefined) {
+        for (let i = 0; i < message.legacyIds.length && translation === undefined; i++) {
+            translation = translations[message.legacyIds[i]];
+        }
+    }
     if (translation === undefined) {
         throw new MissingTranslationError(message);
     }
@@ -243,7 +269,8 @@ function translate(translations, messageParts, substitutions) {
                 return message.substitutions[placeholder];
             }
             else {
-                throw new Error(`No placeholder found with name ${placeholder} in message ${describeMessage(message)}.`);
+                throw new Error(`There is a placeholder name mismatch with the translation provided for the message ${describeMessage(message)}.\n` +
+                    `The translation contains a placeholder with name ${placeholder}, which does not exist in the message.`);
             }
         })
     ];
@@ -256,8 +283,8 @@ function translate(translations, messageParts, substitutions) {
  *
  * @param message the message to be parsed.
  */
-function parseTranslation(message) {
-    const parts = message.split(/{\$([^}]*)}/);
+function parseTranslation(messageString) {
+    const parts = messageString.split(/{\$([^}]*)}/);
     const messageParts = [parts[0]];
     const placeholderNames = [];
     for (let i = 1; i < parts.length - 1; i += 2) {
@@ -265,7 +292,11 @@ function parseTranslation(message) {
         messageParts.push(`${parts[i + 1]}`);
     }
     const rawMessageParts = messageParts.map(part => part.charAt(0) === BLOCK_MARKER ? '\\' + part : part);
-    return { messageParts: makeTemplateObject(messageParts, rawMessageParts), placeholderNames };
+    return {
+        text: messageString,
+        messageParts: makeTemplateObject(messageParts, rawMessageParts),
+        placeholderNames,
+    };
 }
 /**
  * Create a `ParsedTranslation` from a set of `messageParts` and `placeholderNames`.
@@ -274,7 +305,15 @@ function parseTranslation(message) {
  * @param placeholderNames The names of the placeholders to intersperse between the `messageParts`.
  */
 function makeParsedTranslation(messageParts, placeholderNames = []) {
-    return { messageParts: makeTemplateObject(messageParts, messageParts), placeholderNames };
+    let messageString = messageParts[0];
+    for (let i = 0; i < placeholderNames.length; i++) {
+        messageString += `{$${placeholderNames[i]}}${messageParts[i + 1]}`;
+    }
+    return {
+        text: messageString,
+        messageParts: makeTemplateObject(messageParts, messageParts),
+        placeholderNames
+    };
 }
 /**
  * Create the specialized array that is passed to tagged-string tag functions.
@@ -288,33 +327,58 @@ function makeTemplateObject(cooked, raw) {
 }
 function describeMessage(message) {
     const meaningString = message.meaning && ` - "${message.meaning}"`;
-    return `"${message.messageId}" ("${message.messageString}"${meaningString})`;
+    const legacy = message.legacyIds && message.legacyIds.length > 0 ?
+        ` [${message.legacyIds.map(l => `"${l}"`).join(', ')}]` :
+        '';
+    return `"${message.id}"${legacy} ("${message.text}"${meaningString})`;
 }
 
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
 
 /**
- * Load translations for `$localize`.
+ * Load translations for use by `$localize`, if doing runtime translation.
  *
- * The given `translations` are processed and added to a lookup based on their `MessageId`.
- * A new translation will overwrite a previous translation if it has the same `MessageId`.
+ * If the `$localize` tagged strings are not going to be replaced at compiled time, it is possible
+ * to load a set of translations that will be applied to the `$localize` tagged strings at runtime,
+ * in the browser.
  *
- * * If a message is generated by the Angular compiler from an `i18n` marker in a template, the
- *   `MessageId` is passed through to the `$localize` call as a custom `MessageId`. The `MessageId`
- *   will match what is extracted into translation files.
+ * Loading a new translation will overwrite a previous translation if it has the same `MessageId`.
  *
- * * If the translation is from a call to `$localize` in application code, and no custom `MessageId`
- *   is provided, then the `MessageId` can be generated by passing the tagged string message-parts
- *   to the `parseMessage()` function (not currently public API).
+ * Note that `$localize` messages are only processed once, when the tagged string is first
+ * encountered, and does not provide dynamic language changing without refreshing the browser.
+ * Loading new translations later in the application life-cycle will not change the translated text
+ * of messages that have already been translated.
  *
+ * The message IDs and translations are in the same format as that rendered to "simple JSON"
+ * translation files when extracting messages. In particular, placeholders in messages are rendered
+ * using the `{$PLACEHOLDER_NAME}` syntax. For example the message from the following template:
+ *
+ * ```html
+ * <div i18n>pre<span>inner-pre<b>bold</b>inner-post</span>post</div>
+ * ```
+ *
+ * would have the following form in the `translations` map:
+ *
+ * ```ts
+ * {
+ *   "2932901491976224757":
+ *      "pre{$START_TAG_SPAN}inner-pre{$START_BOLD_TEXT}bold{$CLOSE_BOLD_TEXT}inner-post{$CLOSE_TAG_SPAN}post"
+ * }
+ * ```
+ *
+ * @param translations A map from message ID to translated message.
+ *
+ * These messages are processed and added to a lookup based on their `MessageId`.
+ *
+ * @see `clearTranslations()` for removing translations loaded using this function.
+ * @see `$localize` for tagging messages as needing to be translated.
  * @publicApi
- *
  */
 function loadTranslations(translations) {
     // Ensure the translate function exists
@@ -329,11 +393,17 @@ function loadTranslations(translations) {
     });
 }
 /**
- * Remove all translations for `$localize`.
+ * Remove all translations for `$localize`, if doing runtime translation.
+ *
+ * All translations that had been loading into memory using `loadTranslations()` will be removed.
+ *
+ * @see `loadTranslations()` for loading translations at runtime.
+ * @see `$localize` for tagging messages as needing to be translated.
  *
  * @publicApi
  */
 function clearTranslations() {
+    $localize.translate = undefined;
     $localize.TRANSLATIONS = {};
 }
 /**
@@ -353,7 +423,7 @@ function translate$1(messageParts, substitutions) {
 
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
@@ -361,7 +431,7 @@ function translate$1(messageParts, substitutions) {
 
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
@@ -369,7 +439,7 @@ function translate$1(messageParts, substitutions) {
 
 /**
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
