@@ -1,17 +1,18 @@
 /**
- * @license Angular v9.0.0-rc.1+246.sha-d3cfad7.with-local-changes
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+77.sha-917664e
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
-(function (factory) {
-    typeof define === 'function' && define.amd ? define('@angular/localize/init', factory) :
-    factory();
-}((function () { 'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define('@angular/localize/init', ['exports'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.localize = global.ng.localize || {}, global.ng.localize.init = {})));
+}(this, (function (exports) { 'use strict';
 
     /**
      * @license
-     * Copyright Google Inc. All Rights Reserved.
+     * Copyright Google LLC All Rights Reserved.
      *
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
@@ -28,7 +29,7 @@
 
     /**
      * @license
-     * Copyright Google Inc. All Rights Reserved.
+     * Copyright Google LLC All Rights Reserved.
      *
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
@@ -56,7 +57,7 @@
      * ```
      *
      * This format is the same as that used for `i18n` markers in Angular templates. See the
-     * [Angular 18n guide](guide/i18n#template-translations).
+     * [Angular 18n guide](guide/i18n#mark-text-for-translations).
      *
      * **Naming placeholders**
      *
@@ -120,9 +121,13 @@
      * the original template literal string without applying any translations to the parts. This
      * version is used during development or where there is no need to translate the localized
      * template literals.
+     *
      * @param messageParts a collection of the static parts of the template string.
      * @param expressions a collection of the values of each placeholder in the template string.
      * @returns the translated string, with the `messageParts` and `expressions` interleaved together.
+     *
+     * @globalApi
+     * @publicApi
      */
     var $localize = function (messageParts) {
         var expressions = [];
@@ -150,25 +155,12 @@
      * escaped with a backslash, `\:`. This function checks for this by looking at the `raw`
      * messagePart, which should still contain the backslash.
      *
-     * ---
-     *
-     * If the template literal was synthesized and downleveled by TypeScript to ES5 then its
-     * raw array will only contain empty strings. This is because the current TypeScript compiler uses
-     * the original source code to find the raw text and in the case of synthesized AST nodes, there is
-     * no source code to draw upon.
-     *
-     * The workaround in this function is to assume that the template literal did not contain an escaped
-     * placeholder name, and fall back on checking the cooked array instead.
-     * This is a limitation if compiling to ES5 in TypeScript but is not a problem if the TypeScript
-     * output is ES2015 and the code is downleveled by a separate tool as happens in the Angular CLI.
-     *
      * @param messagePart The cooked message part to process.
      * @param rawMessagePart The raw message part to check.
      * @returns the message part with the placeholder name stripped, if found.
      * @throws an error if the block is unterminated
      */
     function stripBlock(messagePart, rawMessagePart) {
-        rawMessagePart = rawMessagePart || messagePart;
         return rawMessagePart.charAt(0) === BLOCK_MARKER ?
             messagePart.substring(findEndOfBlock(messagePart, rawMessagePart) + 1) :
             messagePart;
@@ -202,7 +194,7 @@
 
     /**
      * @license
-     * Copyright Google Inc. All Rights Reserved.
+     * Copyright Google LLC All Rights Reserved.
      *
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
@@ -210,13 +202,17 @@
 
     /**
      * @license
-     * Copyright Google Inc. All Rights Reserved.
+     * Copyright Google LLC All Rights Reserved.
      *
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
     // Attach $localize to the global context, as a side-effect of this module.
     _global.$localize = $localize;
+
+    exports.$localize = $localize;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 //# sourceMappingURL=localize-init.umd.js.map

@@ -1,5 +1,11 @@
 /// <amd-module name="@angular/localize/src/tools/src/translate/translation_files/translation_parsers/simple_json_translation_parser" />
-import { ParsedTranslationBundle, TranslationParser } from './translation_parser';
+import { ParseAnalysis, ParsedTranslationBundle, TranslationParser } from './translation_parser';
+interface SimpleJsonFile {
+    locale: string;
+    translations: {
+        [messageId: string]: string;
+    };
+}
 /**
  * A translation parser that can parse JSON that has the form:
  *
@@ -12,8 +18,16 @@ import { ParsedTranslationBundle, TranslationParser } from './translation_parser
  *   }
  * }
  * ```
+ *
+ * @see SimpleJsonTranslationSerializer
+ * @publicApi used by CLI
  */
-export declare class SimpleJsonTranslationParser implements TranslationParser {
-    canParse(filePath: string, _contents: string): boolean;
-    parse(_filePath: string, contents: string): ParsedTranslationBundle;
+export declare class SimpleJsonTranslationParser implements TranslationParser<SimpleJsonFile> {
+    /**
+     * @deprecated
+     */
+    canParse(filePath: string, contents: string): SimpleJsonFile | false;
+    analyze(filePath: string, contents: string): ParseAnalysis<SimpleJsonFile>;
+    parse(_filePath: string, contents: string, json?: SimpleJsonFile): ParsedTranslationBundle;
 }
+export {};

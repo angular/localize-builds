@@ -1,3 +1,4 @@
+import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
 /**
  * Re-export this helper function so that users of `@angular/localize` don't need to actively import
  * from `@angular/compiler`.
@@ -24,6 +25,61 @@ export declare type TargetMessage = string;
  */
 export declare type MessageId = string;
 /**
+ * The location of the message in the source file.
+ *
+ * The `line` and `column` values for the `start` and `end` properties are zero-based.
+ */
+export interface SourceLocation {
+    start: {
+        line: number;
+        column: number;
+    };
+    end: {
+        line: number;
+        column: number;
+    };
+    file: AbsoluteFsPath;
+    text?: string;
+}
+/**
+ * Additional information that can be associated with a message.
+ */
+export interface MessageMetadata {
+    /**
+     * A human readable rendering of the message
+     */
+    text: string;
+    /**
+     * Legacy message ids, if provided.
+     *
+     * In legacy message formats the message id can only be computed directly from the original
+     * template source.
+     *
+     * Since this information is not available in `$localize` calls, the legacy message ids may be
+     * attached by the compiler to the `$localize` metablock so it can be used if needed at the point
+     * of translation if the translations are encoded using the legacy message id.
+     */
+    legacyIds?: string[];
+    /**
+     * The id of the `message` if a custom one was specified explicitly.
+     *
+     * This id overrides any computed or legacy ids.
+     */
+    customId?: string;
+    /**
+     * The meaning of the `message`, used to distinguish identical `messageString`s.
+     */
+    meaning?: string;
+    /**
+     * The description of the `message`, used to aid translation.
+     */
+    description?: string;
+    /**
+     * The location of the message in the source.
+     */
+    location?: SourceLocation;
+}
+/**
  * Information parsed from a `$localize` tagged string that is used to translate it.
  *
  * For example:
@@ -37,71 +93,65 @@ export declare type MessageId = string;
  *
  * ```
  * {
- *   messageId: '6998194507597730591',
+ *   id: '6998194507597730591',
  *   substitutions: { title: 'Jo Bloggs' },
  *   messageString: 'Hello {$title}!',
  * }
  * ```
  */
-export interface ParsedMessage {
+export interface ParsedMessage extends MessageMetadata {
     /**
      * The key used to look up the appropriate translation target.
      */
-    messageId: MessageId;
+    id: MessageId;
     /**
      * A mapping of placeholder names to substitution values.
      */
     substitutions: Record<string, any>;
     /**
-     * A human readable rendering of the message
+     * An optional mapping of placeholder names to source locations
      */
-    messageString: string;
-    /**
-     * The meaning of the `message`, used to distinguish identical `messageString`s.
-     */
-    meaning: string;
-    /**
-     * The description of the `message`, used to aid translation.
-     */
-    description: string;
+    substitutionLocations?: Record<string, SourceLocation | undefined>;
     /**
      * The static parts of the message.
      */
     messageParts: string[];
+    /**
+     * An optional mapping of message parts to source locations
+     */
+    messagePartLocations?: (SourceLocation | undefined)[];
     /**
      * The names of the placeholders that will be replaced with substitutions.
      */
     placeholderNames: string[];
 }
 /**
- * Parse a `$localize` tagged string into a structure that can be used for translation.
+ * Parse a `$localize` tagged string into a structure that can be used for translation or
+ * extraction.
  *
  * See `ParsedMessage` for an example.
  */
-export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[]): ParsedMessage;
-export interface MessageMetadata {
-    text: string;
-    meaning: string | undefined;
-    description: string | undefined;
-    id: string | undefined;
-}
+export declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[], location?: SourceLocation, messagePartLocations?: (SourceLocation | undefined)[], expressionLocations?: (SourceLocation | undefined)[]): ParsedMessage;
 /**
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *
  * If the message part has a metadata block this function will extract the `meaning`,
- * `description` and `id` (if provided) from the block. These metadata properties are serialized in
- * the string delimited by `|` and `@@` respectively.
+ * `description`, `customId` and `legacyId` (if provided) from the block. These metadata properties
+ * are serialized in the string delimited by `|`, `@@` and `␟` respectively.
+ *
+ * (Note that `␟` is the `LEGACY_ID_INDICATOR` - see `constants.ts`.)
  *
  * For example:
  *
  * ```ts
- * `:meaning|description@@id`
- * `:meaning|@@id`
+ * `:meaning|description@@custom-id`
+ * `:meaning|@@custom-id`
  * `:meaning|description`
- * `description@@id`
+ * `description@@custom-id`
  * `meaning|`
  * `description`
- * `@@id`
+ * `@@custom-id`
+ * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2`
  * ```
  *
  * @param cooked The cooked version of the message part to parse.
@@ -122,18 +172,6 @@ export declare function parseMetadata(cooked: string, raw: string): MessageMetad
  *
  * Since blocks are optional, it is possible that the content of a message block actually starts
  * with a block marker. In this case the marker must be escaped `\:`.
- *
- * ---
- *
- * If the template literal was synthesized and downleveled by TypeScript to ES5 then its
- * raw array will only contain empty strings. This is because the current TypeScript compiler uses
- * the original source code to find the raw text and in the case of synthesized AST nodes, there is
- * no source code to draw upon.
- *
- * The workaround in this function is to assume that the template literal did not contain an escaped
- * placeholder name, and fall back on checking the cooked array instead.
- * This is a limitation if compiling to ES5 in TypeScript but is not a problem if the TypeScript
- * output is ES2015 and the code is downlevelled by a separate tool as happens in the Angular CLI.
  *
  * @param cooked The cooked version of the message part to parse.
  * @param raw The raw version of the message part to parse.
