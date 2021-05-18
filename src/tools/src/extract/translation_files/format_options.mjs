@@ -1,0 +1,36 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Check that the given `options` are allowed based on the given `validOptions`.
+ * @param name The name of the serializer that is receiving the options.
+ * @param validOptions An array of valid options and their allowed values.
+ * @param options The options to be validated.
+ */
+export function validateOptions(name, validOptions, options) {
+    const validOptionsMap = new Map(validOptions);
+    for (const option in options) {
+        if (!validOptionsMap.has(option)) {
+            throw new Error(`Invalid format option for ${name}: "${option}".\n` +
+                `Allowed options are ${JSON.stringify(Array.from(validOptionsMap.keys()))}.`);
+        }
+        const validOptionValues = validOptionsMap.get(option);
+        const optionValue = options[option];
+        if (!validOptionValues.includes(optionValue)) {
+            throw new Error(`Invalid format option value for ${name}: "${option}".\n` +
+                `Allowed option values are ${JSON.stringify(validOptionValues)} but received "${optionValue}".`);
+        }
+    }
+}
+/**
+ * Parse the given `optionString` into a collection of `FormatOptions`.
+ * @param optionString The string to parse.
+ */
+export function parseFormatOptions(optionString = '{}') {
+    return JSON.parse(optionString);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZm9ybWF0X29wdGlvbnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9sb2NhbGl6ZS9zcmMvdG9vbHMvc3JjL2V4dHJhY3QvdHJhbnNsYXRpb25fZmlsZXMvZm9ybWF0X29wdGlvbnMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBTUg7Ozs7O0dBS0c7QUFDSCxNQUFNLFVBQVUsZUFBZSxDQUFDLElBQVksRUFBRSxZQUEwQixFQUFFLE9BQXNCO0lBQzlGLE1BQU0sZUFBZSxHQUFHLElBQUksR0FBRyxDQUFpQyxZQUFZLENBQUMsQ0FBQztJQUM5RSxLQUFLLE1BQU0sTUFBTSxJQUFJLE9BQU8sRUFBRTtRQUM1QixJQUFJLENBQUMsZUFBZSxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsRUFBRTtZQUNoQyxNQUFNLElBQUksS0FBSyxDQUNYLDZCQUE2QixJQUFJLE1BQU0sTUFBTSxNQUFNO2dCQUNuRCx1QkFBdUIsSUFBSSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxJQUFJLEVBQUUsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDO1NBQ25GO1FBQ0QsTUFBTSxpQkFBaUIsR0FBRyxlQUFlLENBQUMsR0FBRyxDQUFDLE1BQU0sQ0FBRSxDQUFDO1FBQ3ZELE1BQU0sV0FBVyxHQUFHLE9BQU8sQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUNwQyxJQUFJLENBQUMsaUJBQWlCLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxFQUFFO1lBQzVDLE1BQU0sSUFBSSxLQUFLLENBQ1gsbUNBQW1DLElBQUksTUFBTSxNQUFNLE1BQU07Z0JBQ3pELDZCQUE2QixJQUFJLENBQUMsU0FBUyxDQUFDLGlCQUFpQixDQUFDLGtCQUMxRCxXQUFXLElBQUksQ0FBQyxDQUFDO1NBQzFCO0tBQ0Y7QUFDSCxDQUFDO0FBRUQ7OztHQUdHO0FBQ0gsTUFBTSxVQUFVLGtCQUFrQixDQUFDLGVBQXVCLElBQUk7SUFDNUQsT0FBTyxJQUFJLENBQUMsS0FBSyxDQUFDLFlBQVksQ0FBa0IsQ0FBQztBQUNuRCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmV4cG9ydCB0eXBlIEZvcm1hdE9wdGlvbnMgPSBSZWNvcmQ8c3RyaW5nLCBzdHJpbmc+O1xuZXhwb3J0IHR5cGUgVmFsaWRPcHRpb24gPSBba2V5OiBzdHJpbmcsIHZhbHVlczogc3RyaW5nW11dO1xuZXhwb3J0IHR5cGUgVmFsaWRPcHRpb25zID0gVmFsaWRPcHRpb25bXTtcblxuLyoqXG4gKiBDaGVjayB0aGF0IHRoZSBnaXZlbiBgb3B0aW9uc2AgYXJlIGFsbG93ZWQgYmFzZWQgb24gdGhlIGdpdmVuIGB2YWxpZE9wdGlvbnNgLlxuICogQHBhcmFtIG5hbWUgVGhlIG5hbWUgb2YgdGhlIHNlcmlhbGl6ZXIgdGhhdCBpcyByZWNlaXZpbmcgdGhlIG9wdGlvbnMuXG4gKiBAcGFyYW0gdmFsaWRPcHRpb25zIEFuIGFycmF5IG9mIHZhbGlkIG9wdGlvbnMgYW5kIHRoZWlyIGFsbG93ZWQgdmFsdWVzLlxuICogQHBhcmFtIG9wdGlvbnMgVGhlIG9wdGlvbnMgdG8gYmUgdmFsaWRhdGVkLlxuICovXG5leHBvcnQgZnVuY3Rpb24gdmFsaWRhdGVPcHRpb25zKG5hbWU6IHN0cmluZywgdmFsaWRPcHRpb25zOiBWYWxpZE9wdGlvbnMsIG9wdGlvbnM6IEZvcm1hdE9wdGlvbnMpIHtcbiAgY29uc3QgdmFsaWRPcHRpb25zTWFwID0gbmV3IE1hcDxWYWxpZE9wdGlvblswXSwgVmFsaWRPcHRpb25bMV0+KHZhbGlkT3B0aW9ucyk7XG4gIGZvciAoY29uc3Qgb3B0aW9uIGluIG9wdGlvbnMpIHtcbiAgICBpZiAoIXZhbGlkT3B0aW9uc01hcC5oYXMob3B0aW9uKSkge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKFxuICAgICAgICAgIGBJbnZhbGlkIGZvcm1hdCBvcHRpb24gZm9yICR7bmFtZX06IFwiJHtvcHRpb259XCIuXFxuYCArXG4gICAgICAgICAgYEFsbG93ZWQgb3B0aW9ucyBhcmUgJHtKU09OLnN0cmluZ2lmeShBcnJheS5mcm9tKHZhbGlkT3B0aW9uc01hcC5rZXlzKCkpKX0uYCk7XG4gICAgfVxuICAgIGNvbnN0IHZhbGlkT3B0aW9uVmFsdWVzID0gdmFsaWRPcHRpb25zTWFwLmdldChvcHRpb24pITtcbiAgICBjb25zdCBvcHRpb25WYWx1ZSA9IG9wdGlvbnNbb3B0aW9uXTtcbiAgICBpZiAoIXZhbGlkT3B0aW9uVmFsdWVzLmluY2x1ZGVzKG9wdGlvblZhbHVlKSkge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKFxuICAgICAgICAgIGBJbnZhbGlkIGZvcm1hdCBvcHRpb24gdmFsdWUgZm9yICR7bmFtZX06IFwiJHtvcHRpb259XCIuXFxuYCArXG4gICAgICAgICAgYEFsbG93ZWQgb3B0aW9uIHZhbHVlcyBhcmUgJHtKU09OLnN0cmluZ2lmeSh2YWxpZE9wdGlvblZhbHVlcyl9IGJ1dCByZWNlaXZlZCBcIiR7XG4gICAgICAgICAgICAgIG9wdGlvblZhbHVlfVwiLmApO1xuICAgIH1cbiAgfVxufVxuXG4vKipcbiAqIFBhcnNlIHRoZSBnaXZlbiBgb3B0aW9uU3RyaW5nYCBpbnRvIGEgY29sbGVjdGlvbiBvZiBgRm9ybWF0T3B0aW9uc2AuXG4gKiBAcGFyYW0gb3B0aW9uU3RyaW5nIFRoZSBzdHJpbmcgdG8gcGFyc2UuXG4gKi9cbmV4cG9ydCBmdW5jdGlvbiBwYXJzZUZvcm1hdE9wdGlvbnMob3B0aW9uU3RyaW5nOiBzdHJpbmcgPSAne30nKTogRm9ybWF0T3B0aW9ucyB7XG4gIHJldHVybiBKU09OLnBhcnNlKG9wdGlvblN0cmluZykgYXMgRm9ybWF0T3B0aW9ucztcbn1cbiJdfQ==
