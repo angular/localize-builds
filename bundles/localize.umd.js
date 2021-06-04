@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.4+41.sha-6929625
+ * @license Angular v12.1.0-next.4+43.sha-71e14a7
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -569,8 +569,7 @@
             throw new MissingTranslationError(message);
         }
         return [
-            translation.messageParts,
-            translation.placeholderNames.map(function (placeholder) {
+            translation.messageParts, translation.placeholderNames.map(function (placeholder) {
                 if (message.substitutions.hasOwnProperty(placeholder)) {
                     return message.substitutions[placeholder];
                 }
