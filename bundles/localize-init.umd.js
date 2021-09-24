@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.7+11.sha-ea61ec2.with-local-changes
+ * @license Angular v13.0.0-next.7+29.sha-d9d8f95.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -57,7 +57,7 @@
      * ```
      *
      * This format is the same as that used for `i18n` markers in Angular templates. See the
-     * [Angular 18n guide](guide/i18n#mark-text-for-translations).
+     * [Angular 18n guide](guide/i18n-common-prepare#mark-text-for-translations).
      *
      * **Naming placeholders**
      *
