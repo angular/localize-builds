@@ -1,11 +1,32 @@
 {
   "name": "@angular/localize",
-  "version": "13.0.0-next.9+10.sha-9eba260.with-local-changes",
+  "version": "13.0.0-next.9+84.sha-c15b8c7.with-local-changes",
   "description": "Angular - library for localizing messages",
   "bin": {
-    "localize-translate": "./src/tools/src/translate/main.js",
-    "localize-extract": "./src/tools/src/extract/main.js",
-    "localize-migrate": "./src/tools/src/migrate/main.js"
+    "localize-translate": "./tools/bundles/src/translate/cli.js",
+    "localize-extract": "./tools/bundles/src/extract/cli.js",
+    "localize-migrate": "./tools/bundles/src/migrate/cli.js"
+  },
+  "exports": {
+    "./tools": {
+      "types": "./tools/index.d.ts",
+      "default": "./tools/bundles/index.js"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "es2015": "./fesm2015/localize.mjs",
+      "node": "./fesm2015/localize.mjs",
+      "default": "./fesm2020/localize.mjs"
+    },
+    "./init": {
+      "types": "./init/index.d.ts",
+      "es2015": "./fesm2015/init.mjs",
+      "node": "./fesm2015/init.mjs",
+      "default": "./fesm2020/init.mjs"
+    }
   },
   "author": "angular",
   "license": "MIT",
@@ -41,23 +62,23 @@
     "save": "devDependencies"
   },
   "sideEffects": [
-    "**/init/index.js",
-    "**/init.js",
-    "**/localize-init.umd.js"
+    "**/init/index.mjs",
+    "**/init.mjs"
   ],
   "dependencies": {
-    "@babel/core": "7.8.3",
+    "@babel/core": "7.8.6",
     "glob": "7.2.0",
-    "yargs": "^17.0.0"
+    "yargs": "^17.2.1"
   },
   "peerDependencies": {
-    "@angular/compiler": "13.0.0-next.9+10.sha-9eba260.with-local-changes",
-    "@angular/compiler-cli": "13.0.0-next.9+10.sha-9eba260.with-local-changes"
+    "@angular/compiler": "13.0.0-next.9+84.sha-c15b8c7.with-local-changes",
+    "@angular/compiler-cli": "13.0.0-next.9+84.sha-c15b8c7.with-local-changes"
   },
-  "main": "./bundles/localize.umd.js",
-  "fesm2015": "./fesm2015/localize.js",
-  "esm2015": "./esm2015/index.js",
+  "fesm2020": "./fesm2020/localize.mjs",
+  "fesm2015": "./fesm2015/localize.mjs",
+  "esm2020": "./esm2020/index.mjs",
   "typings": "./index.d.ts",
-  "module": "./fesm2015/localize.js",
-  "es2015": "./fesm2015/localize.js"
+  "module": "./fesm2015/localize.mjs",
+  "es2020": "./fesm2020/localize.mjs",
+  "type": "module"
 }

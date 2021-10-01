@@ -1,4 +1,4 @@
-import { AbsoluteFsPath } from '@angular/compiler-cli/src/ngtsc/file_system';
+import { AbsoluteFsPath } from '@angular/compiler-cli/private/localize';
 /**
  * Re-export this helper function so that users of `@angular/localize` don't need to actively import
  * from `@angular/compiler`.
