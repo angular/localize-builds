@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.14+66.sha-67a7c48.with-local-changes
+ * @license Angular v13.0.0-next.14+71.sha-25b9c8c.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -81,18 +81,22 @@ const LEGACY_ID_INDICATOR = '\u241F';
 function parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations = []) {
     const substitutions = {};
     const substitutionLocations = {};
+    const associatedMessageIds = {};
     const metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
     const cleanedMessageParts = [metadata.text];
     const placeholderNames = [];
     let messageString = metadata.text;
     for (let i = 1; i < messageParts.length; i++) {
-        const { text: messagePart, block: placeholderName = computePlaceholderName(i) } = splitBlock(messageParts[i], messageParts.raw[i]);
+        const { messagePart, placeholderName = computePlaceholderName(i), associatedMessageId } = parsePlaceholder(messageParts[i], messageParts.raw[i]);
         messageString += `{$${placeholderName}}${messagePart}`;
         if (expressions !== undefined) {
             substitutions[placeholderName] = expressions[i - 1];
             substitutionLocations[placeholderName] = expressionLocations[i - 1];
         }
         placeholderNames.push(placeholderName);
+        if (associatedMessageId !== undefined) {
+            associatedMessageIds[placeholderName] = associatedMessageId;
+        }
         cleanedMessageParts.push(messagePart);
     }
     const messageId = metadata.customId || computeMsgId(messageString, metadata.meaning || '');
@@ -109,6 +113,7 @@ function parseMessage(messageParts, expressions, location, messagePartLocations,
         messageParts: cleanedMessageParts,
         messagePartLocations,
         placeholderNames,
+        associatedMessageIds,
         location,
     };
 }
@@ -124,14 +129,14 @@ function parseMessage(messageParts, expressions, location, messagePartLocations,
  * For example:
  *
  * ```ts
- * `:meaning|description@@custom-id`
- * `:meaning|@@custom-id`
- * `:meaning|description`
- * `description@@custom-id`
- * `meaning|`
- * `description`
- * `@@custom-id`
- * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2`
+ * `:meaning|description@@custom-id:`
+ * `:meaning|@@custom-id:`
+ * `:meaning|description:`
+ * `:description@@custom-id:`
+ * `:meaning|:`
+ * `:description:`
+ * `:@@custom-id:`
+ * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2:`
  * ```
  *
  * @param cooked The cooked version of the message part to parse.
@@ -155,6 +160,36 @@ function parseMetadata(cooked, raw) {
             description = undefined;
         }
         return { text: messageString, meaning, description, customId, legacyIds };
+    }
+}
+/**
+ * Parse the given message part (`cooked` + `raw`) to extract any placeholder metadata from the
+ * text.
+ *
+ * If the message part has a metadata block this function will extract the `placeholderName` and
+ * `associatedMessageId` (if provided) from the block.
+ *
+ * These metadata properties are serialized in the string delimited by `@@`.
+ *
+ * For example:
+ *
+ * ```ts
+ * `:placeholder-name@@associated-id:`
+ * ```
+ *
+ * @param cooked The cooked version of the message part to parse.
+ * @param raw The raw version of the message part to parse.
+ * @returns A object containing the metadata (`placeholderName` and `associatedMesssageId`) of the
+ *     preceding placeholder, along with the static text that follows.
+ */
+function parsePlaceholder(cooked, raw) {
+    const { text: messagePart, block } = splitBlock(cooked, raw);
+    if (block === undefined) {
+        return { messagePart };
+    }
+    else {
+        const [placeholderName, associatedMessageId] = block.split(ID_SEPARATOR);
+        return { messagePart, placeholderName, associatedMessageId };
     }
 }
 /**

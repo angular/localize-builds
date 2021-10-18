@@ -86,7 +86,7 @@ export interface MessageMetadata {
  *
  * ```
  * const name = 'Jo Bloggs';
- * $localize`Hello ${name}:title!`;
+ * $localize`Hello ${name}:title@@ID:!`;
  * ```
  *
  * May be parsed into:
@@ -96,6 +96,8 @@ export interface MessageMetadata {
  *   id: '6998194507597730591',
  *   substitutions: { title: 'Jo Bloggs' },
  *   messageString: 'Hello {$title}!',
+ *   placeholderNames: ['title'],
+ *   associatedMessageIds: { title: 'ID' },
  * }
  * ```
  */
@@ -108,6 +110,11 @@ export interface ParsedMessage extends MessageMetadata {
      * A mapping of placeholder names to substitution values.
      */
     substitutions: Record<string, any>;
+    /**
+     * An optional mapping of placeholder names to associated MessageIds.
+     * This can be used to match ICU placeholders to the message that contains the ICU.
+     */
+    associatedMessageIds?: Record<string, MessageId>;
     /**
      * An optional mapping of placeholder names to source locations
      */
@@ -144,14 +151,14 @@ export declare function parseMessage(messageParts: TemplateStringsArray, express
  * For example:
  *
  * ```ts
- * `:meaning|description@@custom-id`
- * `:meaning|@@custom-id`
- * `:meaning|description`
- * `description@@custom-id`
- * `meaning|`
- * `description`
- * `@@custom-id`
- * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2`
+ * `:meaning|description@@custom-id:`
+ * `:meaning|@@custom-id:`
+ * `:meaning|description:`
+ * `:description@@custom-id:`
+ * `:meaning|:`
+ * `:description:`
+ * `:@@custom-id:`
+ * `:meaning|description@@custom-id␟legacy-id-1␟legacy-id-2:`
  * ```
  *
  * @param cooked The cooked version of the message part to parse.
@@ -159,6 +166,31 @@ export declare function parseMessage(messageParts: TemplateStringsArray, express
  * @returns A object containing any metadata that was parsed from the message part.
  */
 export declare function parseMetadata(cooked: string, raw: string): MessageMetadata;
+/**
+ * Parse the given message part (`cooked` + `raw`) to extract any placeholder metadata from the
+ * text.
+ *
+ * If the message part has a metadata block this function will extract the `placeholderName` and
+ * `associatedMessageId` (if provided) from the block.
+ *
+ * These metadata properties are serialized in the string delimited by `@@`.
+ *
+ * For example:
+ *
+ * ```ts
+ * `:placeholder-name@@associated-id:`
+ * ```
+ *
+ * @param cooked The cooked version of the message part to parse.
+ * @param raw The raw version of the message part to parse.
+ * @returns A object containing the metadata (`placeholderName` and `associatedMesssageId`) of the
+ *     preceding placeholder, along with the static text that follows.
+ */
+export declare function parsePlaceholder(cooked: string, raw: string): {
+    messagePart: string;
+    placeholderName?: string;
+    associatedMessageId?: string;
+};
 /**
  * Split a message part (`cooked` + `raw`) into an optional delimited "block" off the front and the
  * rest of the text of the message part.

@@ -847,8 +847,10 @@ var Xliff1TranslationSerializer = class {
     const length = message.messageParts.length - 1;
     for (let i = 0; i < length; i++) {
       this.serializeTextPart(xml, message.messageParts[i]);
-      const location = (_a2 = message.substitutionLocations) == null ? void 0 : _a2[message.placeholderNames[i]];
-      this.serializePlaceholder(xml, message.placeholderNames[i], location == null ? void 0 : location.text);
+      const name = message.placeholderNames[i];
+      const location = (_a2 = message.substitutionLocations) == null ? void 0 : _a2[name];
+      const associatedMessageId = message.associatedMessageIds && message.associatedMessageIds[name];
+      this.serializePlaceholder(xml, name, location == null ? void 0 : location.text, associatedMessageId);
     }
     this.serializeTextPart(xml, message.messageParts[length]);
   }
@@ -857,11 +859,11 @@ var Xliff1TranslationSerializer = class {
     const length = pieces.length - 1;
     for (let i = 0; i < length; i += 2) {
       xml.text(pieces[i]);
-      this.serializePlaceholder(xml, pieces[i + 1], void 0);
+      this.serializePlaceholder(xml, pieces[i + 1], void 0, void 0);
     }
     xml.text(pieces[length]);
   }
-  serializePlaceholder(xml, id, text) {
+  serializePlaceholder(xml, id, text, associatedId) {
     const attrs = { id };
     const ctype = getCtypeForPlaceholder(id);
     if (ctype !== null) {
@@ -869,6 +871,9 @@ var Xliff1TranslationSerializer = class {
     }
     if (text !== void 0) {
       attrs["equiv-text"] = text;
+    }
+    if (associatedId !== void 0) {
+      attrs["xid"] = associatedId;
     }
     xml.startTag("x", attrs, { selfClosing: true });
   }
@@ -997,7 +1002,9 @@ var Xliff2TranslationSerializer = class {
     const length = message.messageParts.length - 1;
     for (let i = 0; i < length; i++) {
       this.serializeTextPart(xml, message.messageParts[i]);
-      this.serializePlaceholder(xml, message.placeholderNames[i], message.substitutionLocations);
+      const name = message.placeholderNames[i];
+      const associatedMessageId = message.associatedMessageIds && message.associatedMessageIds[name];
+      this.serializePlaceholder(xml, name, message.substitutionLocations, associatedMessageId);
     }
     this.serializeTextPart(xml, message.messageParts[length]);
   }
@@ -1006,11 +1013,11 @@ var Xliff2TranslationSerializer = class {
     const length = pieces.length - 1;
     for (let i = 0; i < length; i += 2) {
       xml.text(pieces[i]);
-      this.serializePlaceholder(xml, pieces[i + 1], void 0);
+      this.serializePlaceholder(xml, pieces[i + 1], void 0, void 0);
     }
     xml.text(pieces[length]);
   }
-  serializePlaceholder(xml, placeholderName, substitutionLocations) {
+  serializePlaceholder(xml, placeholderName, substitutionLocations, associatedMessageId) {
     var _a2, _b;
     const text = (_a2 = substitutionLocations == null ? void 0 : substitutionLocations[placeholderName]) == null ? void 0 : _a2.text;
     if (placeholderName.startsWith("START_")) {
@@ -1045,6 +1052,9 @@ var Xliff2TranslationSerializer = class {
       }
       if (text !== void 0) {
         attrs.disp = text;
+      }
+      if (associatedMessageId !== void 0) {
+        attrs["subFlows"] = associatedMessageId;
       }
       xml.startTag("ph", attrs, { selfClosing: true });
     }
