@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.11+8.sha-c831c67.with-local-changes
+ * @license Angular v12.2.11+10.sha-5f32863.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -51,7 +51,7 @@ const _global = __globalThis || __global || __window || __self;
  * ```
  *
  * This format is the same as that used for `i18n` markers in Angular templates. See the
- * [Angular 18n guide](guide/i18n-common-prepare#mark-text-in-component-template).
+ * [Angular i18n guide](guide/i18n-common-prepare#mark-text-in-component-template).
  *
  * **Naming placeholders**
  *
