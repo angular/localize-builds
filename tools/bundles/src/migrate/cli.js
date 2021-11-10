@@ -3,7 +3,7 @@
       import {createRequire as __cjsCompatRequire} from 'module';
       const require = __cjsCompatRequire(import.meta.url);
     
-import "../../chunk-KZHPLSGS.js";
+import "../../chunk-LVTJYDSU.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/cli.mjs
 import { ConsoleLogger, LogLevel, NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";

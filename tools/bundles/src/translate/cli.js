@@ -21,7 +21,7 @@ import {
 import {
   __spreadProps,
   __spreadValues
-} from "../../chunk-KZHPLSGS.js";
+} from "../../chunk-LVTJYDSU.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
