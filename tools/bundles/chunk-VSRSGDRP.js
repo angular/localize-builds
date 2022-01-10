@@ -13,7 +13,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-KHVODPDB.js";
+} from "./chunk-HXTFGWOC.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -480,7 +480,7 @@ var Xliff1TranslationParser = class {
     }
     const bundle = { locale: void 0, translations: {}, diagnostics };
     const translationVisitor = new XliffTranslationVisitor();
-    const localesFound = new Set();
+    const localesFound = /* @__PURE__ */ new Set();
     for (const file of files) {
       const locale = getAttribute(file, "target-language");
       if (locale !== void 0) {
@@ -743,4 +743,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-NTUC2PMV.js.map
+//# sourceMappingURL=chunk-VSRSGDRP.js.map

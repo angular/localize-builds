@@ -15,7 +15,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-KHVODPDB.js";
+} from "./chunk-HXTFGWOC.js";
 import {
   __spreadValues
 } from "./chunk-LVTJYDSU.js";
@@ -25,7 +25,7 @@ function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath
   const diagnostics = new Diagnostics();
   if (duplicateMessageHandling === "ignore")
     return diagnostics;
-  const messageMap = new Map();
+  const messageMap = /* @__PURE__ */ new Map();
   for (const message of messages) {
     if (messageMap.has(message.id)) {
       messageMap.get(message.id).push(message);
@@ -174,7 +174,7 @@ var MessageExtractor = class {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/utils.mjs
 function consolidateMessages(messages, getMessageId2) {
-  const messageGroups = new Map();
+  const messageGroups = /* @__PURE__ */ new Map();
   for (const message of messages) {
     const id = getMessageId2(message);
     if (!messageGroups.has(id)) {
@@ -901,4 +901,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-OCJTL5RA.js.map
+//# sourceMappingURL=chunk-NAAT3C62.js.map
