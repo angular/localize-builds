@@ -50,7 +50,7 @@ var _typesNamespace = _babelNamespace.types;
 if (_babelDefault !== void 0) {
   _typesNamespace = _babelDefault.types;
 }
-var types = _typesNamespace;
+var types2 = _typesNamespace;
 var NodePath = babel.NodePath;
 var transformSync = babel.transformSync;
 var parseSync = babel.parseSync;
@@ -67,10 +67,10 @@ function isGlobalIdentifier(identifier) {
   return !identifier.scope || !identifier.scope.hasBinding(identifier.node.name);
 }
 function buildLocalizeReplacement(messageParts, substitutions) {
-  let mappedString = types.stringLiteral(messageParts[0]);
+  let mappedString = types2.stringLiteral(messageParts[0]);
   for (let i = 1; i < messageParts.length; i++) {
-    mappedString = types.binaryExpression("+", mappedString, wrapInParensIfNecessary(substitutions[i - 1]));
-    mappedString = types.binaryExpression("+", mappedString, types.stringLiteral(messageParts[i]));
+    mappedString = types2.binaryExpression("+", mappedString, wrapInParensIfNecessary(substitutions[i - 1]));
+    mappedString = types2.binaryExpression("+", mappedString, types2.stringLiteral(messageParts[i]));
   }
   return mappedString;
 }
@@ -156,8 +156,8 @@ function unwrapExpressionsFromTemplateLiteral(quasi, fs = getFileSystem()) {
   return [quasi.node.expressions, quasi.get("expressions").map((e) => getLocation(fs, e))];
 }
 function wrapInParensIfNecessary(expression) {
-  if (types.isBinaryExpression(expression)) {
-    return types.parenthesizedExpression(expression);
+  if (types2.isBinaryExpression(expression)) {
+    return types2.parenthesizedExpression(expression);
   } else {
     return expression;
   }
@@ -224,7 +224,7 @@ function getReturnedExpression(fn) {
   throw new BabelParseError(fn.node, "Missing return statement in helper function.");
 }
 function isStringLiteralArray(node) {
-  return types.isArrayExpression(node) && node.elements.every((element) => types.isStringLiteral(element));
+  return types2.isArrayExpression(node) && node.elements.every((element) => types2.isStringLiteral(element));
 }
 function isArrayOfExpressions(paths) {
   return paths.every((element) => element.isExpression());
@@ -312,7 +312,7 @@ function getText(path) {
 
 export {
   Diagnostics,
-  types,
+  types2 as types,
   transformSync,
   parseSync,
   transformFromAstSync,
@@ -337,4 +337,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-KHVODPDB.js.map
+//# sourceMappingURL=chunk-HXTFGWOC.js.map

@@ -12,12 +12,12 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-NTUC2PMV.js";
+} from "../../chunk-VSRSGDRP.js";
 import {
   Diagnostics,
   parseSync,
   transformFromAstSync
-} from "../../chunk-KHVODPDB.js";
+} from "../../chunk-HXTFGWOC.js";
 import {
   __spreadProps,
   __spreadValues
@@ -148,7 +148,7 @@ var TranslationLoader = class {
   }
   loadBundle(filePath, providedLocale) {
     const fileContents = this.fs.readFile(filePath);
-    const unusedParsers = new Map();
+    const unusedParsers = /* @__PURE__ */ new Map();
     for (const translationParser of this.translationParsers) {
       const result = translationParser.analyze(filePath, fileContents);
       if (!result.canParse) {
