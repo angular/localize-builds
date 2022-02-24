@@ -1,4 +1,3 @@
-import { AbsoluteFsPath } from '@angular/compiler-cli/private/localize';
 /**
  * Re-export this helper function so that users of `@angular/localize` don't need to actively import
  * from `@angular/compiler`.
@@ -25,6 +24,19 @@ export declare type TargetMessage = string;
  */
 export declare type MessageId = string;
 /**
+ * Declares a copy of the `AbsoluteFsPath` branded type in `@angular/compiler-cli` to avoid an
+ * import into `@angular/compiler-cli`. The compiler-cli's declaration files are not necessarily
+ * compatible with web environments that use `@angular/localize`, and would inadvertently include
+ * `typescript` declaration files in any compilation unit that uses `@angular/localize` (which
+ * increases parsing time and memory usage during builds) using a default import that only
+ * type-checks when `allowSyntheticDefaultImports` is enabled.
+ *
+ * @see https://github.com/angular/angular/issues/45179
+ */
+declare type AbsoluteFsPathLocalizeCopy = string & {
+    _brand: 'AbsoluteFsPath';
+};
+/**
  * The location of the message in the source file.
  *
  * The `line` and `column` values for the `start` and `end` properties are zero-based.
@@ -38,7 +50,7 @@ export interface SourceLocation {
         line: number;
         column: number;
     };
-    file: AbsoluteFsPath;
+    file: AbsoluteFsPathLocalizeCopy;
     text?: string;
 }
 /**
