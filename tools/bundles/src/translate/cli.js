@@ -12,12 +12,12 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-VSRSGDRP.js";
+} from "../../chunk-722CM33X.js";
 import {
   Diagnostics,
   parseSync,
   transformFromAstSync
-} from "../../chunk-HXTFGWOC.js";
+} from "../../chunk-I4EIM2HO.js";
 import {
   __spreadProps,
   __spreadValues

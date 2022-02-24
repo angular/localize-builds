@@ -153,7 +153,10 @@ function unwrapMessagePartsFromTemplateLiteral(elements, fs = getFileSystem()) {
   return [\u0275makeTemplateObject(cooked, raw), locations];
 }
 function unwrapExpressionsFromTemplateLiteral(quasi, fs = getFileSystem()) {
-  return [quasi.node.expressions, quasi.get("expressions").map((e) => getLocation(fs, e))];
+  return [
+    quasi.node.expressions,
+    quasi.get("expressions").map((e) => getLocation(fs, e))
+  ];
 }
 function wrapInParensIfNecessary(expression) {
   if (types2.isBinaryExpression(expression)) {
@@ -289,14 +292,14 @@ function serializeLocationPosition(location) {
   return `${location.start.line + 1}${endLineString}`;
 }
 function getFileFromPath(fs, path) {
-  var _a2;
+  var _a2, _b;
   const opts = path == null ? void 0 : path.hub.file.opts;
   const filename = opts == null ? void 0 : opts.filename;
-  if (!filename) {
+  if (!filename || !opts.cwd) {
     return null;
   }
   const relativePath = fs.relative(opts.cwd, filename);
-  const root = (_a2 = opts.generatorOpts.sourceRoot) != null ? _a2 : opts.cwd;
+  const root = (_b = (_a2 = opts.generatorOpts) == null ? void 0 : _a2.sourceRoot) != null ? _b : opts.cwd;
   const absPath = fs.resolve(root, relativePath);
   return absPath;
 }
@@ -337,4 +340,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-HXTFGWOC.js.map
+//# sourceMappingURL=chunk-I4EIM2HO.js.map
