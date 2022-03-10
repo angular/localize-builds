@@ -100,7 +100,7 @@
             (0, dependencies_1.addPackageJsonDependency)(host, {
                 name: '@angular/localize',
                 type: dependencies_1.NodeDependencyType.Default,
-                version: `~13.2.6+2.sha-6336b8e`
+                version: `~13.2.6+3.sha-895c541`
             });
             // Add a task to run the package manager. This is necessary because we updated
             // "package.json" and we want lock files to reflect this.
@@ -108,7 +108,7 @@
         }
     }
     function default_1(options) {
-        return (host) => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return (host) => tslib_1.__awaiter(this, void 0, void 0, function* () {
             if (!options.name) {
                 throw new schematics_1.SchematicsException('Option "name" is required.');
             }
