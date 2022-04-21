@@ -6,7 +6,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ɵMessageId, ɵParsedTranslation } from '@angular/localize';
+import { MessageId, ɵParsedTranslation } from '@angular/localize';
 import { Diagnostics } from '../../../diagnostics';
 /**
  * Indicates that a parser can parse a given file, with a hint that can be used to speed up actual
@@ -33,7 +33,7 @@ export declare type ParseAnalysis<Hint> = CanParseAnalysis<Hint> | CannotParseAn
  */
 export interface ParsedTranslationBundle {
     locale: string | undefined;
-    translations: Record<ɵMessageId, ɵParsedTranslation>;
+    translations: Record<MessageId, ɵParsedTranslation>;
     diagnostics: Diagnostics;
 }
 /**

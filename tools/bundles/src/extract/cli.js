@@ -13,7 +13,7 @@ import {
   XmbTranslationSerializer,
   checkDuplicateMessages,
   parseFormatOptions
-} from "../../chunk-LRGT6B5H.js";
+} from "../../chunk-TONYPNL2.js";
 import "../../chunk-SJTMYW2P.js";
 import "../../chunk-LVTJYDSU.js";
 

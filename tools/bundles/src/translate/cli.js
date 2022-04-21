@@ -12,7 +12,7 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-ACSZQPVL.js";
+} from "../../chunk-EKPIKXBU.js";
 import {
   Diagnostics,
   parseSync,

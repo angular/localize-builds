@@ -11,7 +11,7 @@ import {
   Xliff2TranslationSerializer,
   XmbTranslationSerializer,
   checkDuplicateMessages
-} from "./chunk-LRGT6B5H.js";
+} from "./chunk-TONYPNL2.js";
 import {
   ArbTranslationParser,
   SimpleJsonTranslationParser,
@@ -21,7 +21,7 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "./chunk-ACSZQPVL.js";
+} from "./chunk-EKPIKXBU.js";
 import {
   Diagnostics,
   buildLocalizeReplacement,
