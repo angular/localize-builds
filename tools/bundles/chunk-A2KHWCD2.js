@@ -307,7 +307,7 @@ function getLineAndColumn(loc) {
   return { line: loc.line - 1, column: loc.column };
 }
 function getText(path) {
-  if (path.node.start === null || path.node.end === null) {
+  if (path.node.start == null || path.node.end == null) {
     return void 0;
   }
   return path.hub.file.code.substring(path.node.start, path.node.end);
@@ -340,4 +340,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-SJTMYW2P.js.map
+//# sourceMappingURL=chunk-A2KHWCD2.js.map
