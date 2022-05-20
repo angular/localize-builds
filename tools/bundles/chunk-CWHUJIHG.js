@@ -15,7 +15,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-SJTMYW2P.js";
+} from "./chunk-A2KHWCD2.js";
 import {
   __spreadValues
 } from "./chunk-LVTJYDSU.js";
@@ -901,4 +901,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-TONYPNL2.js.map
+//# sourceMappingURL=chunk-CWHUJIHG.js.map
