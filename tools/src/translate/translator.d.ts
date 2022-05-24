@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { AbsoluteFsPath, PathSegment, ReadonlyFileSystem } from '@angular/compiler-cli/private/localize';
-import { MessageId, ɵParsedTranslation } from '@angular/localize';
+import { ɵMessageId, ɵParsedTranslation } from '@angular/localize';
 import { Diagnostics } from '../diagnostics';
 import { OutputPathFn } from './output_path';
 /**
@@ -15,7 +15,7 @@ import { OutputPathFn } from './output_path';
  */
 export interface TranslationBundle {
     locale: string;
-    translations: Record<MessageId, ɵParsedTranslation>;
+    translations: Record<ɵMessageId, ɵParsedTranslation>;
     diagnostics?: Diagnostics;
 }
 /**

@@ -13,8 +13,8 @@ import {
   XmbTranslationSerializer,
   checkDuplicateMessages,
   parseFormatOptions
-} from "../../chunk-CWHUJIHG.js";
-import "../../chunk-A2KHWCD2.js";
+} from "../../chunk-LRGT6B5H.js";
+import "../../chunk-SJTMYW2P.js";
 import "../../chunk-LVTJYDSU.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/cli.mjs
