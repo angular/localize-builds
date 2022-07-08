@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.4+sha-cee207e
+ * @license Angular v14.1.0-next.4+sha-c14c701
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -179,7 +179,7 @@ function parseMetadata(cooked, raw) {
  *
  * @param cooked The cooked version of the message part to parse.
  * @param raw The raw version of the message part to parse.
- * @returns A object containing the metadata (`placeholderName` and `associatedMesssageId`) of the
+ * @returns A object containing the metadata (`placeholderName` and `associatedMessageId`) of the
  *     preceding placeholder, along with the static text that follows.
  */
 function parsePlaceholder(cooked, raw) {

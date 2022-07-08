@@ -17,9 +17,9 @@ import { getFileSystem } from "@angular/compiler-cli/private/localize";
 function migrateFile(sourceCode, mapping) {
   const legacyIds = Object.keys(mapping);
   for (const legacyId of legacyIds) {
-    const cannonicalId = mapping[legacyId];
+    const canonicalId = mapping[legacyId];
     const pattern = new RegExp(escapeRegExp(legacyId), "g");
-    sourceCode = sourceCode.replace(pattern, cannonicalId);
+    sourceCode = sourceCode.replace(pattern, canonicalId);
   }
   return sourceCode;
 }
