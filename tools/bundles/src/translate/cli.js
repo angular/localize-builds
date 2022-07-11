@@ -12,16 +12,12 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-DJJPI7SI.js";
+} from "../../chunk-PGXSBBYJ.js";
 import {
   Diagnostics,
   parseSync,
   transformFromAstSync
-} from "../../chunk-A2KHWCD2.js";
-import {
-  __spreadProps,
-  __spreadValues
-} from "../../chunk-LVTJYDSU.js";
+} from "../../chunk-KTVUCOMS.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -71,7 +67,7 @@ var SourceFileTranslationHandler = class {
   constructor(fs2, translationOptions = {}) {
     this.fs = fs2;
     this.translationOptions = translationOptions;
-    this.sourceLocaleOptions = __spreadProps(__spreadValues({}, this.translationOptions), { missingTranslation: "ignore" });
+    this.sourceLocaleOptions = { ...this.translationOptions, missingTranslation: "ignore" };
   }
   canTranslate(relativeFilePath, _contents) {
     return this.fs.extname(relativeFilePath) === ".js";

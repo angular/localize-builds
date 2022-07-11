@@ -15,10 +15,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-A2KHWCD2.js";
-import {
-  __spreadValues
-} from "./chunk-LVTJYDSU.js";
+} from "./chunk-KTVUCOMS.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -534,11 +531,12 @@ var Xliff1TranslationSerializer = class {
     const messageGroups = consolidateMessages(messages, (message) => this.getMessageId(message));
     const xml = new XmlFile();
     xml.startTag("xliff", { "version": "1.2", "xmlns": "urn:oasis:names:tc:xliff:document:1.2" });
-    xml.startTag("file", __spreadValues({
+    xml.startTag("file", {
       "source-language": this.sourceLocale,
       "datatype": "plaintext",
-      "original": "ng2.template"
-    }, this.formatOptions));
+      "original": "ng2.template",
+      ...this.formatOptions
+    });
     xml.startTag("body");
     for (const duplicateMessages of messageGroups) {
       const message = duplicateMessages[0];
@@ -687,7 +685,7 @@ var Xliff2TranslationSerializer = class {
       "xmlns": "urn:oasis:names:tc:xliff:document:2.0",
       "srcLang": this.sourceLocale
     });
-    xml.startTag("file", __spreadValues({ "id": "ngi18n", "original": "ng.template" }, this.formatOptions));
+    xml.startTag("file", { "id": "ngi18n", "original": "ng.template", ...this.formatOptions });
     for (const duplicateMessages of messageGroups) {
       const message = duplicateMessages[0];
       const id = this.getMessageId(message);
@@ -901,4 +899,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-CWHUJIHG.js.map
+//# sourceMappingURL=chunk-OMWFZJP4.js.map
