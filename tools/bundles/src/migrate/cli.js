@@ -3,7 +3,6 @@
       import {createRequire as __cjsCompatRequire} from 'module';
       const require = __cjsCompatRequire(import.meta.url);
     
-import "../../chunk-LVTJYDSU.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/cli.mjs
 import { ConsoleLogger, LogLevel, NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -17,9 +16,9 @@ import { getFileSystem } from "@angular/compiler-cli/private/localize";
 function migrateFile(sourceCode, mapping) {
   const legacyIds = Object.keys(mapping);
   for (const legacyId of legacyIds) {
-    const cannonicalId = mapping[legacyId];
+    const canonicalId = mapping[legacyId];
     const pattern = new RegExp(escapeRegExp(legacyId), "g");
-    sourceCode = sourceCode.replace(pattern, cannonicalId);
+    sourceCode = sourceCode.replace(pattern, canonicalId);
   }
   return sourceCode;
 }

@@ -52,7 +52,8 @@ export declare function buildLocalizeReplacement(messageParts: TemplateStringsAr
  */
 export declare function unwrapMessagePartsFromLocalizeCall(call: NodePath<t.CallExpression>, fs?: PathManipulation): [TemplateStringsArray, (ɵSourceLocation | undefined)[]];
 /**
- * Parse the localize call expression to extract the arguments that hold the substition expressions.
+ * Parse the localize call expression to extract the arguments that hold the substitution
+ * expressions.
  *
  * @param call The AST node of the call to process.
  * @param fs The file system to use when computing source-map paths. If not provided then it uses
