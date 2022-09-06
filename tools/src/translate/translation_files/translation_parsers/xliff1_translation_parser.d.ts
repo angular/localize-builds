@@ -11,12 +11,7 @@ import { XmlTranslationParserHint } from './translation_utils';
  * @publicApi used by CLI
  */
 export declare class Xliff1TranslationParser implements TranslationParser<XmlTranslationParserHint> {
-    /**
-     * @deprecated
-     */
-    canParse(filePath: string, contents: string): XmlTranslationParserHint | false;
     analyze(filePath: string, contents: string): ParseAnalysis<XmlTranslationParserHint>;
-    parse(filePath: string, contents: string, hint?: XmlTranslationParserHint): ParsedTranslationBundle;
+    parse(filePath: string, contents: string, hint: XmlTranslationParserHint): ParsedTranslationBundle;
     private extractBundle;
-    private extractBundleDeprecated;
 }
