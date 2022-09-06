@@ -53,6 +53,10 @@ export interface ArbLocation {
  * ```
  */
 export declare class ArbTranslationParser implements TranslationParser<ArbJsonObject> {
+    /**
+     * @deprecated
+     */
+    canParse(filePath: string, contents: string): ArbJsonObject | false;
     analyze(_filePath: string, contents: string): ParseAnalysis<ArbJsonObject>;
     parse(_filePath: string, contents: string, arb?: ArbJsonObject): ParsedTranslationBundle;
     private tryParseArbFormat;

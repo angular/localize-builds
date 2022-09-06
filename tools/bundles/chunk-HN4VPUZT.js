@@ -108,6 +108,10 @@ function isLocalizeGuard(expression, localizeName) {
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/arb_translation_parser.mjs
 import { \u0275parseTranslation } from "@angular/localize";
 var ArbTranslationParser = class {
+  canParse(filePath, contents) {
+    const result = this.analyze(filePath, contents);
+    return result.canParse && result.hint;
+  }
   analyze(_filePath, contents) {
     const diagnostics = new Diagnostics();
     if (!contents.includes('"@@locale"')) {
@@ -148,6 +152,10 @@ var ArbTranslationParser = class {
 import { \u0275parseTranslation as \u0275parseTranslation2 } from "@angular/localize";
 import { extname } from "path";
 var SimpleJsonTranslationParser = class {
+  canParse(filePath, contents) {
+    const result = this.analyze(filePath, contents);
+    return result.canParse && result.hint;
+  }
   analyze(filePath, contents) {
     const diagnostics = new Diagnostics();
     if (extname(filePath) !== ".json" || !(contents.includes('"locale"') && contents.includes('"translations"'))) {
@@ -443,11 +451,19 @@ function serializeTranslationMessage(element, config) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xliff1_translation_parser.mjs
 var Xliff1TranslationParser = class {
+  canParse(filePath, contents) {
+    const result = this.analyze(filePath, contents);
+    return result.canParse && result.hint;
+  }
   analyze(filePath, contents) {
     return canParseXml(filePath, contents, "xliff", { version: "1.2" });
   }
   parse(filePath, contents, hint) {
-    return this.extractBundle(hint);
+    if (hint) {
+      return this.extractBundle(hint);
+    } else {
+      return this.extractBundleDeprecated(filePath, contents);
+    }
   }
   extractBundle({ element, errors }) {
     const diagnostics = new Diagnostics();
@@ -475,6 +491,18 @@ var Xliff1TranslationParser = class {
     }
     if (localesFound.size > 1) {
       addParseDiagnostic(diagnostics, element.sourceSpan, `More than one locale found in translation file: ${JSON.stringify(Array.from(localesFound))}. Using "${bundle.locale}"`, ParseErrorLevel3.WARNING);
+    }
+    return bundle;
+  }
+  extractBundleDeprecated(filePath, contents) {
+    const hint = this.canParse(filePath, contents);
+    if (!hint) {
+      throw new Error(`Unable to parse "${filePath}" as XLIFF 1.2 format.`);
+    }
+    const bundle = this.extractBundle(hint);
+    if (bundle.diagnostics.hasErrors) {
+      const message = bundle.diagnostics.formatDiagnostics(`Failed to parse "${filePath}" as XLIFF 1.2 format`);
+      throw new Error(message);
     }
     return bundle;
   }
@@ -521,11 +549,19 @@ var XliffTranslationVisitor = class extends BaseVisitor {
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xliff2_translation_parser.mjs
 import { Element as Element3, ParseErrorLevel as ParseErrorLevel4, visitAll as visitAll3 } from "@angular/compiler";
 var Xliff2TranslationParser = class {
+  canParse(filePath, contents) {
+    const result = this.analyze(filePath, contents);
+    return result.canParse && result.hint;
+  }
   analyze(filePath, contents) {
     return canParseXml(filePath, contents, "xliff", { version: "2.0" });
   }
   parse(filePath, contents, hint) {
-    return this.extractBundle(hint);
+    if (hint) {
+      return this.extractBundle(hint);
+    } else {
+      return this.extractBundleDeprecated(filePath, contents);
+    }
   }
   extractBundle({ element, errors }) {
     const diagnostics = new Diagnostics();
@@ -541,6 +577,18 @@ var Xliff2TranslationParser = class {
     const translationVisitor = new Xliff2TranslationVisitor();
     for (const file of files) {
       visitAll3(translationVisitor, file.children, { bundle });
+    }
+    return bundle;
+  }
+  extractBundleDeprecated(filePath, contents) {
+    const hint = this.canParse(filePath, contents);
+    if (!hint) {
+      throw new Error(`Unable to parse "${filePath}" as XLIFF 2.0 format.`);
+    }
+    const bundle = this.extractBundle(hint);
+    if (bundle.diagnostics.hasErrors) {
+      const message = bundle.diagnostics.formatDiagnostics(`Failed to parse "${filePath}" as XLIFF 2.0 format`);
+      throw new Error(message);
     }
     return bundle;
   }
@@ -601,6 +649,10 @@ function isFileElement(node) {
 import { ParseErrorLevel as ParseErrorLevel5, visitAll as visitAll4 } from "@angular/compiler";
 import { extname as extname2 } from "path";
 var XtbTranslationParser = class {
+  canParse(filePath, contents) {
+    const result = this.analyze(filePath, contents);
+    return result.canParse && result.hint;
+  }
   analyze(filePath, contents) {
     const extension = extname2(filePath);
     if (extension !== ".xtb" && extension !== ".xmb") {
@@ -611,7 +663,11 @@ var XtbTranslationParser = class {
     return canParseXml(filePath, contents, "translationbundle", {});
   }
   parse(filePath, contents, hint) {
-    return this.extractBundle(hint);
+    if (hint) {
+      return this.extractBundle(hint);
+    } else {
+      return this.extractBundleDeprecated(filePath, contents);
+    }
   }
   extractBundle({ element, errors }) {
     const langAttr = element.attrs.find((attr) => attr.name === "lang");
@@ -623,6 +679,18 @@ var XtbTranslationParser = class {
     errors.forEach((e) => addParseError(bundle.diagnostics, e));
     const bundleVisitor = new XtbVisitor();
     visitAll4(bundleVisitor, element.children, bundle);
+    return bundle;
+  }
+  extractBundleDeprecated(filePath, contents) {
+    const hint = this.canParse(filePath, contents);
+    if (!hint) {
+      throw new Error(`Unable to parse "${filePath}" as XMB/XTB format.`);
+    }
+    const bundle = this.extractBundle(hint);
+    if (bundle.diagnostics.hasErrors) {
+      const message = bundle.diagnostics.formatDiagnostics(`Failed to parse "${filePath}" as XMB/XTB format`);
+      throw new Error(message);
+    }
     return bundle;
   }
 };
@@ -675,4 +743,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-HS5BMNX3.js.map
+//# sourceMappingURL=chunk-HN4VPUZT.js.map
