@@ -23,10 +23,6 @@ interface SimpleJsonFile {
  * @publicApi used by CLI
  */
 export declare class SimpleJsonTranslationParser implements TranslationParser<SimpleJsonFile> {
-    /**
-     * @deprecated
-     */
-    canParse(filePath: string, contents: string): SimpleJsonFile | false;
     analyze(filePath: string, contents: string): ParseAnalysis<SimpleJsonFile>;
     parse(_filePath: string, contents: string, json?: SimpleJsonFile): ParsedTranslationBundle;
 }
