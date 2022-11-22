@@ -13,7 +13,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-N3C6NOYD.js";
+} from "./chunk-EE2T5UCZ.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -675,4 +675,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-HS5BMNX3.js.map
+//# sourceMappingURL=chunk-52W4JLVC.js.map
