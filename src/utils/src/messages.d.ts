@@ -11,7 +11,7 @@ export { computeMsgId } from '@angular/compiler';
  *
  * Uses `{$placeholder-name}` to indicate a placeholder.
  */
-export declare type SourceMessage = string;
+export type SourceMessage = string;
 /**
  * A string containing a translation target message.
  *
@@ -19,11 +19,11 @@ export declare type SourceMessage = string;
  *
  * Uses `{$placeholder-name}` to indicate a placeholder.
  */
-export declare type TargetMessage = string;
+export type TargetMessage = string;
 /**
  * A string that uniquely identifies a message, to be used for matching translations.
  */
-export declare type MessageId = string;
+export type MessageId = string;
 /**
  * Declares a copy of the `AbsoluteFsPath` branded type in `@angular/compiler-cli` to avoid an
  * import into `@angular/compiler-cli`. The compiler-cli's declaration files are not necessarily
@@ -34,7 +34,7 @@ export declare type MessageId = string;
  *
  * @see https://github.com/angular/angular/issues/45179
  */
-declare type AbsoluteFsPathLocalizeCopy = string & {
+type AbsoluteFsPathLocalizeCopy = string & {
     _brand: 'AbsoluteFsPath';
 };
 /**

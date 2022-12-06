@@ -10,7 +10,7 @@ export interface ParsedTranslation extends MessageMetadata {
 /**
  * The internal structure used by the runtime localization to translate messages.
  */
-export declare type ParsedTranslations = Record<MessageId, ParsedTranslation>;
+export type ParsedTranslations = Record<MessageId, ParsedTranslation>;
 export declare class MissingTranslationError extends Error {
     readonly parsedMessage: ParsedMessage;
     private readonly type;

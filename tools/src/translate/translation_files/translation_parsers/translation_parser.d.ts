@@ -27,7 +27,7 @@ export interface CannotParseAnalysis {
 /**
  * Information about whether a `TranslationParser` can parse a given file.
  */
-export declare type ParseAnalysis<Hint> = CanParseAnalysis<Hint> | CannotParseAnalysis;
+export type ParseAnalysis<Hint> = CanParseAnalysis<Hint> | CannotParseAnalysis;
 /**
  * An object that holds translations that have been parsed from a translation file.
  */

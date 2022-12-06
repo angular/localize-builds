@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /// <amd-module name="@angular/localize/tools/src/extract/translation_files/format_options" />
-export declare type FormatOptions = Record<string, string>;
-export declare type ValidOption = [key: string, values: string[]];
-export declare type ValidOptions = ValidOption[];
+export type FormatOptions = Record<string, string>;
+export type ValidOption = [key: string, values: string[]];
+export type ValidOptions = ValidOption[];
 /**
  * Check that the given `options` are allowed based on the given `validOptions`.
  * @param name The name of the serializer that is receiving the options.

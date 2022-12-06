@@ -7,7 +7,7 @@
  */
 /// <amd-module name="@angular/localize/tools/src/migrate/migrate" />
 /** Mapping between legacy message IDs and their canonical counterparts. */
-export declare type MigrationMapping = {
+export type MigrationMapping = {
     [legacyId: string]: string;
 };
 /** Migrates the legacy message IDs within a single file. */

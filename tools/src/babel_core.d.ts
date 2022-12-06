@@ -28,10 +28,10 @@
 import * as _babelNamespace from '@babel/core';
 import _typesNamespace = _babelNamespace.types;
 export import types = _typesNamespace;
-export declare type PluginObj = _babelNamespace.PluginObj;
-export declare type ConfigAPI = _babelNamespace.ConfigAPI;
-export declare type NodePath<T = _babelNamespace.Node> = _babelNamespace.NodePath<T>;
-export declare type TransformOptions = _babelNamespace.TransformOptions;
+export type PluginObj = _babelNamespace.PluginObj;
+export type ConfigAPI = _babelNamespace.ConfigAPI;
+export type NodePath<T = _babelNamespace.Node> = _babelNamespace.NodePath<T>;
+export type TransformOptions = _babelNamespace.TransformOptions;
 export declare const NodePath: typeof _babelNamespace.NodePath;
 export declare const transformSync: typeof _babelNamespace.transformSync;
 export declare const parseSync: typeof _babelNamespace.parseSync;

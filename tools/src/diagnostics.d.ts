@@ -9,7 +9,7 @@
 /**
  * How to handle potential diagnostics.
  */
-export declare type DiagnosticHandlingStrategy = 'error' | 'warning' | 'ignore';
+export type DiagnosticHandlingStrategy = 'error' | 'warning' | 'ignore';
 /**
  * This class is used to collect and then report warnings and errors that occur during the execution
  * of the tools.
