@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/extract/duplicates" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.

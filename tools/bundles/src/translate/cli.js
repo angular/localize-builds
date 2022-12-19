@@ -12,12 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-52W4JLVC.js";
+} from "../../chunk-3TQ7D6V2.js";
 import {
-  Diagnostics,
-  parseSync,
-  transformFromAstSync
-} from "../../chunk-EE2T5UCZ.js";
+  Diagnostics
+} from "../../chunk-SOWE44E4.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -63,6 +61,7 @@ var AssetTranslationHandler = class {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/source_file_translation_handler.mjs
 import { absoluteFrom as absoluteFrom2 } from "@angular/compiler-cli/private/localize";
+import babel from "@babel/core";
 var SourceFileTranslationHandler = class {
   constructor(fs2, translationOptions = {}) {
     this.fs = fs2;
@@ -82,7 +81,7 @@ var SourceFileTranslationHandler = class {
         this.writeSourceFile(diagnostics2, outputPathFn2, sourceLocale2, relativeFilePath, contents);
       }
     } else {
-      const ast = parseSync(sourceCode, { sourceRoot, filename: relativeFilePath });
+      const ast = babel.parseSync(sourceCode, { sourceRoot, filename: relativeFilePath });
       if (!ast) {
         diagnostics2.error(`Unable to parse source file: ${this.fs.join(sourceRoot, relativeFilePath)}`);
         return;
@@ -96,7 +95,7 @@ var SourceFileTranslationHandler = class {
     }
   }
   translateFile(diagnostics2, ast, translationBundle, sourceRoot, filename, outputPathFn2, options2) {
-    const translated = transformFromAstSync(ast, void 0, {
+    const translated = babel.transformFromAstSync(ast, void 0, {
       compact: true,
       generatorOpts: { minified: true },
       plugins: [

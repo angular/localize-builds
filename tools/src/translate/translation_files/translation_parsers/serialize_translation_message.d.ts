@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/translate/translation_files/translation_parsers/serialize_translation_message" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.

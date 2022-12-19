@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/src/utils/src/messages" />
 /**
  * Re-export this helper function so that users of `@angular/localize` don't need to actively import
  * from `@angular/compiler`.

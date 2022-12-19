@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/extract/source_files/es5_extract_plugin" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -8,5 +7,5 @@
  */
 import { PathManipulation } from '@angular/compiler-cli/private/localize';
 import { ɵParsedMessage } from '@angular/localize';
-import { PluginObj } from '../../babel_core';
+import { PluginObj } from '@babel/core';
 export declare function makeEs5ExtractPlugin(fs: PathManipulation, messages: ɵParsedMessage[], localizeName?: string): PluginObj;

@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/translate/translation_files/translation_parsers/xtb_translation_parser" />
 import { ParseAnalysis, ParsedTranslationBundle, TranslationParser } from './translation_parser';
 import { XmlTranslationParserHint } from './translation_utils';
 /**

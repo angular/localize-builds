@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/extract/translation_files/utils" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.

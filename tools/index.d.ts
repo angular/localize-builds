@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/localize/tools" />
 export { DiagnosticHandlingStrategy, Diagnostics } from './src/diagnostics';
 export { checkDuplicateMessages } from './src/extract/duplicates';
 export { MessageExtractor } from './src/extract/extraction';

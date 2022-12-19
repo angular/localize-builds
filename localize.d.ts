@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/localize/localize" />
 import { LocalizeFn } from './src/localize';
 export { clearTranslations, loadTranslations } from './src/translate';
 export { MessageId, TargetMessage } from './src/utils';

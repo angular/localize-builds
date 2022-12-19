@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/src/utils/src/translations" />
 import { MessageId, MessageMetadata, ParsedMessage, TargetMessage } from './messages';
 /**
  * A translation message that has been processed to extract the message parts and placeholders.

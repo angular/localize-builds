@@ -41,23 +41,7 @@ var Diagnostics = class {
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
 import { \u0275isMissingTranslationError, \u0275makeTemplateObject, \u0275translate } from "@angular/localize";
-
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/babel_core.mjs
-import * as _babelNamespace from "@babel/core";
-import _babelDefault from "@babel/core";
-var _a;
-var babel = (_a = _babelDefault) != null ? _a : _babelNamespace;
-var _typesNamespace = _babelNamespace.types;
-if (_babelDefault !== void 0) {
-  _typesNamespace = _babelDefault.types;
-}
-var types2 = _typesNamespace;
-var NodePath = babel.NodePath;
-var transformSync = babel.transformSync;
-var parseSync = babel.parseSync;
-var transformFromAstSync = babel.transformFromAstSync;
-
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.mjs
+import { types as t } from "@babel/core";
 function isLocalize(expression, localizeName) {
   return isNamedIdentifier(expression, localizeName) && isGlobalIdentifier(expression);
 }
@@ -68,10 +52,10 @@ function isGlobalIdentifier(identifier) {
   return !identifier.scope || !identifier.scope.hasBinding(identifier.node.name);
 }
 function buildLocalizeReplacement(messageParts, substitutions) {
-  let mappedString = types2.stringLiteral(messageParts[0]);
+  let mappedString = t.stringLiteral(messageParts[0]);
   for (let i = 1; i < messageParts.length; i++) {
-    mappedString = types2.binaryExpression("+", mappedString, wrapInParensIfNecessary(substitutions[i - 1]));
-    mappedString = types2.binaryExpression("+", mappedString, types2.stringLiteral(messageParts[i]));
+    mappedString = t.binaryExpression("+", mappedString, wrapInParensIfNecessary(substitutions[i - 1]));
+    mappedString = t.binaryExpression("+", mappedString, t.stringLiteral(messageParts[i]));
   }
   return mappedString;
 }
@@ -160,8 +144,8 @@ function unwrapExpressionsFromTemplateLiteral(quasi, fs = getFileSystem()) {
   ];
 }
 function wrapInParensIfNecessary(expression) {
-  if (types2.isBinaryExpression(expression)) {
-    return types2.parenthesizedExpression(expression);
+  if (t.isBinaryExpression(expression)) {
+    return t.parenthesizedExpression(expression);
   } else {
     return expression;
   }
@@ -228,7 +212,7 @@ function getReturnedExpression(fn) {
   throw new BabelParseError(fn.node, "Missing return statement in helper function.");
 }
 function isStringLiteralArray(node) {
-  return types2.isArrayExpression(node) && node.elements.every((element) => types2.isStringLiteral(element));
+  return t.isArrayExpression(node) && node.elements.every((element) => t.isStringLiteral(element));
 }
 function isArrayOfExpressions(paths) {
   return paths.every((element) => element.isExpression());
@@ -293,14 +277,14 @@ function serializeLocationPosition(location) {
   return `${location.start.line + 1}${endLineString}`;
 }
 function getFileFromPath(fs, path) {
-  var _a2, _b;
+  var _a, _b;
   const opts = path == null ? void 0 : path.hub.file.opts;
   const filename = opts == null ? void 0 : opts.filename;
   if (!filename || !opts.cwd) {
     return null;
   }
   const relativePath = fs.relative(opts.cwd, filename);
-  const root = (_b = (_a2 = opts.generatorOpts) == null ? void 0 : _a2.sourceRoot) != null ? _b : opts.cwd;
+  const root = (_b = (_a = opts.generatorOpts) == null ? void 0 : _a.sourceRoot) != null ? _b : opts.cwd;
   const absPath = fs.resolve(root, relativePath);
   return absPath;
 }
@@ -316,10 +300,6 @@ function getText(path) {
 
 export {
   Diagnostics,
-  types2 as types,
-  transformSync,
-  parseSync,
-  transformFromAstSync,
   isLocalize,
   isNamedIdentifier,
   isGlobalIdentifier,
@@ -341,4 +321,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-EE2T5UCZ.js.map
+//# sourceMappingURL=chunk-SOWE44E4.js.map

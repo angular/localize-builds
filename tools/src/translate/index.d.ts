@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/translate/index" />
 import { DiagnosticHandlingStrategy, Diagnostics } from '../diagnostics';
 import { OutputPathFn } from './output_path';
 export interface TranslateFilesOptions {
