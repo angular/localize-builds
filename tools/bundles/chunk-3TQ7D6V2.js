@@ -9,11 +9,10 @@ import {
   isBabelParseError,
   isLocalize,
   translate,
-  types,
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-EE2T5UCZ.js";
+} from "./chunk-SOWE44E4.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -67,6 +66,7 @@ function makeEs5TranslatePlugin(diagnostics, translations, { missingTranslation 
 }
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/locale_plugin.mjs
+import { types as t } from "@babel/core";
 function makeLocalePlugin(locale, { localizeName = "$localize" } = {}) {
   return {
     visitor: {
@@ -91,7 +91,7 @@ function makeLocalePlugin(locale, { localizeName = "$localize" } = {}) {
             left.replaceWith(left.get("left"));
           }
         }
-        expression.replaceWith(types.stringLiteral(locale));
+        expression.replaceWith(t.stringLiteral(locale));
       }
     }
   };
@@ -675,4 +675,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-52W4JLVC.js.map
+//# sourceMappingURL=chunk-3TQ7D6V2.js.map

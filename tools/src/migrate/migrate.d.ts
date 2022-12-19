@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/localize/tools/src/migrate/migrate" />
 /** Mapping between legacy message IDs and their canonical counterparts. */
 export type MigrationMapping = {
     [legacyId: string]: string;

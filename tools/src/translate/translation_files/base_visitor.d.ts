@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/translate/translation_files/base_visitor" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.

@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/src/translate" />
 import { MessageId, TargetMessage } from './utils';
 /**
  * Load translations for use by `$localize`, if doing runtime translation.

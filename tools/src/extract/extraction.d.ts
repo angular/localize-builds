@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/extract/extraction" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.

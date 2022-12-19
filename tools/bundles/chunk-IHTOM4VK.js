@@ -10,12 +10,11 @@ import {
   isGlobalIdentifier,
   isNamedIdentifier,
   serializeLocationPosition,
-  transformSync,
   unwrapExpressionsFromTemplateLiteral,
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-EE2T5UCZ.js";
+} from "./chunk-SOWE44E4.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -53,6 +52,7 @@ function serializeMessage(fs, basePath, message) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.mjs
 import { SourceFileLoader } from "@angular/compiler-cli/private/localize";
+import { transformSync } from "@babel/core";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es2015_extract_plugin.mjs
 import { \u0275parseMessage } from "@angular/localize";
@@ -899,4 +899,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-ELQQ25UB.js.map
+//# sourceMappingURL=chunk-IHTOM4VK.js.map

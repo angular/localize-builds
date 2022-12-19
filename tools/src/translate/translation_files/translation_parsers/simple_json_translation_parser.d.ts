@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/translate/translation_files/translation_parsers/simple_json_translation_parser" />
 import { ParseAnalysis, ParsedTranslationBundle, TranslationParser } from './translation_parser';
 interface SimpleJsonFile {
     locale: string;

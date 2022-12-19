@@ -1,4 +1,3 @@
-/// <amd-module name="@angular/localize/tools/src/translate/source_files/es5_translate_plugin" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -8,7 +7,7 @@
  */
 import { PathManipulation } from '@angular/compiler-cli/private/localize';
 import { ɵParsedTranslation } from '@angular/localize';
-import { PluginObj } from '../../babel_core';
+import { PluginObj } from '@babel/core';
 import { Diagnostics } from '../../diagnostics';
 import { TranslatePluginOptions } from '../../source_file_utils';
 /**
