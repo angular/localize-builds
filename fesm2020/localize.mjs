@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.3+sha-cc284af
+ * @license Angular v15.1.0-next.3+sha-2d539e1
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,13 +7,6 @@
 import { computeMsgId } from '@angular/compiler';
 export { computeMsgId as ɵcomputeMsgId } from '@angular/compiler';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * The character used to mark the start and end of a "block" in a `$localize` tagged string.
  * A block can indicate metadata about the message or specify a name of a placeholder for a
@@ -65,13 +58,6 @@ const ID_SEPARATOR = '@@';
  */
 const LEGACY_ID_INDICATOR = '\u241F';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Parse a `$localize` tagged string into a structure that can be used for translation or
  * extraction.
@@ -248,13 +234,6 @@ function findEndOfBlock(cooked, raw) {
     throw new Error(`Unterminated $localize metadata block in "${raw}".`);
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class MissingTranslationError extends Error {
     constructor(parsedMessage) {
         super(`No translation found for ${describeMessage(parsedMessage)}.`);
@@ -365,14 +344,6 @@ function describeMessage(message) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
  * Load translations for use by `$localize`, if doing runtime translation.
  *
  * If the `$localize` tagged strings are not going to be replaced at compiled time, it is possible
@@ -452,13 +423,6 @@ function translate(messageParts, substitutions) {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 // Always use __globalThis if available, which is the spec-defined global variable across all
 // environments, then fallback to __global first, because in Node tests both __global and
 // __window may be defined and _global should be __global in that case. Note: Typeof/Instanceof
@@ -469,13 +433,6 @@ const _global = ( /* @__PURE__ */(() => (typeof globalThis !== 'undefined' && gl
     (typeof self !== 'undefined' && typeof WorkerGlobalScope !== 'undefined' &&
         self instanceof WorkerGlobalScope && self))());
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Tag a template literal string for localization.
  *
@@ -604,37 +561,9 @@ function stripBlock(messagePart, rawMessagePart) {
         messagePart;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
+// This file exports all the `utils` as private exports so that other parts of `@angular/localize`
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
+// DO NOT ADD public exports to this file.
 
 export { clearTranslations, loadTranslations, $localize$1 as ɵ$localize, MissingTranslationError as ɵMissingTranslationError, _global as ɵ_global, findEndOfBlock as ɵfindEndOfBlock, isMissingTranslationError as ɵisMissingTranslationError, makeParsedTranslation as ɵmakeParsedTranslation, makeTemplateObject as ɵmakeTemplateObject, parseMessage as ɵparseMessage, parseMetadata as ɵparseMetadata, parseTranslation as ɵparseTranslation, splitBlock as ɵsplitBlock, translate$1 as ɵtranslate };
 //# sourceMappingURL=localize.mjs.map
