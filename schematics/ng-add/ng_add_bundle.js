@@ -49,15 +49,16 @@ var import_json_file = require("@schematics/angular/utility/json-file");
 var import_workspace = require("@schematics/angular/utility/workspace");
 var import_workspace_models = require("@schematics/angular/utility/workspace-models");
 var localizeType = `@angular/localize`;
+var localizeTripleSlashType = `/// <reference types="@angular/localize" />`;
 function addTypeScriptConfigTypes(projectName) {
   return (host) => __async(this, null, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     const workspace = yield (0, import_workspace.getWorkspace)(host);
     const project = workspace.projects.get(projectName);
     if (!project) {
       throw new import_schematics.SchematicsException(`Invalid project name '${projectName}'.`);
     }
-    const tsConfigFiles = /* @__PURE__ */ new Set(["tsconfig.json"]);
+    const tsConfigFiles = /* @__PURE__ */ new Set();
     for (const target of project.targets.values()) {
       switch (target.builder) {
         case import_workspace_models.Builders.Karma:
@@ -69,6 +70,12 @@ function addTypeScriptConfigTypes(projectName) {
           }
           break;
       }
+      if (target.builder === import_workspace_models.Builders.Browser) {
+        const value = (_b = target.options) == null ? void 0 : _b["main"];
+        if (typeof value === "string") {
+          addTripleSlashType(host, value);
+        }
+      }
     }
     const typesJsonPath = ["compilerOptions", "types"];
     for (const path of tsConfigFiles) {
@@ -76,7 +83,7 @@ function addTypeScriptConfigTypes(projectName) {
         continue;
       }
       const json = new import_json_file.JSONFile(host, path);
-      const types = (_b = json.get(typesJsonPath)) != null ? _b : [];
+      const types = (_c = json.get(typesJsonPath)) != null ? _c : [];
       if (!Array.isArray(types)) {
         throw new import_schematics.SchematicsException(`TypeScript configuration file '${path}' has an invalid 'types' property. It must be an array.`);
       }
@@ -88,6 +95,12 @@ function addTypeScriptConfigTypes(projectName) {
     }
   });
 }
+function addTripleSlashType(host, path) {
+  const content = host.readText(path);
+  if (!content.includes(localizeTripleSlashType)) {
+    host.overwrite(path, localizeTripleSlashType + "\n\n" + content);
+  }
+}
 function moveToDependencies(host, context) {
   if (!host.exists("package.json")) {
     return;
@@ -96,7 +109,7 @@ function moveToDependencies(host, context) {
   (0, import_dependencies.addPackageJsonDependency)(host, {
     name: "@angular/localize",
     type: import_dependencies.NodeDependencyType.Default,
-    version: `~15.1.0-next.3+sha-2f4f063`
+    version: `~15.1.0-next.3+sha-687ab04`
   });
   context.addTask(new import_tasks.NodePackageInstallTask());
 }
