@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.4+sha-7bbe492
+ * @license Angular v15.0.4+sha-c001528
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -562,6 +562,8 @@ function stripBlock(messagePart, rawMessagePart) {
 }
 
 // This file exports all the `utils` as private exports so that other parts of `@angular/localize`
+
+// This file contains the public API of the `@angular/localize` entry-point
 
 // DO NOT ADD public exports to this file.
 
