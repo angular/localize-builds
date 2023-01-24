@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 export * from './localize';
-import { LocalizeFn } from './src/localize';
+import { ɵLocalizeFn } from './localize';
 declare global {
     /**
      * Tag a template literal string for localization.
@@ -100,5 +100,5 @@ declare global {
      * @param expressions a collection of the values of each placeholder in the template string.
      * @returns the translated string, with the `messageParts` and `expressions` interleaved together.
      */
-    const $localize: LocalizeFn;
+    const $localize: ɵLocalizeFn;
 }
