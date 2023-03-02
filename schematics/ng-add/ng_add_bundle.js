@@ -109,7 +109,7 @@ function moveToDependencies(host, context) {
   (0, import_dependencies.addPackageJsonDependency)(host, {
     name: "@angular/localize",
     type: import_dependencies.NodeDependencyType.Default,
-    version: `~15.2.1+sha-d42032a`
+    version: `~15.2.1+sha-81e32f4`
   });
   context.addTask(new import_tasks.NodePackageInstallTask());
 }
