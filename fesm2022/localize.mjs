@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.4+sha-07cbaa3
+ * @license Angular v16.0.0-next.4+sha-6161c50
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -315,7 +315,7 @@ class _SerializerIgnoreIcuExpVisitor extends _SerializerVisitor {
  *          DO NOT USE IT IN A SECURITY SENSITIVE CONTEXT.
  */
 function sha1(str) {
-    textEncoder !== null && textEncoder !== void 0 ? textEncoder : (textEncoder = new TextEncoder());
+    textEncoder ??= new TextEncoder();
     const utf8 = [...textEncoder.encode(str)];
     const words32 = bytesToWords32(utf8, Endian.Big);
     const len = utf8.length * 8;
@@ -381,7 +381,7 @@ function fk(index, b, c, d) {
  * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/GoogleJsMessageIdGenerator.java
  */
 function fingerprint(str) {
-    textEncoder !== null && textEncoder !== void 0 ? textEncoder : (textEncoder = new TextEncoder());
+    textEncoder ??= new TextEncoder();
     const utf8 = textEncoder.encode(str);
     const view = new DataView(utf8.buffer, utf8.byteOffset, utf8.byteLength);
     let hi = hash32(view, utf8.length, 0);
