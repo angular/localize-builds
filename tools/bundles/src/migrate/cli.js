@@ -6,7 +6,7 @@
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/cli.mjs
 import { ConsoleLogger, LogLevel, NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
-import glob from "glob";
+import glob from "fast-glob";
 import yargs from "yargs";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/index.mjs
@@ -63,7 +63,7 @@ var options = yargs(args).option("r", {
 var fs = new NodeJSFileSystem();
 setFileSystem(fs);
 var rootPath = options.r;
-var translationFilePaths = glob.sync(options.f, { cwd: rootPath, nodir: true });
+var translationFilePaths = glob.sync(options.f, { cwd: rootPath, onlyFiles: true });
 var logger = new ConsoleLogger(LogLevel.warn);
 migrateFiles({ rootPath, translationFilePaths, mappingFilePath: options.m, logger });
 process.exit(0);
