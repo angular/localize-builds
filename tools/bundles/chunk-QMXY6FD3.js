@@ -206,6 +206,12 @@ var BaseVisitor = class {
   }
   visitExpansionCase(_expansionCase, _context) {
   }
+  visitBlockGroup(_group, _context) {
+  }
+  visitBlock(_block, _context) {
+  }
+  visitBlockParameter(_parameter, _context) {
+  }
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.mjs
@@ -675,4 +681,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-3TQ7D6V2.js.map
+//# sourceMappingURL=chunk-QMXY6FD3.js.map
