@@ -215,8 +215,6 @@ export declare type TargetMessage = string;
  */
 export declare const ɵ$localize: ɵLocalizeFn;
 
-export declare const ɵ_global: any;
-
 export declare function ɵcomputeMsgId(msg: string, meaning?: string): string;
 
 /**

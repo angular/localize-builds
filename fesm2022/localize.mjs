@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.2.0-next.2+sha-451d6c0
+ * @license Angular v16.2.0-next.2+sha-67df5a9
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -943,16 +943,6 @@ function translate(messageParts, substitutions) {
     }
 }
 
-// Always use __globalThis if available, which is the spec-defined global variable across all
-// environments, then fallback to __global first, because in Node tests both __global and
-// __window may be defined and _global should be __global in that case. Note: Typeof/Instanceof
-// checks are considered side-effects in Terser. We explicitly mark this as side-effect free:
-// https://github.com/terser/terser/issues/250.
-const _global = ( /* @__PURE__ */(() => (typeof globalThis !== 'undefined' && globalThis) ||
-    (typeof global !== 'undefined' && global) || (typeof window !== 'undefined' && window) ||
-    (typeof self !== 'undefined' && typeof WorkerGlobalScope !== 'undefined' &&
-        self instanceof WorkerGlobalScope && self))());
-
 /**
  * Tag a template literal string for localization.
  *
@@ -1087,5 +1077,5 @@ function stripBlock(messagePart, rawMessagePart) {
 
 // DO NOT ADD public exports to this file.
 
-export { clearTranslations, loadTranslations, $localize$1 as ɵ$localize, MissingTranslationError as ɵMissingTranslationError, _global as ɵ_global, computeMsgId as ɵcomputeMsgId, findEndOfBlock as ɵfindEndOfBlock, isMissingTranslationError as ɵisMissingTranslationError, makeParsedTranslation as ɵmakeParsedTranslation, makeTemplateObject as ɵmakeTemplateObject, parseMessage as ɵparseMessage, parseMetadata as ɵparseMetadata, parseTranslation as ɵparseTranslation, splitBlock as ɵsplitBlock, translate$1 as ɵtranslate };
+export { clearTranslations, loadTranslations, $localize$1 as ɵ$localize, MissingTranslationError as ɵMissingTranslationError, computeMsgId as ɵcomputeMsgId, findEndOfBlock as ɵfindEndOfBlock, isMissingTranslationError as ɵisMissingTranslationError, makeParsedTranslation as ɵmakeParsedTranslation, makeTemplateObject as ɵmakeTemplateObject, parseMessage as ɵparseMessage, parseMetadata as ɵparseMetadata, parseTranslation as ɵparseTranslation, splitBlock as ɵsplitBlock, translate$1 as ɵtranslate };
 //# sourceMappingURL=localize.mjs.map
