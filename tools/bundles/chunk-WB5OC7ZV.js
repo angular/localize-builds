@@ -586,7 +586,7 @@ var Xliff1TranslationSerializer = class {
     const attrs = { id };
     const ctype = getCtypeForPlaceholder(id);
     if (ctype !== null) {
-      attrs.ctype = ctype;
+      attrs["ctype"] = ctype;
     }
     if (text !== void 0) {
       attrs["equiv-text"] = text;
@@ -749,13 +749,13 @@ var Xliff2TranslationSerializer = class {
       };
       const type = getTypeForPlaceholder(placeholderName);
       if (type !== null) {
-        attrs.type = type;
+        attrs["type"] = type;
       }
       if (text !== void 0) {
-        attrs.dispStart = text;
+        attrs["dispStart"] = text;
       }
       if (closingText !== void 0) {
-        attrs.dispEnd = closingText;
+        attrs["dispEnd"] = closingText;
       }
       xml.startTag("pc", attrs);
     } else if (placeholderName.startsWith("CLOSE_")) {
@@ -767,10 +767,10 @@ var Xliff2TranslationSerializer = class {
       };
       const type = getTypeForPlaceholder(placeholderName);
       if (type !== null) {
-        attrs.type = type;
+        attrs["type"] = type;
       }
       if (text !== void 0) {
-        attrs.disp = text;
+        attrs["disp"] = text;
       }
       if (associatedMessageId !== void 0) {
         attrs["subFlows"] = associatedMessageId;
@@ -899,4 +899,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-IHTOM4VK.js.map
+//# sourceMappingURL=chunk-WB5OC7ZV.js.map

@@ -11,7 +11,7 @@ import {
   Xliff2TranslationSerializer,
   XmbTranslationSerializer,
   checkDuplicateMessages
-} from "./chunk-IHTOM4VK.js";
+} from "./chunk-WB5OC7ZV.js";
 import {
   ArbTranslationParser,
   SimpleJsonTranslationParser,
