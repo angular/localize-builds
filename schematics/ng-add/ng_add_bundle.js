@@ -52,7 +52,7 @@ var localizeType = `@angular/localize`;
 var localizeTripleSlashType = `/// <reference types="@angular/localize" />`;
 function addTypeScriptConfigTypes(projectName) {
   return (host) => __async(this, null, function* () {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     const workspace = yield (0, import_workspace.getWorkspace)(host);
     const project = workspace.projects.get(projectName);
     if (!project) {
@@ -64,6 +64,7 @@ function addTypeScriptConfigTypes(projectName) {
         case import_workspace_models.Builders.Karma:
         case import_workspace_models.Builders.Server:
         case import_workspace_models.Builders.Browser:
+        case import_workspace_models.Builders.Application:
           const value = (_a = target.options) == null ? void 0 : _a["tsConfig"];
           if (typeof value === "string") {
             tsConfigFiles.add(value);
@@ -75,6 +76,11 @@ function addTypeScriptConfigTypes(projectName) {
         if (typeof value === "string") {
           addTripleSlashType(host, value);
         }
+      } else if (target.builder === import_workspace_models.Builders.Application) {
+        const value = (_c = target.options) == null ? void 0 : _c["browser"];
+        if (typeof value === "string") {
+          addTripleSlashType(host, value);
+        }
       }
     }
     const typesJsonPath = ["compilerOptions", "types"];
@@ -83,7 +89,7 @@ function addTypeScriptConfigTypes(projectName) {
         continue;
       }
       const json = new import_json_file.JSONFile(host, path);
-      const types = (_c = json.get(typesJsonPath)) != null ? _c : [];
+      const types = (_d = json.get(typesJsonPath)) != null ? _d : [];
       if (!Array.isArray(types)) {
         throw new import_schematics.SchematicsException(`TypeScript configuration file '${path}' has an invalid 'types' property. It must be an array.`);
       }
@@ -109,7 +115,7 @@ function moveToDependencies(host, context) {
   (0, import_dependencies.addPackageJsonDependency)(host, {
     name: "@angular/localize",
     type: import_dependencies.NodeDependencyType.Default,
-    version: `~17.0.0-next.4+sha-88ac76f`
+    version: `~17.0.0-next.4+sha-5a20a44`
   });
   context.addTask(new import_tasks.NodePackageInstallTask());
 }
