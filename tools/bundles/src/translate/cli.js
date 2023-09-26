@@ -12,7 +12,7 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-QMXY6FD3.js";
+} from "../../chunk-QROAH45X.js";
 import {
   Diagnostics
 } from "../../chunk-SOWE44E4.js";
