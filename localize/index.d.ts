@@ -67,6 +67,8 @@ export declare function loadTranslations(translations: Record<MessageId, TargetM
 
 /**
  * A string that uniquely identifies a message, to be used for matching translations.
+ *
+ * @publicApi
  */
 export declare type MessageId = string;
 
@@ -115,6 +117,8 @@ declare interface MessageMetadata {
  * I.E. the message that indicates what will be translated to.
  *
  * Uses `{$placeholder-name}` to indicate a placeholder.
+ *
+ * @publicApi
  */
 export declare type TargetMessage = string;
 
