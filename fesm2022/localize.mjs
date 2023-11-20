@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.0+sha-060ea83
+ * @license Angular v17.1.0-next.0+sha-406049b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -113,6 +113,9 @@ class _SerializerVisitor {
     }
     visitIcuPlaceholder(ph, context) {
         return `<ph icu name="${ph.name}">${ph.value.visit(this)}</ph>`;
+    }
+    visitBlockPlaceholder(ph, context) {
+        return `<ph block name="${ph.startName}">${ph.children.map(child => child.visit(this)).join(', ')}</ph name="${ph.closeName}">`;
     }
 }
 const serializerVisitor = new _SerializerVisitor();
