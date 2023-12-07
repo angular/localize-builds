@@ -243,11 +243,11 @@ var BabelParseError = class extends Error {
 function isBabelParseError(e) {
   return e.type === "BabelParseError";
 }
-function buildCodeFrameError(fs, path, file, e) {
-  let filename = file.opts.filename;
+function buildCodeFrameError(fs, path, e) {
+  let filename = path.hub.file.opts.filename;
   if (filename) {
     filename = fs.resolve(filename);
-    let cwd = file.opts.cwd;
+    let cwd = path.hub.file.opts.cwd;
     if (cwd) {
       cwd = fs.resolve(cwd);
       filename = fs.relative(cwd, filename);
@@ -255,7 +255,7 @@ function buildCodeFrameError(fs, path, file, e) {
   } else {
     filename = "(unknown file)";
   }
-  const { message } = file.hub.buildError(e.node, e.message);
+  const message = path.hub.file.buildCodeFrameError(e.node, e.message).message;
   return `${filename}: ${message}`;
 }
 function getLocation(fs, startPath, endPath) {
@@ -269,7 +269,7 @@ function getLocation(fs, startPath, endPath) {
     start: getLineAndColumn(startLocation.start),
     end: getLineAndColumn(endLocation.end),
     file,
-    text: startPath.getSource() || void 0
+    text: getText(startPath)
   };
 }
 function serializeLocationPosition(location) {
@@ -277,19 +277,25 @@ function serializeLocationPosition(location) {
   return `${location.start.line + 1}${endLineString}`;
 }
 function getFileFromPath(fs, path) {
-  var _a, _b, _c;
-  const opts = (_a = (path == null ? void 0 : path.hub).file) == null ? void 0 : _a.opts;
+  var _a, _b;
+  const opts = path == null ? void 0 : path.hub.file.opts;
   const filename = opts == null ? void 0 : opts.filename;
   if (!filename || !opts.cwd) {
     return null;
   }
   const relativePath = fs.relative(opts.cwd, filename);
-  const root = (_c = (_b = opts.generatorOpts) == null ? void 0 : _b.sourceRoot) != null ? _c : opts.cwd;
+  const root = (_b = (_a = opts.generatorOpts) == null ? void 0 : _a.sourceRoot) != null ? _b : opts.cwd;
   const absPath = fs.resolve(root, relativePath);
   return absPath;
 }
 function getLineAndColumn(loc) {
   return { line: loc.line - 1, column: loc.column };
+}
+function getText(path) {
+  if (path.node.start == null || path.node.end == null) {
+    return void 0;
+  }
+  return path.hub.file.code.substring(path.node.start, path.node.end);
 }
 
 export {
@@ -315,4 +321,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-AGG7OSL3.js.map
+//# sourceMappingURL=chunk-FRTJVZSW.js.map

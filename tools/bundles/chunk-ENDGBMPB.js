@@ -12,14 +12,14 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-AGG7OSL3.js";
+} from "./chunk-FRTJVZSW.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
 function makeEs2015TranslatePlugin(diagnostics, translations, { missingTranslation = "error", localizeName = "$localize" } = {}, fs = getFileSystem()) {
   return {
     visitor: {
-      TaggedTemplateExpression(path, state) {
+      TaggedTemplateExpression(path) {
         try {
           const tag = path.get("tag");
           if (isLocalize(tag, localizeName)) {
@@ -29,7 +29,7 @@ function makeEs2015TranslatePlugin(diagnostics, translations, { missingTranslati
           }
         } catch (e) {
           if (isBabelParseError(e)) {
-            throw buildCodeFrameError(fs, path, state.file, e);
+            throw buildCodeFrameError(fs, path, e);
           } else {
             throw e;
           }
@@ -44,7 +44,7 @@ import { getFileSystem as getFileSystem2 } from "@angular/compiler-cli/private/l
 function makeEs5TranslatePlugin(diagnostics, translations, { missingTranslation = "error", localizeName = "$localize" } = {}, fs = getFileSystem2()) {
   return {
     visitor: {
-      CallExpression(callPath, state) {
+      CallExpression(callPath) {
         try {
           const calleePath = callPath.get("callee");
           if (isLocalize(calleePath, localizeName)) {
@@ -55,7 +55,7 @@ function makeEs5TranslatePlugin(diagnostics, translations, { missingTranslation 
           }
         } catch (e) {
           if (isBabelParseError(e)) {
-            diagnostics.error(buildCodeFrameError(fs, callPath, state.file, e));
+            diagnostics.error(buildCodeFrameError(fs, callPath, e));
           } else {
             throw e;
           }
@@ -679,4 +679,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-D6MRN5VQ.js.map
+//# sourceMappingURL=chunk-ENDGBMPB.js.map

@@ -14,7 +14,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-AGG7OSL3.js";
+} from "./chunk-FRTJVZSW.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -79,7 +79,7 @@ import { \u0275parseMessage as \u0275parseMessage2 } from "@angular/localize";
 function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
-      CallExpression(callPath, state) {
+      CallExpression(callPath) {
         try {
           const calleePath = callPath.get("callee");
           if (isNamedIdentifier(calleePath, localizeName) && isGlobalIdentifier(calleePath)) {
@@ -92,7 +92,7 @@ function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
           }
         } catch (e) {
           if (isBabelParseError(e)) {
-            throw buildCodeFrameError(fs, callPath, state.file, e);
+            throw buildCodeFrameError(fs, callPath, e);
           } else {
             throw e;
           }
@@ -899,4 +899,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-RYPILH3L.js.map
+//# sourceMappingURL=chunk-WDQDIC7H.js.map
