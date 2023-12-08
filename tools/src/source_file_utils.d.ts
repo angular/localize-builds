@@ -1,6 +1,4 @@
-/// <reference types="@types/babel__traverse" />
 /// <reference types="@angular/compiler-cli/private/babel" />
-/// <reference types="@types/babel__core" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -10,8 +8,7 @@
  */
 import { PathManipulation } from '@angular/compiler-cli/private/localize';
 import { ɵParsedTranslation, ɵSourceLocation } from '@angular/localize';
-import { types as t } from '@babel/core';
-import { NodePath } from '@babel/traverse';
+import { BabelFile, NodePath, types as t } from '@babel/core';
 import { DiagnosticHandlingStrategy, Diagnostics } from './diagnostics';
 /**
  * Is the given `expression` the global `$localize` identifier?
@@ -148,6 +145,6 @@ export declare class BabelParseError extends Error {
     constructor(node: t.Node, message: string);
 }
 export declare function isBabelParseError(e: any): e is BabelParseError;
-export declare function buildCodeFrameError(fs: PathManipulation, path: NodePath, e: BabelParseError): string;
+export declare function buildCodeFrameError(fs: PathManipulation, path: NodePath, file: BabelFile, e: BabelParseError): string;
 export declare function getLocation(fs: PathManipulation, startPath: NodePath, endPath?: NodePath): ɵSourceLocation | undefined;
 export declare function serializeLocationPosition(location: ɵSourceLocation): string;
