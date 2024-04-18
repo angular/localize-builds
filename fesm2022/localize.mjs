@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-a5b5b7d
+ * @license Angular v18.0.0-next.5+sha-ca517d7
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -82,7 +82,7 @@ function decimalDigest(message) {
  */
 function computeDecimalDigest(message) {
     const visitor = new _SerializerIgnoreIcuExpVisitor();
-    const parts = message.nodes.map(a => a.visit(visitor, null));
+    const parts = message.nodes.map((a) => a.visit(visitor, null));
     return computeMsgId(parts.join(''), message.meaning);
 }
 /**
@@ -97,16 +97,18 @@ class _SerializerVisitor {
         return text.value;
     }
     visitContainer(container, context) {
-        return `[${container.children.map(child => child.visit(this)).join(', ')}]`;
+        return `[${container.children.map((child) => child.visit(this)).join(', ')}]`;
     }
     visitIcu(icu, context) {
         const strCases = Object.keys(icu.cases).map((k) => `${k} {${icu.cases[k].visit(this)}}`);
         return `{${icu.expression}, ${icu.type}, ${strCases.join(', ')}}`;
     }
     visitTagPlaceholder(ph, context) {
-        return ph.isVoid ?
-            `<ph tag name="${ph.startName}"/>` :
-            `<ph tag name="${ph.startName}">${ph.children.map(child => child.visit(this)).join(', ')}</ph name="${ph.closeName}">`;
+        return ph.isVoid
+            ? `<ph tag name="${ph.startName}"/>`
+            : `<ph tag name="${ph.startName}">${ph.children
+                .map((child) => child.visit(this))
+                .join(', ')}</ph name="${ph.closeName}">`;
     }
     visitPlaceholder(ph, context) {
         return ph.value ? `<ph name="${ph.name}">${ph.value}</ph>` : `<ph name="${ph.name}"/>`;
@@ -115,12 +117,14 @@ class _SerializerVisitor {
         return `<ph icu name="${ph.name}">${ph.value.visit(this)}</ph>`;
     }
     visitBlockPlaceholder(ph, context) {
-        return `<ph block name="${ph.startName}">${ph.children.map(child => child.visit(this)).join(', ')}</ph name="${ph.closeName}">`;
+        return `<ph block name="${ph.startName}">${ph.children
+            .map((child) => child.visit(this))
+            .join(', ')}</ph name="${ph.closeName}">`;
     }
 }
 const serializerVisitor = new _SerializerVisitor();
 function serializeNodes(nodes) {
-    return nodes.map(a => a.visit(serializerVisitor, null));
+    return nodes.map((a) => a.visit(serializerVisitor, null));
 }
 /**
  * Serialize the i18n ast to something xml-like in order to generate an UID.
@@ -151,8 +155,8 @@ function sha1(str) {
     const len = utf8.length * 8;
     const w = new Uint32Array(80);
     let a = 0x67452301, b = 0xefcdab89, c = 0x98badcfe, d = 0x10325476, e = 0xc3d2e1f0;
-    words32[len >> 5] |= 0x80 << (24 - len % 32);
-    words32[((len + 64 >> 9) << 4) + 15] = len;
+    words32[len >> 5] |= 0x80 << (24 - (len % 32));
+    words32[(((len + 64) >> 9) << 4) + 15] = len;
     for (let i = 0; i < words32.length; i += 16) {
         const h0 = a, h1 = b, h2 = c, h3 = d, h4 = e;
         for (let j = 0; j < 80; j++) {
@@ -227,8 +231,9 @@ function computeMsgId(msg, meaning = '') {
     if (meaning) {
         // Rotate the 64-bit message fingerprint one bit to the left and then add the meaning
         // fingerprint.
-        msgFingerprint = BigInt.asUintN(64, msgFingerprint << BigInt(1)) |
-            ((msgFingerprint >> BigInt(63)) & BigInt(1));
+        msgFingerprint =
+            BigInt.asUintN(64, msgFingerprint << BigInt(1)) |
+                ((msgFingerprint >> BigInt(63)) & BigInt(1));
         msgFingerprint += fingerprint(meaning);
     }
     return BigInt.asUintN(63, msgFingerprint).toString();
@@ -242,7 +247,7 @@ function hash32(view, length, c) {
         b += view.getUint32(index + 4, true);
         c += view.getUint32(index + 8, true);
         const res = mix(a, b, c);
-        a = res[0], b = res[1], c = res[2];
+        (a = res[0]), (b = res[1]), (c = res[2]);
     }
     const remainder = length - index;
     // the first byte of c is reserved for the length
@@ -361,7 +366,7 @@ function wordAt(bytes, index, endian) {
     }
     else {
         for (let i = 0; i < 4; i++) {
-            word += byteAt(bytes, index + i) << 8 * i;
+            word += byteAt(bytes, index + i) << (8 * i);
         }
     }
     return word;
