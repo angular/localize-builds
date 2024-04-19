@@ -63,4 +63,4 @@ export interface TranslateFilesOptions {
      */
     sourceLocale?: string;
 }
-export declare function translateFiles({ sourceRootPath, sourceFilePaths, translationFilePaths, translationFileLocales, outputPathFn, diagnostics, missingTranslation, duplicateTranslation, sourceLocale }: TranslateFilesOptions): void;
+export declare function translateFiles({ sourceRootPath, sourceFilePaths, translationFilePaths, translationFileLocales, outputPathFn, diagnostics, missingTranslation, duplicateTranslation, sourceLocale, }: TranslateFilesOptions): void;

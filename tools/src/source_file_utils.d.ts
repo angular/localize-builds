@@ -68,10 +68,7 @@ export declare function unwrapSubstitutionsFromLocalizeCall(call: NodePath<t.Cal
  *     the "current" FileSystem.
  * @publicApi used by CLI
  */
-export declare function unwrapMessagePartsFromTemplateLiteral(elements: NodePath<t.TemplateElement>[], fs?: PathManipulation): [
-    TemplateStringsArray,
-    (ɵSourceLocation | undefined)[]
-];
+export declare function unwrapMessagePartsFromTemplateLiteral(elements: NodePath<t.TemplateElement>[], fs?: PathManipulation): [TemplateStringsArray, (ɵSourceLocation | undefined)[]];
 /**
  * Parse the tagged template literal to extract the interpolation expressions.
  *

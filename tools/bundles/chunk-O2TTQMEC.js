@@ -12,7 +12,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-AGG7OSL3.js";
+} from "./chunk-GGL5GE7J.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -588,7 +588,11 @@ var Xliff2TranslationVisitor = class extends BaseVisitor {
     const { translation, parseErrors, serializeErrors } = serializeTranslationMessage(targetMessage, {
       inlineElements: ["cp", "sc", "ec", "mrk", "sm", "em"],
       placeholder: { elementName: "ph", nameAttribute: "equiv", bodyAttribute: "disp" },
-      placeholderContainer: { elementName: "pc", startAttribute: "equivStart", endAttribute: "equivEnd" }
+      placeholderContainer: {
+        elementName: "pc",
+        startAttribute: "equivStart",
+        endAttribute: "equivEnd"
+      }
     });
     if (translation !== null) {
       bundle.translations[unit] = translation;
@@ -643,7 +647,10 @@ var XtbVisitor = class extends BaseVisitor {
           addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Duplicated translations for message "${id}"`, ParseErrorLevel5.ERROR);
           return;
         }
-        const { translation, parseErrors, serializeErrors } = serializeTranslationMessage(element, { inlineElements: [], placeholder: { elementName: "ph", nameAttribute: "name" } });
+        const { translation, parseErrors, serializeErrors } = serializeTranslationMessage(element, {
+          inlineElements: [],
+          placeholder: { elementName: "ph", nameAttribute: "name" }
+        });
         if (parseErrors.length) {
           bundle.diagnostics.warn(computeParseWarning(id, parseErrors));
         } else if (translation !== null) {
@@ -679,4 +686,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-D6MRN5VQ.js.map
+//# sourceMappingURL=chunk-O2TTQMEC.js.map

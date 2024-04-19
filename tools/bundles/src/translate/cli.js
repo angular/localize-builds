@@ -12,10 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-D6MRN5VQ.js";
+} from "../../chunk-O2TTQMEC.js";
 import {
   Diagnostics
-} from "../../chunk-AGG7OSL3.js";
+} from "../../chunk-GGL5GE7J.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -66,7 +66,10 @@ var SourceFileTranslationHandler = class {
   constructor(fs2, translationOptions = {}) {
     this.fs = fs2;
     this.translationOptions = translationOptions;
-    this.sourceLocaleOptions = { ...this.translationOptions, missingTranslation: "ignore" };
+    this.sourceLocaleOptions = {
+      ...this.translationOptions,
+      missingTranslation: "ignore"
+    };
   }
   canTranslate(relativeFilePath, _contents) {
     return this.fs.extname(relativeFilePath) === ".js";
@@ -229,10 +232,7 @@ function translateFiles({ sourceRootPath: sourceRootPath2, sourceFilePaths: sour
     new SimpleJsonTranslationParser(),
     new ArbTranslationParser()
   ], duplicateTranslation2, diagnostics2);
-  const resourceProcessor = new Translator(fs2, [
-    new SourceFileTranslationHandler(fs2, { missingTranslation: missingTranslation2 }),
-    new AssetTranslationHandler(fs2)
-  ], diagnostics2);
+  const resourceProcessor = new Translator(fs2, [new SourceFileTranslationHandler(fs2, { missingTranslation: missingTranslation2 }), new AssetTranslationHandler(fs2)], diagnostics2);
   const translationFilePathsArrays = translationFilePaths2.map((filePaths) => Array.isArray(filePaths) ? filePaths.map((p) => fs2.resolve(p)) : [fs2.resolve(filePaths)]);
   const translations = translationLoader.loadBundles(translationFilePathsArrays, translationFileLocales2);
   sourceRootPath2 = fs2.resolve(sourceRootPath2);

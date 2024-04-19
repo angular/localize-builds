@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-a743d37
+ * @license Angular v18.0.0-next.5+sha-b1dffa4
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -388,7 +388,7 @@ function parseMessage(messageParts, expressions, location, messagePartLocations,
     const placeholderNames = [];
     let messageString = metadata.text;
     for (let i = 1; i < messageParts.length; i++) {
-        const { messagePart, placeholderName = computePlaceholderName(i), associatedMessageId } = parsePlaceholder(messageParts[i], messageParts.raw[i]);
+        const { messagePart, placeholderName = computePlaceholderName(i), associatedMessageId, } = parsePlaceholder(messageParts[i], messageParts.raw[i]);
         messageString += `{$${placeholderName}}${messagePart}`;
         if (expressions !== undefined) {
             substitutions[placeholderName] = expressions[i - 1];
@@ -401,7 +401,7 @@ function parseMessage(messageParts, expressions, location, messagePartLocations,
         cleanedMessageParts.push(messagePart);
     }
     const messageId = metadata.customId || computeMsgId(messageString, metadata.meaning || '');
-    const legacyIds = metadata.legacyIds ? metadata.legacyIds.filter(id => id !== messageId) : [];
+    const legacyIds = metadata.legacyIds ? metadata.legacyIds.filter((id) => id !== messageId) : [];
     return {
         id: messageId,
         legacyIds,
@@ -589,7 +589,8 @@ function translate$1(translations, messageParts, substitutions) {
         throw new MissingTranslationError(message);
     }
     return [
-        translation.messageParts, translation.placeholderNames.map(placeholder => {
+        translation.messageParts,
+        translation.placeholderNames.map((placeholder) => {
             if (message.substitutions.hasOwnProperty(placeholder)) {
                 return message.substitutions[placeholder];
             }
@@ -597,7 +598,7 @@ function translate$1(translations, messageParts, substitutions) {
                 throw new Error(`There is a placeholder name mismatch with the translation provided for the message ${describeMessage(message)}.\n` +
                     `The translation contains a placeholder with name ${placeholder}, which does not exist in the message.`);
             }
-        })
+        }),
     ];
 }
 /**
@@ -616,7 +617,7 @@ function parseTranslation(messageString) {
         placeholderNames.push(parts[i]);
         messageParts.push(`${parts[i + 1]}`);
     }
-    const rawMessageParts = messageParts.map(part => part.charAt(0) === BLOCK_MARKER$1 ? '\\' + part : part);
+    const rawMessageParts = messageParts.map((part) => part.charAt(0) === BLOCK_MARKER$1 ? '\\' + part : part);
     return {
         text: messageString,
         messageParts: makeTemplateObject(messageParts, rawMessageParts),
@@ -637,7 +638,7 @@ function makeParsedTranslation(messageParts, placeholderNames = []) {
     return {
         text: messageString,
         messageParts: makeTemplateObject(messageParts, messageParts),
-        placeholderNames
+        placeholderNames,
     };
 }
 /**
@@ -652,9 +653,9 @@ function makeTemplateObject(cooked, raw) {
 }
 function describeMessage(message) {
     const meaningString = message.meaning && ` - "${message.meaning}"`;
-    const legacy = message.legacyIds && message.legacyIds.length > 0 ?
-        ` [${message.legacyIds.map(l => `"${l}"`).join(', ')}]` :
-        '';
+    const legacy = message.legacyIds && message.legacyIds.length > 0
+        ? ` [${message.legacyIds.map((l) => `"${l}"`).join(', ')}]`
+        : '';
     return `"${message.id}"${legacy} ("${message.text}"${meaningString})`;
 }
 
@@ -705,7 +706,7 @@ function loadTranslations(translations) {
     if (!$localize.TRANSLATIONS) {
         $localize.TRANSLATIONS = {};
     }
-    Object.keys(translations).forEach(key => {
+    Object.keys(translations).forEach((key) => {
         $localize.TRANSLATIONS[key] = parseTranslation(translations[key]);
     });
 }
@@ -861,9 +862,9 @@ const BLOCK_MARKER = ':';
  * @throws an error if the block is unterminated
  */
 function stripBlock(messagePart, rawMessagePart) {
-    return rawMessagePart.charAt(0) === BLOCK_MARKER ?
-        messagePart.substring(findEndOfBlock(messagePart, rawMessagePart) + 1) :
-        messagePart;
+    return rawMessagePart.charAt(0) === BLOCK_MARKER
+        ? messagePart.substring(findEndOfBlock(messagePart, rawMessagePart) + 1)
+        : messagePart;
 }
 
 // This file exports all the `utils` as private exports so that other parts of `@angular/localize`
