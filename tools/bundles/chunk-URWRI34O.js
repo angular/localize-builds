@@ -808,6 +808,7 @@ function getTypeForPlaceholder(placeholder) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xmb_translation_serializer.mjs
 import { getFileSystem as getFileSystem3 } from "@angular/compiler-cli/private/localize";
+var XMB_HANDLER = "angular";
 var XmbTranslationSerializer = class {
   constructor(basePath, useLegacyIds, fs = getFileSystem3()) {
     this.basePath = basePath;
@@ -839,7 +840,9 @@ var XmbTranslationSerializer = class {
 <!ELEMENT ex (#PCDATA)>
 ]>
 `);
-    xml.startTag("messagebundle");
+    xml.startTag("messagebundle", {
+      "handler": XMB_HANDLER
+    });
     for (const duplicateMessages of messageGroups) {
       const message = duplicateMessages[0];
       const id = this.getMessageId(message);
@@ -899,4 +902,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-4FKYVLU2.js.map
+//# sourceMappingURL=chunk-URWRI34O.js.map
