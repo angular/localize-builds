@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.1.0-next.0+sha-76d0aea
+ * @license Angular v18.1.0-next.0+sha-7187394
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -296,7 +296,6 @@ function hash32(view, length, c) {
     }
     return mix(a, b, c)[2];
 }
-// clang-format off
 function mix(a, b, c) {
     a -= b;
     a -= c;
@@ -327,7 +326,6 @@ function mix(a, b, c) {
     c ^= b >>> 15;
     return [a, b, c];
 }
-// clang-format on
 // Utils
 var Endian;
 (function (Endian) {
