@@ -49,7 +49,41 @@ var import_json_file = require("@schematics/angular/utility/json-file");
 var import_workspace = require("@schematics/angular/utility/workspace");
 var import_workspace_models = require("@schematics/angular/utility/workspace-models");
 var localizeType = `@angular/localize`;
+var localizePolyfill = "@angular/localize/init";
 var localizeTripleSlashType = `/// <reference types="@angular/localize" />`;
+function addPolyfillToConfig(projectName) {
+  return (0, import_workspace.updateWorkspace)((workspace) => {
+    var _a;
+    const project = workspace.projects.get(projectName);
+    if (!project) {
+      throw new import_schematics.SchematicsException(`Invalid project name '${projectName}'.`);
+    }
+    const isLocalizePolyfill = (path) => path.startsWith("@angular/localize");
+    for (const target of project.targets.values()) {
+      switch (target.builder) {
+        case import_workspace_models.Builders.Karma:
+        case import_workspace_models.Builders.Server:
+        case import_workspace_models.Builders.Browser:
+        case import_workspace_models.Builders.BrowserEsbuild:
+        case import_workspace_models.Builders.Application:
+          (_a = target.options) != null ? _a : target.options = {};
+          const value = target.options["polyfills"];
+          if (typeof value === "string") {
+            if (!isLocalizePolyfill(value)) {
+              target.options["polyfills"] = [value, localizePolyfill];
+            }
+          } else if (Array.isArray(value)) {
+            if (!value.some(isLocalizePolyfill)) {
+              value.push(localizePolyfill);
+            }
+          } else {
+            target.options["polyfills"] = [localizePolyfill];
+          }
+          break;
+      }
+    }
+  });
+}
 function addTypeScriptConfigTypes(projectName) {
   return (host) => __async(this, null, function* () {
     var _a, _b, _c, _d;
@@ -63,6 +97,7 @@ function addTypeScriptConfigTypes(projectName) {
       switch (target.builder) {
         case import_workspace_models.Builders.Karma:
         case import_workspace_models.Builders.Server:
+        case import_workspace_models.Builders.BrowserEsbuild:
         case import_workspace_models.Builders.Browser:
         case import_workspace_models.Builders.Application:
           const value = (_a = target.options) == null ? void 0 : _a["tsConfig"];
@@ -71,7 +106,7 @@ function addTypeScriptConfigTypes(projectName) {
           }
           break;
       }
-      if (target.builder === import_workspace_models.Builders.Browser) {
+      if (target.builder === import_workspace_models.Builders.Browser || target.builder === import_workspace_models.Builders.BrowserEsbuild) {
         const value = (_b = target.options) == null ? void 0 : _b["main"];
         if (typeof value === "string") {
           addTripleSlashType(host, value);
@@ -115,7 +150,7 @@ function moveToDependencies(host, context) {
   (0, import_dependencies.addPackageJsonDependency)(host, {
     name: "@angular/localize",
     type: import_dependencies.NodeDependencyType.Default,
-    version: `~18.1.0-next.0+sha-1360110`
+    version: `~18.1.0-next.1+sha-567c2f6`
   });
   context.addTask(new import_tasks.NodePackageInstallTask());
 }
@@ -128,6 +163,7 @@ function ng_add_default(options) {
     }
     return (0, import_schematics.chain)([
       addTypeScriptConfigTypes(projectName),
+      addPolyfillToConfig(projectName),
       options.useAtRuntime ? moveToDependencies : (0, import_schematics.noop)()
     ]);
   };
