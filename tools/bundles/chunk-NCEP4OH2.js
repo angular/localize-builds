@@ -210,6 +210,8 @@ var BaseVisitor = class {
   }
   visitBlockParameter(_parameter, _context) {
   }
+  visitLetDeclaration(_decl, _context) {
+  }
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.mjs
@@ -686,4 +688,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-//# sourceMappingURL=chunk-O2TTQMEC.js.map
+//# sourceMappingURL=chunk-NCEP4OH2.js.map
