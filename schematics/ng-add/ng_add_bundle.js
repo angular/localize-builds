@@ -43,16 +43,14 @@ __export(ng_add_exports, {
 });
 module.exports = __toCommonJS(ng_add_exports);
 var import_schematics = require("@angular-devkit/schematics");
-var import_tasks = require("@angular-devkit/schematics/tasks");
+var import_utility = require("@schematics/angular/utility");
 var import_dependencies = require("@schematics/angular/utility/dependencies");
 var import_json_file = require("@schematics/angular/utility/json-file");
-var import_workspace = require("@schematics/angular/utility/workspace");
-var import_workspace_models = require("@schematics/angular/utility/workspace-models");
 var localizeType = `@angular/localize`;
 var localizePolyfill = "@angular/localize/init";
 var localizeTripleSlashType = `/// <reference types="@angular/localize" />`;
 function addPolyfillToConfig(projectName) {
-  return (0, import_workspace.updateWorkspace)((workspace) => {
+  return (0, import_utility.updateWorkspace)((workspace) => {
     var _a;
     const project = workspace.projects.get(projectName);
     if (!project) {
@@ -61,11 +59,11 @@ function addPolyfillToConfig(projectName) {
     const isLocalizePolyfill = (path) => path.startsWith("@angular/localize");
     for (const target of project.targets.values()) {
       switch (target.builder) {
-        case import_workspace_models.Builders.Karma:
-        case import_workspace_models.Builders.Server:
-        case import_workspace_models.Builders.Browser:
-        case import_workspace_models.Builders.BrowserEsbuild:
-        case import_workspace_models.Builders.Application:
+        case import_utility.AngularBuilder.Karma:
+        case import_utility.AngularBuilder.Server:
+        case import_utility.AngularBuilder.Browser:
+        case import_utility.AngularBuilder.BrowserEsbuild:
+        case import_utility.AngularBuilder.Application:
           (_a = target.options) != null ? _a : target.options = {};
           const value = target.options["polyfills"];
           if (typeof value === "string") {
@@ -87,7 +85,7 @@ function addPolyfillToConfig(projectName) {
 function addTypeScriptConfigTypes(projectName) {
   return (host) => __async(this, null, function* () {
     var _a, _b, _c, _d;
-    const workspace = yield (0, import_workspace.getWorkspace)(host);
+    const workspace = yield (0, import_utility.readWorkspace)(host);
     const project = workspace.projects.get(projectName);
     if (!project) {
       throw new import_schematics.SchematicsException(`Invalid project name '${projectName}'.`);
@@ -95,23 +93,23 @@ function addTypeScriptConfigTypes(projectName) {
     const tsConfigFiles = /* @__PURE__ */ new Set();
     for (const target of project.targets.values()) {
       switch (target.builder) {
-        case import_workspace_models.Builders.Karma:
-        case import_workspace_models.Builders.Server:
-        case import_workspace_models.Builders.BrowserEsbuild:
-        case import_workspace_models.Builders.Browser:
-        case import_workspace_models.Builders.Application:
+        case import_utility.AngularBuilder.Karma:
+        case import_utility.AngularBuilder.Server:
+        case import_utility.AngularBuilder.BrowserEsbuild:
+        case import_utility.AngularBuilder.Browser:
+        case import_utility.AngularBuilder.Application:
           const value = (_a = target.options) == null ? void 0 : _a["tsConfig"];
           if (typeof value === "string") {
             tsConfigFiles.add(value);
           }
           break;
       }
-      if (target.builder === import_workspace_models.Builders.Browser || target.builder === import_workspace_models.Builders.BrowserEsbuild) {
+      if (target.builder === import_utility.AngularBuilder.Browser || target.builder === import_utility.AngularBuilder.BrowserEsbuild) {
         const value = (_b = target.options) == null ? void 0 : _b["main"];
         if (typeof value === "string") {
           addTripleSlashType(host, value);
         }
-      } else if (target.builder === import_workspace_models.Builders.Application) {
+      } else if (target.builder === import_utility.AngularBuilder.Application) {
         const value = (_c = target.options) == null ? void 0 : _c["browser"];
         if (typeof value === "string") {
           addTripleSlashType(host, value);
@@ -142,31 +140,24 @@ function addTripleSlashType(host, path) {
     host.overwrite(path, localizeTripleSlashType + "\n\n" + content);
   }
 }
-function moveToDependencies(host, context) {
+function moveToDependencies(host) {
   if (!host.exists("package.json")) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  (0, import_dependencies.addPackageJsonDependency)(host, {
-    name: "@angular/localize",
-    type: import_dependencies.NodeDependencyType.Default,
-    version: `~18.1.0-rc.0+sha-9b35726`
-  });
-  context.addTask(new import_tasks.NodePackageInstallTask());
+  return (0, import_utility.addDependency)("@angular/localize", `~18.1.0-rc.0+sha-ba325c5`);
 }
 function ng_add_default(options) {
-  return () => {
-    var _a;
-    const projectName = (_a = options.name) != null ? _a : options.project;
-    if (!projectName) {
-      throw new import_schematics.SchematicsException('Option "project" is required.');
-    }
-    return (0, import_schematics.chain)([
-      addTypeScriptConfigTypes(projectName),
-      addPolyfillToConfig(projectName),
-      options.useAtRuntime ? moveToDependencies : (0, import_schematics.noop)()
-    ]);
-  };
+  var _a;
+  const projectName = (_a = options.name) != null ? _a : options.project;
+  if (!projectName) {
+    throw new import_schematics.SchematicsException('Option "project" is required.');
+  }
+  return (0, import_schematics.chain)([
+    addTypeScriptConfigTypes(projectName),
+    addPolyfillToConfig(projectName),
+    options.useAtRuntime ? moveToDependencies : (0, import_schematics.noop)()
+  ]);
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {});
