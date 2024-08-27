@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.2.1+sha-3067633
+ * @license Angular v18.2.1+sha-5d2e243
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -74,14 +74,14 @@ function computeDigest(message) {
 /**
  * Return the message id or compute it using the XLIFF2/XMB/$localize digest.
  */
-function decimalDigest(message) {
-    return message.id || computeDecimalDigest(message);
+function decimalDigest(message, preservePlaceholders) {
+    return message.id || computeDecimalDigest(message, preservePlaceholders);
 }
 /**
  * Compute the message id using the XLIFF2/XMB/$localize digest.
  */
-function computeDecimalDigest(message) {
-    const visitor = new _SerializerIgnoreIcuExpVisitor();
+function computeDecimalDigest(message, preservePlaceholders) {
+    const visitor = new _SerializerIgnoreExpVisitor(preservePlaceholders);
     const parts = message.nodes.map((a) => a.visit(visitor, null));
     return computeMsgId(parts.join(''), message.meaning);
 }
@@ -129,12 +129,22 @@ function serializeNodes(nodes) {
 /**
  * Serialize the i18n ast to something xml-like in order to generate an UID.
  *
- * Ignore the ICU expressions so that message IDs stays identical if only the expression changes.
+ * Ignore the expressions so that message IDs stays identical if only the expression changes.
  *
  * @internal
  */
-class _SerializerIgnoreIcuExpVisitor extends _SerializerVisitor {
-    visitIcu(icu, context) {
+class _SerializerIgnoreExpVisitor extends _SerializerVisitor {
+    constructor(preservePlaceholders) {
+        super();
+        this.preservePlaceholders = preservePlaceholders;
+    }
+    visitPlaceholder(ph, context) {
+        // Do not take the expression into account when `preservePlaceholders` is disabled.
+        return this.preservePlaceholders
+            ? super.visitPlaceholder(ph, context)
+            : `<ph name="${ph.name}"/>`;
+    }
+    visitIcu(icu) {
         let strCases = Object.keys(icu.cases).map((k) => `${k} {${icu.cases[k].visit(this)}}`);
         // Do not take the expression into account
         return `{${icu.type}, ${strCases.join(', ')}}`;
