@@ -12,10 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-NCEP4OH2.js";
+} from "../../chunk-P52LUQCG.js";
 import {
   Diagnostics
-} from "../../chunk-GGL5GE7J.js";
+} from "../../chunk-YINHXBYF.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -316,6 +316,6 @@ function convertArraysFromArgs(args2) {
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 //# sourceMappingURL=cli.js.map

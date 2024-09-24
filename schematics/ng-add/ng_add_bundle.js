@@ -145,7 +145,7 @@ function moveToDependencies(host) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  return (0, import_utility.addDependency)("@angular/localize", `~19.0.0-next.6+sha-7afa978`);
+  return (0, import_utility.addDependency)("@angular/localize", `~19.0.0-next.6+sha-9dbe6fc`);
 }
 function ng_add_default(options) {
   var _a;
@@ -166,7 +166,7 @@ function ng_add_default(options) {
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  *
  * @fileoverview Schematics for `ng add @angular/localize` schematic.
  */
