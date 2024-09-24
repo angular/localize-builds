@@ -14,7 +14,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-GGL5GE7J.js";
+} from "./chunk-YINHXBYF.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -900,6 +900,6 @@ export {
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-URWRI34O.js.map
+//# sourceMappingURL=chunk-I3JVQBEZ.js.map
