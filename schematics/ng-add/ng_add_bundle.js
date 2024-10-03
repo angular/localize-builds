@@ -64,6 +64,7 @@ function addPolyfillToConfig(projectName) {
         case import_utility.AngularBuilder.Browser:
         case import_utility.AngularBuilder.BrowserEsbuild:
         case import_utility.AngularBuilder.Application:
+        case import_utility.AngularBuilder.BuildApplication:
           (_a = target.options) != null ? _a : target.options = {};
           const value = target.options["polyfills"];
           if (typeof value === "string") {
@@ -98,6 +99,7 @@ function addTypeScriptConfigTypes(projectName) {
         case import_utility.AngularBuilder.BrowserEsbuild:
         case import_utility.AngularBuilder.Browser:
         case import_utility.AngularBuilder.Application:
+        case import_utility.AngularBuilder.BuildApplication:
           const value = (_a = target.options) == null ? void 0 : _a["tsConfig"];
           if (typeof value === "string") {
             tsConfigFiles.add(value);
@@ -145,11 +147,10 @@ function moveToDependencies(host) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  return (0, import_utility.addDependency)("@angular/localize", `~19.0.0-next.8+sha-5cbe02a`);
+  return (0, import_utility.addDependency)("@angular/localize", `~19.0.0-next.8+sha-9213216`);
 }
 function ng_add_default(options) {
-  var _a;
-  const projectName = (_a = options.name) != null ? _a : options.project;
+  const projectName = options.project;
   if (!projectName) {
     throw new import_schematics.SchematicsException('Option "project" is required.');
   }
