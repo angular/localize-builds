@@ -85,7 +85,18 @@ var options = yargs(args).option("l", {
 }).option("f", {
   alias: "format",
   required: true,
-  choices: ["xmb", "xlf", "xlif", "xliff", "xlf2", "xlif2", "xliff2", "json", "legacy-migrate"],
+  choices: [
+    "xmb",
+    "xlf",
+    "xlif",
+    "xliff",
+    "xlf2",
+    "xlif2",
+    "xliff2",
+    "json",
+    "legacy-migrate",
+    "arb"
+  ],
   describe: "The format of the translation file.",
   type: "string"
 }).option("formatOptions", {
