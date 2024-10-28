@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.2.9+sha-3b989ac
+ * @license Angular v18.2.9+sha-ddda355
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -839,7 +839,6 @@ function translate(messageParts, substitutions) {
  * @param expressions a collection of the values of each placeholder in the template string.
  * @returns the translated string, with the `messageParts` and `expressions` interleaved together.
  *
- * @globalApi
  * @publicApi
  */
 const $localize$1 = function (messageParts, ...expressions) {
