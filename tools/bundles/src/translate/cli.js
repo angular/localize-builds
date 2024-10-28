@@ -12,10 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-P52LUQCG.js";
+} from "../../chunk-HW2VGZZI.js";
 import {
   Diagnostics
-} from "../../chunk-YINHXBYF.js";
+} from "../../chunk-P63CR46L.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -34,6 +34,7 @@ import { getFileSystem, relativeFrom } from "@angular/compiler-cli/private/local
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/asset_files/asset_translation_handler.mjs
 import { absoluteFrom } from "@angular/compiler-cli/private/localize";
 var AssetTranslationHandler = class {
+  fs;
   constructor(fs2) {
     this.fs = fs2;
   }
@@ -63,6 +64,9 @@ var AssetTranslationHandler = class {
 import { absoluteFrom as absoluteFrom2 } from "@angular/compiler-cli/private/localize";
 import babel from "@babel/core";
 var SourceFileTranslationHandler = class {
+  fs;
+  translationOptions;
+  sourceLocaleOptions;
   constructor(fs2, translationOptions = {}) {
     this.fs = fs2;
     this.translationOptions = translationOptions;
@@ -132,6 +136,10 @@ var SourceFileTranslationHandler = class {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_loader.mjs
 var TranslationLoader = class {
+  fs;
+  translationParsers;
+  duplicateTranslation;
+  diagnostics;
   constructor(fs2, translationParsers, duplicateTranslation2, diagnostics2) {
     this.fs = fs2;
     this.translationParsers = translationParsers;
@@ -202,6 +210,9 @@ ${parser.constructor.name} cannot parse translation file.`));
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translator.mjs
 var Translator = class {
+  fs;
+  resourceHandlers;
+  diagnostics;
   constructor(fs2, resourceHandlers, diagnostics2) {
     this.fs = fs2;
     this.resourceHandlers = resourceHandlers;
