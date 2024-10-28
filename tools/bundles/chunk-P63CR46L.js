@@ -5,9 +5,7 @@
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/diagnostics.mjs
 var Diagnostics = class {
-  constructor() {
-    this.messages = [];
-  }
+  messages = [];
   get hasErrors() {
     return this.messages.some((m) => m.type === "error");
   }
@@ -234,10 +232,11 @@ function translate(diagnostics, translations, messageParts, substitutions, missi
   }
 }
 var BabelParseError = class extends Error {
+  node;
+  type = "BabelParseError";
   constructor(node, message) {
     super(message);
     this.node = node;
-    this.type = "BabelParseError";
   }
 };
 function isBabelParseError(e) {
@@ -315,4 +314,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-YINHXBYF.js.map
+//# sourceMappingURL=chunk-P63CR46L.js.map

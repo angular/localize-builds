@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.0-next.11+sha-395cb34
+ * @license Angular v19.0.0-next.11+sha-f815d7b
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -548,10 +548,11 @@ function findEndOfBlock(cooked, raw) {
 }
 
 class MissingTranslationError extends Error {
+    parsedMessage;
+    type = 'MissingTranslationError';
     constructor(parsedMessage) {
         super(`No translation found for ${describeMessage(parsedMessage)}.`);
         this.parsedMessage = parsedMessage;
-        this.type = 'MissingTranslationError';
     }
 }
 function isMissingTranslationError(e) {
@@ -829,7 +830,6 @@ function translate(messageParts, substitutions) {
  * @param expressions a collection of the values of each placeholder in the template string.
  * @returns the translated string, with the `messageParts` and `expressions` interleaved together.
  *
- * @globalApi
  * @publicApi
  */
 const $localize$1 = function (messageParts, ...expressions) {

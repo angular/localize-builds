@@ -12,7 +12,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-YINHXBYF.js";
+} from "./chunk-P63CR46L.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -220,6 +220,9 @@ import { Element as Element2, visitAll } from "@angular/compiler";
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/translation_parse_error.mjs
 import { ParseErrorLevel } from "@angular/compiler";
 var TranslationParseError = class extends Error {
+  span;
+  msg;
+  level;
   constructor(span, msg, level = ParseErrorLevel.ERROR) {
     super(contextualMessage(span, msg, level));
     this.span = span;
@@ -317,6 +320,8 @@ function addErrorsToBundle(bundle, errors) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.mjs
 var MessageSerializer = class extends BaseVisitor {
+  renderer;
+  config;
   constructor(renderer, config) {
     super();
     this.renderer = renderer;
@@ -380,10 +385,8 @@ var MessageSerializer = class extends BaseVisitor {
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/target_message_renderer.mjs
 import { \u0275makeParsedTranslation } from "@angular/localize";
 var TargetMessageRenderer = class {
-  constructor() {
-    this.current = { messageParts: [], placeholderNames: [], text: "" };
-    this.icuDepth = 0;
-  }
+  current = { messageParts: [], placeholderNames: [], text: "" };
+  icuDepth = 0;
   get message() {
     const { messageParts, placeholderNames } = this.current;
     return \u0275makeParsedTranslation(messageParts, placeholderNames);
@@ -688,4 +691,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-P52LUQCG.js.map
+//# sourceMappingURL=chunk-HW2VGZZI.js.map

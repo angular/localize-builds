@@ -214,7 +214,6 @@ export declare type TargetMessage = string;
  * @param expressions a collection of the values of each placeholder in the template string.
  * @returns the translated string, with the `messageParts` and `expressions` interleaved together.
  *
- * @globalApi
  * @publicApi
  */
 export declare const ɵ$localize: ɵLocalizeFn;
