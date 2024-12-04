@@ -13,7 +13,7 @@ import { TranslationSerializer } from './translation_serializer';
  *
  * See https://github.com/google/app-resource-bundle/wiki/ApplicationResourceBundleSpecification
  *
- * ```
+ * ```json
  * {
  *   "@@locale": "en-US",
  *   "message-id": "Target message string",
