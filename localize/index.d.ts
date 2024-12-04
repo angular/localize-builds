@@ -293,14 +293,14 @@ export declare class ɵMissingTranslationError extends Error {
  *
  * For example:
  *
- * ```
+ * ```ts
  * const name = 'Jo Bloggs';
  * $localize`Hello ${name}:title@@ID:!`;
  * ```
  *
  * May be parsed into:
  *
- * ```
+ * ```ts
  * {
  *   id: '6998194507597730591',
  *   substitutions: { title: 'Jo Bloggs' },
