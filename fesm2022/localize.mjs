@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.0+sha-26b3a8f
+ * @license Angular v19.2.0+sha-31bbbe9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -694,7 +694,7 @@ function describeMessage(message) {
  * These messages are processed and added to a lookup based on their `MessageId`.
  *
  * @see {@link clearTranslations} for removing translations loaded using this function.
- * @see [$localize](api/localize/init/$localize) for tagging messages as needing to be translated.
+ * @see {@link /api/localize/init/$localize $localize} for tagging messages as needing to be translated.
  * @publicApi
  */
 function loadTranslations(translations) {
@@ -715,7 +715,7 @@ function loadTranslations(translations) {
  * All translations that had been loading into memory using `loadTranslations()` will be removed.
  *
  * @see {@link loadTranslations} for loading translations at runtime.
- * @see [$localize](api/localize/init/$localize) for tagging messages as needing to be translated.
+ * @see {@link /api/localize/init/$localize $localize} for tagging messages as needing to be translated.
  *
  * @publicApi
  */
