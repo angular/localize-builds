@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.1+sha-dad02c6
+ * @license Angular v19.2.1+sha-48dc0d6
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -59,153 +59,6 @@ const LEGACY_ID_INDICATOR = '\u241F';
  * A lazily created TextEncoder instance for converting strings into UTF-8 bytes
  */
 let textEncoder;
-/**
- * Return the message id or compute it using the XLIFF1 digest.
- */
-function digest(message) {
-    return message.id || computeDigest(message);
-}
-/**
- * Compute the message id using the XLIFF1 digest.
- */
-function computeDigest(message) {
-    return sha1(serializeNodes(message.nodes).join('') + `[${message.meaning}]`);
-}
-/**
- * Return the message id or compute it using the XLIFF2/XMB/$localize digest.
- */
-function decimalDigest(message) {
-    return message.id || computeDecimalDigest(message);
-}
-/**
- * Compute the message id using the XLIFF2/XMB/$localize digest.
- */
-function computeDecimalDigest(message) {
-    const visitor = new _SerializerIgnoreIcuExpVisitor();
-    const parts = message.nodes.map((a) => a.visit(visitor, null));
-    return computeMsgId(parts.join(''), message.meaning);
-}
-/**
- * Serialize the i18n ast to something xml-like in order to generate an UID.
- *
- * The visitor is also used in the i18n parser tests
- *
- * @internal
- */
-class _SerializerVisitor {
-    visitText(text, context) {
-        return text.value;
-    }
-    visitContainer(container, context) {
-        return `[${container.children.map((child) => child.visit(this)).join(', ')}]`;
-    }
-    visitIcu(icu, context) {
-        const strCases = Object.keys(icu.cases).map((k) => `${k} {${icu.cases[k].visit(this)}}`);
-        return `{${icu.expression}, ${icu.type}, ${strCases.join(', ')}}`;
-    }
-    visitTagPlaceholder(ph, context) {
-        return ph.isVoid
-            ? `<ph tag name="${ph.startName}"/>`
-            : `<ph tag name="${ph.startName}">${ph.children
-                .map((child) => child.visit(this))
-                .join(', ')}</ph name="${ph.closeName}">`;
-    }
-    visitPlaceholder(ph, context) {
-        return ph.value ? `<ph name="${ph.name}">${ph.value}</ph>` : `<ph name="${ph.name}"/>`;
-    }
-    visitIcuPlaceholder(ph, context) {
-        return `<ph icu name="${ph.name}">${ph.value.visit(this)}</ph>`;
-    }
-    visitBlockPlaceholder(ph, context) {
-        return `<ph block name="${ph.startName}">${ph.children
-            .map((child) => child.visit(this))
-            .join(', ')}</ph name="${ph.closeName}">`;
-    }
-}
-const serializerVisitor = new _SerializerVisitor();
-function serializeNodes(nodes) {
-    return nodes.map((a) => a.visit(serializerVisitor, null));
-}
-/**
- * Serialize the i18n ast to something xml-like in order to generate an UID.
- *
- * Ignore the ICU expressions so that message IDs stays identical if only the expression changes.
- *
- * @internal
- */
-class _SerializerIgnoreIcuExpVisitor extends _SerializerVisitor {
-    visitIcu(icu) {
-        let strCases = Object.keys(icu.cases).map((k) => `${k} {${icu.cases[k].visit(this)}}`);
-        // Do not take the expression into account
-        return `{${icu.type}, ${strCases.join(', ')}}`;
-    }
-}
-/**
- * Compute the SHA1 of the given string
- *
- * see https://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
- *
- * WARNING: this function has not been designed not tested with security in mind.
- *          DO NOT USE IT IN A SECURITY SENSITIVE CONTEXT.
- */
-function sha1(str) {
-    textEncoder ??= new TextEncoder();
-    const utf8 = [...textEncoder.encode(str)];
-    const words32 = bytesToWords32(utf8, Endian.Big);
-    const len = utf8.length * 8;
-    const w = new Uint32Array(80);
-    let a = 0x67452301, b = 0xefcdab89, c = 0x98badcfe, d = 0x10325476, e = 0xc3d2e1f0;
-    words32[len >> 5] |= 0x80 << (24 - (len % 32));
-    words32[(((len + 64) >> 9) << 4) + 15] = len;
-    for (let i = 0; i < words32.length; i += 16) {
-        const h0 = a, h1 = b, h2 = c, h3 = d, h4 = e;
-        for (let j = 0; j < 80; j++) {
-            if (j < 16) {
-                w[j] = words32[i + j];
-            }
-            else {
-                w[j] = rol32(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1);
-            }
-            const fkVal = fk(j, b, c, d);
-            const f = fkVal[0];
-            const k = fkVal[1];
-            const temp = [rol32(a, 5), f, e, k, w[j]].reduce(add32);
-            e = d;
-            d = c;
-            c = rol32(b, 30);
-            b = a;
-            a = temp;
-        }
-        a = add32(a, h0);
-        b = add32(b, h1);
-        c = add32(c, h2);
-        d = add32(d, h3);
-        e = add32(e, h4);
-    }
-    // Convert the output parts to a 160-bit hexadecimal string
-    return toHexU32(a) + toHexU32(b) + toHexU32(c) + toHexU32(d) + toHexU32(e);
-}
-/**
- * Convert and format a number as a string representing a 32-bit unsigned hexadecimal number.
- * @param value The value to format as a string.
- * @returns A hexadecimal string representing the value.
- */
-function toHexU32(value) {
-    // unsigned right shift of zero ensures an unsigned 32-bit number
-    return (value >>> 0).toString(16).padStart(8, '0');
-}
-function fk(index, b, c, d) {
-    if (index < 20) {
-        return [(b & c) | (~b & d), 0x5a827999];
-    }
-    if (index < 40) {
-        return [b ^ c ^ d, 0x6ed9eba1];
-    }
-    if (index < 60) {
-        return [(b & c) | (b & d) | (c & d), 0x8f1bbcdc];
-    }
-    return [b ^ c ^ d, 0xca62c1d6];
-}
 /**
  * Compute the fingerprint of the given string
  *
@@ -332,43 +185,6 @@ var Endian;
     Endian[Endian["Little"] = 0] = "Little";
     Endian[Endian["Big"] = 1] = "Big";
 })(Endian || (Endian = {}));
-function add32(a, b) {
-    return add32to64(a, b)[1];
-}
-function add32to64(a, b) {
-    const low = (a & 0xffff) + (b & 0xffff);
-    const high = (a >>> 16) + (b >>> 16) + (low >>> 16);
-    return [high >>> 16, (high << 16) | (low & 0xffff)];
-}
-// Rotate a 32b number left `count` position
-function rol32(a, count) {
-    return (a << count) | (a >>> (32 - count));
-}
-function bytesToWords32(bytes, endian) {
-    const size = (bytes.length + 3) >>> 2;
-    const words32 = [];
-    for (let i = 0; i < size; i++) {
-        words32[i] = wordAt(bytes, i * 4, endian);
-    }
-    return words32;
-}
-function byteAt(bytes, index) {
-    return index >= bytes.length ? 0 : bytes[index];
-}
-function wordAt(bytes, index, endian) {
-    let word = 0;
-    if (endian === Endian.Big) {
-        for (let i = 0; i < 4; i++) {
-            word += byteAt(bytes, index + i) << (24 - 8 * i);
-        }
-    }
-    else {
-        for (let i = 0; i < 4; i++) {
-            word += byteAt(bytes, index + i) << (8 * i);
-        }
-    }
-    return word;
-}
 
 // This module specifier is intentionally a relative path to allow bundling the code directly
 /**
@@ -864,12 +680,6 @@ function stripBlock(messagePart, rawMessagePart) {
         ? messagePart.substring(findEndOfBlock(messagePart, rawMessagePart) + 1)
         : messagePart;
 }
-
-// This file exports all the `utils` as private exports so that other parts of `@angular/localize`
-
-// This file contains the public API of the `@angular/localize` entry-point
-
-// DO NOT ADD public exports to this file.
 
 export { clearTranslations, loadTranslations, $localize$1 as ɵ$localize, MissingTranslationError as ɵMissingTranslationError, computeMsgId as ɵcomputeMsgId, findEndOfBlock as ɵfindEndOfBlock, isMissingTranslationError as ɵisMissingTranslationError, makeParsedTranslation as ɵmakeParsedTranslation, makeTemplateObject as ɵmakeTemplateObject, parseMessage as ɵparseMessage, parseMetadata as ɵparseMetadata, parseTranslation as ɵparseTranslation, splitBlock as ɵsplitBlock, translate$1 as ɵtranslate };
 //# sourceMappingURL=localize.mjs.map
