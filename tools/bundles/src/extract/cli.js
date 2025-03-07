@@ -18,7 +18,7 @@ import "../../chunk-P63CR46L.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/cli.mjs
 import { ConsoleLogger, LogLevel, NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
-import glob from "fast-glob";
+import { globSync } from "tinyglobby";
 import yargs from "yargs";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/index.mjs
@@ -129,7 +129,7 @@ var options = yargs(args).option("l", {
 var fileSystem = new NodeJSFileSystem();
 setFileSystem(fileSystem);
 var rootPath = options.r;
-var sourceFilePaths = glob.sync(options.s, { cwd: rootPath });
+var sourceFilePaths = globSync(options.s, { cwd: rootPath });
 var logLevel = options.loglevel;
 var logger = new ConsoleLogger(logLevel ? LogLevel[logLevel] : LogLevel.warn);
 var duplicateMessageHandling = options.d;

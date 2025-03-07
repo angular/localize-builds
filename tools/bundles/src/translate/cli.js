@@ -19,7 +19,7 @@ import {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
-import glob from "fast-glob";
+import { globSync } from "tinyglobby";
 import yargs from "yargs";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/output_path.mjs
@@ -298,7 +298,7 @@ var options = yargs(args).option("r", {
 var fs = new NodeJSFileSystem();
 setFileSystem(fs);
 var sourceRootPath = options.r;
-var sourceFilePaths = glob.sync(options.s, { cwd: sourceRootPath, onlyFiles: true });
+var sourceFilePaths = globSync(options.s, { cwd: sourceRootPath, onlyFiles: true });
 var translationFilePaths = convertArraysFromArgs(options.t);
 var outputPathFn = getOutputPathFn(fs, fs.resolve(options.o));
 var diagnostics = new Diagnostics();
