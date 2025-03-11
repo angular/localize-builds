@@ -1,12 +1,12 @@
 /**
- * @license Angular v19.2.1+sha-56b551d
+ * @license Angular v19.2.1+sha-044dac9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { ɵ$localize } from '@angular/localize';
+import { ɵ$localize as _$localize } from '@angular/localize';
 export { ɵ$localize as $localize } from '@angular/localize';
 
 // Attach $localize to the global context, as a side-effect of this module.
-globalThis.$localize = ɵ$localize;
+globalThis.$localize = _$localize;
 //# sourceMappingURL=init.mjs.map
