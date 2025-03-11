@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.1+sha-8be6e38
+ * @license Angular v20.0.0-next.1+sha-4fa5d18
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -75,7 +75,7 @@ function fingerprint(str) {
     let lo = hash32(view, utf8.length, 102072);
     if (hi == 0 && (lo == 0 || lo == 1)) {
         hi = hi ^ 0x130f9bef;
-        lo = lo ^ -0x6b5f56d8;
+        lo = lo ^ -1801410264;
     }
     return (BigInt.asUintN(32, BigInt(hi)) << BigInt(32)) | BigInt.asUintN(32, BigInt(lo));
 }
@@ -187,6 +187,8 @@ var Endian;
 })(Endian || (Endian = {}));
 
 // This module specifier is intentionally a relative path to allow bundling the code directly
+// into the package.
+// @ng_package: ignore-cross-repo-import
 /**
  * Parse a `$localize` tagged string into a structure that can be used for translation or
  * extraction.
