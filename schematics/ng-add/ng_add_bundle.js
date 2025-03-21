@@ -60,6 +60,7 @@ function addPolyfillToConfig(projectName) {
     for (const target of project.targets.values()) {
       switch (target.builder) {
         case import_utility.AngularBuilder.Karma:
+        case import_utility.AngularBuilder.BuildKarma:
         case import_utility.AngularBuilder.Server:
         case import_utility.AngularBuilder.Browser:
         case import_utility.AngularBuilder.BrowserEsbuild:
@@ -147,7 +148,7 @@ function moveToDependencies(host) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  return (0, import_utility.addDependency)("@angular/localize", `~20.0.0-next.3+sha-9ffeff9`);
+  return (0, import_utility.addDependency)("@angular/localize", `~20.0.0-next.3+sha-13d1c8a`);
 }
 function ng_add_default(options) {
   const projectName = options.project;
