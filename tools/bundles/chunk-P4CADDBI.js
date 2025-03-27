@@ -38,7 +38,312 @@ var Diagnostics = class {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
-import { \u0275isMissingTranslationError, \u0275makeTemplateObject, \u0275translate } from "@angular/localize";
+
+// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/constants.mjs
+var BLOCK_MARKER = ":";
+var MEANING_SEPARATOR = "|";
+var ID_SEPARATOR = "@@";
+var LEGACY_ID_INDICATOR = "\u241F";
+
+// bazel-out/k8-fastbuild/bin/packages/compiler/src/i18n/digest.mjs
+var textEncoder;
+var _SerializerVisitor = class {
+  visitText(text, context) {
+    return text.value;
+  }
+  visitContainer(container, context) {
+    return `[${container.children.map((child) => child.visit(this)).join(", ")}]`;
+  }
+  visitIcu(icu, context) {
+    const strCases = Object.keys(icu.cases).map((k) => `${k} {${icu.cases[k].visit(this)}}`);
+    return `{${icu.expression}, ${icu.type}, ${strCases.join(", ")}}`;
+  }
+  visitTagPlaceholder(ph, context) {
+    return ph.isVoid ? `<ph tag name="${ph.startName}"/>` : `<ph tag name="${ph.startName}">${ph.children.map((child) => child.visit(this)).join(", ")}</ph name="${ph.closeName}">`;
+  }
+  visitPlaceholder(ph, context) {
+    return ph.value ? `<ph name="${ph.name}">${ph.value}</ph>` : `<ph name="${ph.name}"/>`;
+  }
+  visitIcuPlaceholder(ph, context) {
+    return `<ph icu name="${ph.name}">${ph.value.visit(this)}</ph>`;
+  }
+  visitBlockPlaceholder(ph, context) {
+    return `<ph block name="${ph.startName}">${ph.children.map((child) => child.visit(this)).join(", ")}</ph name="${ph.closeName}">`;
+  }
+};
+var serializerVisitor = new _SerializerVisitor();
+function fingerprint(str) {
+  textEncoder != null ? textEncoder : textEncoder = new TextEncoder();
+  const utf8 = textEncoder.encode(str);
+  const view = new DataView(utf8.buffer, utf8.byteOffset, utf8.byteLength);
+  let hi = hash32(view, utf8.length, 0);
+  let lo = hash32(view, utf8.length, 102072);
+  if (hi == 0 && (lo == 0 || lo == 1)) {
+    hi = hi ^ 319790063;
+    lo = lo ^ -1801410264;
+  }
+  return BigInt.asUintN(32, BigInt(hi)) << BigInt(32) | BigInt.asUintN(32, BigInt(lo));
+}
+function computeMsgId(msg, meaning = "") {
+  let msgFingerprint = fingerprint(msg);
+  if (meaning) {
+    msgFingerprint = BigInt.asUintN(64, msgFingerprint << BigInt(1)) | msgFingerprint >> BigInt(63) & BigInt(1);
+    msgFingerprint += fingerprint(meaning);
+  }
+  return BigInt.asUintN(63, msgFingerprint).toString();
+}
+function hash32(view, length, c) {
+  let a = 2654435769, b = 2654435769;
+  let index = 0;
+  const end = length - 12;
+  for (; index <= end; index += 12) {
+    a += view.getUint32(index, true);
+    b += view.getUint32(index + 4, true);
+    c += view.getUint32(index + 8, true);
+    const res = mix(a, b, c);
+    a = res[0], b = res[1], c = res[2];
+  }
+  const remainder = length - index;
+  c += length;
+  if (remainder >= 4) {
+    a += view.getUint32(index, true);
+    index += 4;
+    if (remainder >= 8) {
+      b += view.getUint32(index, true);
+      index += 4;
+      if (remainder >= 9) {
+        c += view.getUint8(index++) << 8;
+      }
+      if (remainder >= 10) {
+        c += view.getUint8(index++) << 16;
+      }
+      if (remainder === 11) {
+        c += view.getUint8(index++) << 24;
+      }
+    } else {
+      if (remainder >= 5) {
+        b += view.getUint8(index++);
+      }
+      if (remainder >= 6) {
+        b += view.getUint8(index++) << 8;
+      }
+      if (remainder === 7) {
+        b += view.getUint8(index++) << 16;
+      }
+    }
+  } else {
+    if (remainder >= 1) {
+      a += view.getUint8(index++);
+    }
+    if (remainder >= 2) {
+      a += view.getUint8(index++) << 8;
+    }
+    if (remainder === 3) {
+      a += view.getUint8(index++) << 16;
+    }
+  }
+  return mix(a, b, c)[2];
+}
+function mix(a, b, c) {
+  a -= b;
+  a -= c;
+  a ^= c >>> 13;
+  b -= c;
+  b -= a;
+  b ^= a << 8;
+  c -= a;
+  c -= b;
+  c ^= b >>> 13;
+  a -= b;
+  a -= c;
+  a ^= c >>> 12;
+  b -= c;
+  b -= a;
+  b ^= a << 16;
+  c -= a;
+  c -= b;
+  c ^= b >>> 5;
+  a -= b;
+  a -= c;
+  a ^= c >>> 3;
+  b -= c;
+  b -= a;
+  b ^= a << 10;
+  c -= a;
+  c -= b;
+  c ^= b >>> 15;
+  return [a, b, c];
+}
+var Endian;
+(function(Endian2) {
+  Endian2[Endian2["Little"] = 0] = "Little";
+  Endian2[Endian2["Big"] = 1] = "Big";
+})(Endian || (Endian = {}));
+
+// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/messages.mjs
+function parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations = []) {
+  const substitutions = {};
+  const substitutionLocations = {};
+  const associatedMessageIds = {};
+  const metadata = parseMetadata(messageParts[0], messageParts.raw[0]);
+  const cleanedMessageParts = [metadata.text];
+  const placeholderNames = [];
+  let messageString = metadata.text;
+  for (let i = 1; i < messageParts.length; i++) {
+    const { messagePart, placeholderName = computePlaceholderName(i), associatedMessageId } = parsePlaceholder(messageParts[i], messageParts.raw[i]);
+    messageString += `{$${placeholderName}}${messagePart}`;
+    if (expressions !== void 0) {
+      substitutions[placeholderName] = expressions[i - 1];
+      substitutionLocations[placeholderName] = expressionLocations[i - 1];
+    }
+    placeholderNames.push(placeholderName);
+    if (associatedMessageId !== void 0) {
+      associatedMessageIds[placeholderName] = associatedMessageId;
+    }
+    cleanedMessageParts.push(messagePart);
+  }
+  const messageId = metadata.customId || computeMsgId(messageString, metadata.meaning || "");
+  const legacyIds = metadata.legacyIds ? metadata.legacyIds.filter((id) => id !== messageId) : [];
+  return {
+    id: messageId,
+    legacyIds,
+    substitutions,
+    substitutionLocations,
+    text: messageString,
+    customId: metadata.customId,
+    meaning: metadata.meaning || "",
+    description: metadata.description || "",
+    messageParts: cleanedMessageParts,
+    messagePartLocations,
+    placeholderNames,
+    associatedMessageIds,
+    location
+  };
+}
+function parseMetadata(cooked, raw) {
+  const { text: messageString, block } = splitBlock(cooked, raw);
+  if (block === void 0) {
+    return { text: messageString };
+  } else {
+    const [meaningDescAndId, ...legacyIds] = block.split(LEGACY_ID_INDICATOR);
+    const [meaningAndDesc, customId] = meaningDescAndId.split(ID_SEPARATOR, 2);
+    let [meaning, description] = meaningAndDesc.split(MEANING_SEPARATOR, 2);
+    if (description === void 0) {
+      description = meaning;
+      meaning = void 0;
+    }
+    if (description === "") {
+      description = void 0;
+    }
+    return { text: messageString, meaning, description, customId, legacyIds };
+  }
+}
+function parsePlaceholder(cooked, raw) {
+  const { text: messagePart, block } = splitBlock(cooked, raw);
+  if (block === void 0) {
+    return { messagePart };
+  } else {
+    const [placeholderName, associatedMessageId] = block.split(ID_SEPARATOR);
+    return { messagePart, placeholderName, associatedMessageId };
+  }
+}
+function splitBlock(cooked, raw) {
+  if (raw.charAt(0) !== BLOCK_MARKER) {
+    return { text: cooked };
+  } else {
+    const endOfBlock = findEndOfBlock(cooked, raw);
+    return {
+      block: cooked.substring(1, endOfBlock),
+      text: cooked.substring(endOfBlock + 1)
+    };
+  }
+}
+function computePlaceholderName(index) {
+  return index === 1 ? "PH" : `PH_${index - 1}`;
+}
+function findEndOfBlock(cooked, raw) {
+  for (let cookedIndex = 1, rawIndex = 1; cookedIndex < cooked.length; cookedIndex++, rawIndex++) {
+    if (raw[rawIndex] === "\\") {
+      rawIndex++;
+    } else if (cooked[cookedIndex] === BLOCK_MARKER) {
+      return cookedIndex;
+    }
+  }
+  throw new Error(`Unterminated $localize metadata block in "${raw}".`);
+}
+
+// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/translations.mjs
+var MissingTranslationError = class extends Error {
+  parsedMessage;
+  type = "MissingTranslationError";
+  constructor(parsedMessage) {
+    super(`No translation found for ${describeMessage(parsedMessage)}.`);
+    this.parsedMessage = parsedMessage;
+  }
+};
+function isMissingTranslationError(e) {
+  return e.type === "MissingTranslationError";
+}
+function translate(translations, messageParts, substitutions) {
+  const message = parseMessage(messageParts, substitutions);
+  let translation = translations[message.id];
+  if (message.legacyIds !== void 0) {
+    for (let i = 0; i < message.legacyIds.length && translation === void 0; i++) {
+      translation = translations[message.legacyIds[i]];
+    }
+  }
+  if (translation === void 0) {
+    throw new MissingTranslationError(message);
+  }
+  return [
+    translation.messageParts,
+    translation.placeholderNames.map((placeholder) => {
+      if (message.substitutions.hasOwnProperty(placeholder)) {
+        return message.substitutions[placeholder];
+      } else {
+        throw new Error(`There is a placeholder name mismatch with the translation provided for the message ${describeMessage(message)}.
+The translation contains a placeholder with name ${placeholder}, which does not exist in the message.`);
+      }
+    })
+  ];
+}
+function parseTranslation(messageString) {
+  const parts = messageString.split(/{\$([^}]*)}/);
+  const messageParts = [parts[0]];
+  const placeholderNames = [];
+  for (let i = 1; i < parts.length - 1; i += 2) {
+    placeholderNames.push(parts[i]);
+    messageParts.push(`${parts[i + 1]}`);
+  }
+  const rawMessageParts = messageParts.map((part) => part.charAt(0) === BLOCK_MARKER ? "\\" + part : part);
+  return {
+    text: messageString,
+    messageParts: makeTemplateObject(messageParts, rawMessageParts),
+    placeholderNames
+  };
+}
+function makeParsedTranslation(messageParts, placeholderNames = []) {
+  let messageString = messageParts[0];
+  for (let i = 0; i < placeholderNames.length; i++) {
+    messageString += `{$${placeholderNames[i]}}${messageParts[i + 1]}`;
+  }
+  return {
+    text: messageString,
+    messageParts: makeTemplateObject(messageParts, messageParts),
+    placeholderNames
+  };
+}
+function makeTemplateObject(cooked, raw) {
+  Object.defineProperty(cooked, "raw", { value: raw });
+  return cooked;
+}
+function describeMessage(message) {
+  const meaningString = message.meaning && ` - "${message.meaning}"`;
+  const legacy = message.legacyIds && message.legacyIds.length > 0 ? ` [${message.legacyIds.map((l) => `"${l}"`).join(", ")}]` : "";
+  return `"${message.id}"${legacy} ("${message.text}"${meaningString})`;
+}
+
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.mjs
 import { types as t } from "@babel/core";
 function isLocalize(expression, localizeName) {
   return isNamedIdentifier(expression, localizeName) && isGlobalIdentifier(expression);
@@ -111,7 +416,7 @@ function unwrapMessagePartsFromLocalizeCall(call, fs = getFileSystem()) {
   }
   const [cookedStrings] = unwrapStringLiteralArray(cooked, fs);
   const [rawStrings, rawLocations] = unwrapStringLiteralArray(raw, fs);
-  return [\u0275makeTemplateObject(cookedStrings, rawStrings), rawLocations];
+  return [makeTemplateObject(cookedStrings, rawStrings), rawLocations];
 }
 function unwrapSubstitutionsFromLocalizeCall(call, fs = getFileSystem()) {
   const expressions = call.get("arguments").splice(1);
@@ -133,7 +438,7 @@ function unwrapMessagePartsFromTemplateLiteral(elements, fs = getFileSystem()) {
   });
   const raw = elements.map((q) => q.node.value.raw);
   const locations = elements.map((q) => getLocation(fs, q));
-  return [\u0275makeTemplateObject(cooked, raw), locations];
+  return [makeTemplateObject(cooked, raw), locations];
 }
 function unwrapExpressionsFromTemplateLiteral(quasi, fs = getFileSystem()) {
   return [
@@ -215,14 +520,14 @@ function isStringLiteralArray(node) {
 function isArrayOfExpressions(paths) {
   return paths.every((element) => element.isExpression());
 }
-function translate(diagnostics, translations, messageParts, substitutions, missingTranslation) {
+function translate2(diagnostics, translations, messageParts, substitutions, missingTranslation) {
   try {
-    return \u0275translate(translations, messageParts, substitutions);
+    return translate(translations, messageParts, substitutions);
   } catch (e) {
-    if (\u0275isMissingTranslationError(e)) {
+    if (isMissingTranslationError(e)) {
       diagnostics.add(missingTranslation, e.message);
       return [
-        \u0275makeTemplateObject(e.parsedMessage.messageParts, e.parsedMessage.messageParts),
+        makeTemplateObject(e.parsedMessage.messageParts, e.parsedMessage.messageParts),
         substitutions
       ];
     } else {
@@ -293,6 +598,9 @@ function getLineAndColumn(loc) {
 
 export {
   Diagnostics,
+  parseMessage,
+  parseTranslation,
+  makeParsedTranslation,
   isLocalize,
   isNamedIdentifier,
   isGlobalIdentifier,
@@ -301,7 +609,7 @@ export {
   unwrapSubstitutionsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapExpressionsFromTemplateLiteral,
-  translate,
+  translate2 as translate,
   isBabelParseError,
   buildCodeFrameError,
   getLocation,
@@ -314,4 +622,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-P63CR46L.js.map
+//# sourceMappingURL=chunk-P4CADDBI.js.map

@@ -9,12 +9,13 @@ import {
   isBabelParseError,
   isGlobalIdentifier,
   isNamedIdentifier,
+  parseMessage,
   serializeLocationPosition,
   unwrapExpressionsFromTemplateLiteral,
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-P63CR46L.js";
+} from "./chunk-P4CADDBI.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -55,7 +56,6 @@ import { SourceFileLoader } from "@angular/compiler-cli/private/localize";
 import { transformSync } from "@babel/core";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es2015_extract_plugin.mjs
-import { \u0275parseMessage } from "@angular/localize";
 function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -66,7 +66,7 @@ function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
           const [messageParts, messagePartLocations] = unwrapMessagePartsFromTemplateLiteral(quasiPath.get("quasis"), fs);
           const [expressions, expressionLocations] = unwrapExpressionsFromTemplateLiteral(quasiPath, fs);
           const location = getLocation(fs, quasiPath);
-          const message = \u0275parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations);
+          const message = parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations);
           messages.push(message);
         }
       }
@@ -75,7 +75,6 @@ function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
 }
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es5_extract_plugin.mjs
-import { \u0275parseMessage as \u0275parseMessage2 } from "@angular/localize";
 function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -87,7 +86,7 @@ function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
             const [expressions, expressionLocations] = unwrapSubstitutionsFromLocalizeCall(callPath, fs);
             const [messagePartsArg, expressionsArg] = callPath.get("arguments");
             const location = getLocation(fs, messagePartsArg, expressionsArg);
-            const message = \u0275parseMessage2(messageParts, expressions, location, messagePartLocations, expressionLocations);
+            const message = parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations);
             messages.push(message);
           }
         } catch (e) {
@@ -920,4 +919,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-PSVGYGNV.js.map
+//# sourceMappingURL=chunk-LXW6G5EF.js.map

@@ -8,11 +8,13 @@ import {
   buildLocalizeReplacement,
   isBabelParseError,
   isLocalize,
+  makeParsedTranslation,
+  parseTranslation,
   translate,
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-P63CR46L.js";
+} from "./chunk-P4CADDBI.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -106,7 +108,6 @@ function isLocalizeGuard(expression, localizeName) {
 }
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/arb_translation_parser.mjs
-import { \u0275parseTranslation } from "@angular/localize";
 var ArbTranslationParser = class {
   analyze(_filePath, contents) {
     const diagnostics = new Diagnostics();
@@ -131,7 +132,7 @@ var ArbTranslationParser = class {
         continue;
       }
       const targetMessage = arb[messageId];
-      bundle.translations[messageId] = \u0275parseTranslation(targetMessage);
+      bundle.translations[messageId] = parseTranslation(targetMessage);
     }
     return bundle;
   }
@@ -145,7 +146,6 @@ var ArbTranslationParser = class {
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/simple_json_translation_parser.mjs
-import { \u0275parseTranslation as \u0275parseTranslation2 } from "@angular/localize";
 import { extname } from "path";
 var SimpleJsonTranslationParser = class {
   analyze(filePath, contents) {
@@ -183,7 +183,7 @@ var SimpleJsonTranslationParser = class {
     const parsedTranslations = {};
     for (const messageId in translations) {
       const targetMessage = translations[messageId];
-      parsedTranslations[messageId] = \u0275parseTranslation2(targetMessage);
+      parsedTranslations[messageId] = parseTranslation(targetMessage);
     }
     return { locale: parsedLocale, translations: parsedTranslations, diagnostics: new Diagnostics() };
   }
@@ -383,13 +383,12 @@ var MessageSerializer = class extends BaseVisitor {
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/target_message_renderer.mjs
-import { \u0275makeParsedTranslation } from "@angular/localize";
 var TargetMessageRenderer = class {
   current = { messageParts: [], placeholderNames: [], text: "" };
   icuDepth = 0;
   get message() {
     const { messageParts, placeholderNames } = this.current;
-    return \u0275makeParsedTranslation(messageParts, placeholderNames);
+    return makeParsedTranslation(messageParts, placeholderNames);
   }
   startRender() {
   }
@@ -691,4 +690,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-HW2VGZZI.js.map
+//# sourceMappingURL=chunk-24AH5IGH.js.map
