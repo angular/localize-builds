@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.4+sha-fdde642
+ * @license Angular v19.2.4+sha-84f3ba0
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -557,4 +557,5 @@ declare global {
     const $localize: LocalizeFn;
 }
 
-export { type MessageId, type TargetMessage, clearTranslations, loadTranslations, $localize as ɵ$localize, type LocalizeFn as ɵLocalizeFn, MissingTranslationError as ɵMissingTranslationError, type ParsedMessage as ɵParsedMessage, type ParsedTranslation as ɵParsedTranslation, type ParsedTranslations as ɵParsedTranslations, type SourceLocation as ɵSourceLocation, type SourceMessage as ɵSourceMessage, type TranslateFn as ɵTranslateFn, computeMsgId as ɵcomputeMsgId, findEndOfBlock as ɵfindEndOfBlock, isMissingTranslationError as ɵisMissingTranslationError, makeParsedTranslation as ɵmakeParsedTranslation, makeTemplateObject as ɵmakeTemplateObject, parseMessage as ɵparseMessage, parseMetadata as ɵparseMetadata, parseTranslation as ɵparseTranslation, splitBlock as ɵsplitBlock, translate as ɵtranslate };
+export { clearTranslations, loadTranslations, $localize as ɵ$localize, MissingTranslationError as ɵMissingTranslationError, computeMsgId as ɵcomputeMsgId, findEndOfBlock as ɵfindEndOfBlock, isMissingTranslationError as ɵisMissingTranslationError, makeParsedTranslation as ɵmakeParsedTranslation, makeTemplateObject as ɵmakeTemplateObject, parseMessage as ɵparseMessage, parseMetadata as ɵparseMetadata, parseTranslation as ɵparseTranslation, splitBlock as ɵsplitBlock, translate as ɵtranslate };
+export type { MessageId, TargetMessage, LocalizeFn as ɵLocalizeFn, ParsedMessage as ɵParsedMessage, ParsedTranslation as ɵParsedTranslation, ParsedTranslations as ɵParsedTranslations, SourceLocation as ɵSourceLocation, SourceMessage as ɵSourceMessage, TranslateFn as ɵTranslateFn };
