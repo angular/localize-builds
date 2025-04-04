@@ -212,6 +212,10 @@ var BaseVisitor = class {
   }
   visitLetDeclaration(_decl, _context) {
   }
+  visitComponent(_component, _context) {
+  }
+  visitDirective(_directive, _context) {
+  }
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.mjs
@@ -690,4 +694,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-24AH5IGH.js.map
+//# sourceMappingURL=chunk-CTYX66SH.js.map
