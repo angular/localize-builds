@@ -8,11 +8,13 @@ import {
   buildLocalizeReplacement,
   isBabelParseError,
   isLocalize,
+  makeParsedTranslation,
+  parseTranslation,
   translate,
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-GGL5GE7J.js";
+} from "./chunk-P4CADDBI.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.mjs
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -106,7 +108,6 @@ function isLocalizeGuard(expression, localizeName) {
 }
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/arb_translation_parser.mjs
-import { \u0275parseTranslation } from "@angular/localize";
 var ArbTranslationParser = class {
   analyze(_filePath, contents) {
     const diagnostics = new Diagnostics();
@@ -131,7 +132,7 @@ var ArbTranslationParser = class {
         continue;
       }
       const targetMessage = arb[messageId];
-      bundle.translations[messageId] = \u0275parseTranslation(targetMessage);
+      bundle.translations[messageId] = parseTranslation(targetMessage);
     }
     return bundle;
   }
@@ -145,7 +146,6 @@ var ArbTranslationParser = class {
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/simple_json_translation_parser.mjs
-import { \u0275parseTranslation as \u0275parseTranslation2 } from "@angular/localize";
 import { extname } from "path";
 var SimpleJsonTranslationParser = class {
   analyze(filePath, contents) {
@@ -183,7 +183,7 @@ var SimpleJsonTranslationParser = class {
     const parsedTranslations = {};
     for (const messageId in translations) {
       const targetMessage = translations[messageId];
-      parsedTranslations[messageId] = \u0275parseTranslation2(targetMessage);
+      parsedTranslations[messageId] = parseTranslation(targetMessage);
     }
     return { locale: parsedLocale, translations: parsedTranslations, diagnostics: new Diagnostics() };
   }
@@ -210,6 +210,12 @@ var BaseVisitor = class {
   }
   visitBlockParameter(_parameter, _context) {
   }
+  visitLetDeclaration(_decl, _context) {
+  }
+  visitComponent(_component, _context) {
+  }
+  visitDirective(_directive, _context) {
+  }
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.mjs
@@ -218,6 +224,9 @@ import { Element as Element2, visitAll } from "@angular/compiler";
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/translation_parse_error.mjs
 import { ParseErrorLevel } from "@angular/compiler";
 var TranslationParseError = class extends Error {
+  span;
+  msg;
+  level;
   constructor(span, msg, level = ParseErrorLevel.ERROR) {
     super(contextualMessage(span, msg, level));
     this.span = span;
@@ -315,6 +324,8 @@ function addErrorsToBundle(bundle, errors) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.mjs
 var MessageSerializer = class extends BaseVisitor {
+  renderer;
+  config;
   constructor(renderer, config) {
     super();
     this.renderer = renderer;
@@ -376,15 +387,12 @@ var MessageSerializer = class extends BaseVisitor {
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/target_message_renderer.mjs
-import { \u0275makeParsedTranslation } from "@angular/localize";
 var TargetMessageRenderer = class {
-  constructor() {
-    this.current = { messageParts: [], placeholderNames: [], text: "" };
-    this.icuDepth = 0;
-  }
+  current = { messageParts: [], placeholderNames: [], text: "" };
+  icuDepth = 0;
   get message() {
     const { messageParts, placeholderNames } = this.current;
-    return \u0275makeParsedTranslation(messageParts, placeholderNames);
+    return makeParsedTranslation(messageParts, placeholderNames);
   }
   startRender() {
   }
@@ -684,6 +692,6 @@ export {
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-O2TTQMEC.js.map
+//# sourceMappingURL=chunk-CTYX66SH.js.map

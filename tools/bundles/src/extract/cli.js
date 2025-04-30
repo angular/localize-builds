@@ -13,12 +13,12 @@ import {
   XmbTranslationSerializer,
   checkDuplicateMessages,
   parseFormatOptions
-} from "../../chunk-URWRI34O.js";
-import "../../chunk-GGL5GE7J.js";
+} from "../../chunk-LXW6G5EF.js";
+import "../../chunk-P4CADDBI.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/cli.mjs
 import { ConsoleLogger, LogLevel, NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
-import glob from "fast-glob";
+import { globSync } from "tinyglobby";
 import yargs from "yargs";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/index.mjs
@@ -85,7 +85,18 @@ var options = yargs(args).option("l", {
 }).option("f", {
   alias: "format",
   required: true,
-  choices: ["xmb", "xlf", "xlif", "xliff", "xlf2", "xlif2", "xliff2", "json", "legacy-migrate"],
+  choices: [
+    "xmb",
+    "xlf",
+    "xlif",
+    "xliff",
+    "xlf2",
+    "xlif2",
+    "xliff2",
+    "json",
+    "legacy-migrate",
+    "arb"
+  ],
   describe: "The format of the translation file.",
   type: "string"
 }).option("formatOptions", {
@@ -118,7 +129,7 @@ var options = yargs(args).option("l", {
 var fileSystem = new NodeJSFileSystem();
 setFileSystem(fileSystem);
 var rootPath = options.r;
-var sourceFilePaths = glob.sync(options.s, { cwd: rootPath });
+var sourceFilePaths = globSync(options.s, { cwd: rootPath });
 var logLevel = options.loglevel;
 var logger = new ConsoleLogger(logLevel ? LogLevel[logLevel] : LogLevel.warn);
 var duplicateMessageHandling = options.d;
@@ -142,6 +153,6 @@ extractTranslations({
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 //# sourceMappingURL=cli.js.map

@@ -1,13 +1,12 @@
-/// <reference types="@angular/compiler-cli/private/babel" />
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 import { PathManipulation } from '@angular/compiler-cli/private/localize';
-import { ɵParsedTranslation, ɵSourceLocation } from '@angular/localize';
+import { ɵParsedTranslation, ɵSourceLocation } from '../../index';
 import { BabelFile, NodePath, types as t } from '@babel/core';
 import { DiagnosticHandlingStrategy, Diagnostics } from './diagnostics';
 /**

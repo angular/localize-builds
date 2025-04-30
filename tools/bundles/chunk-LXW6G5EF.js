@@ -9,12 +9,13 @@ import {
   isBabelParseError,
   isGlobalIdentifier,
   isNamedIdentifier,
+  parseMessage,
   serializeLocationPosition,
   unwrapExpressionsFromTemplateLiteral,
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-GGL5GE7J.js";
+} from "./chunk-P4CADDBI.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -55,7 +56,6 @@ import { SourceFileLoader } from "@angular/compiler-cli/private/localize";
 import { transformSync } from "@babel/core";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es2015_extract_plugin.mjs
-import { \u0275parseMessage } from "@angular/localize";
 function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -66,7 +66,7 @@ function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
           const [messageParts, messagePartLocations] = unwrapMessagePartsFromTemplateLiteral(quasiPath.get("quasis"), fs);
           const [expressions, expressionLocations] = unwrapExpressionsFromTemplateLiteral(quasiPath, fs);
           const location = getLocation(fs, quasiPath);
-          const message = \u0275parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations);
+          const message = parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations);
           messages.push(message);
         }
       }
@@ -75,7 +75,6 @@ function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
 }
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es5_extract_plugin.mjs
-import { \u0275parseMessage as \u0275parseMessage2 } from "@angular/localize";
 function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -87,7 +86,7 @@ function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
             const [expressions, expressionLocations] = unwrapSubstitutionsFromLocalizeCall(callPath, fs);
             const [messagePartsArg, expressionsArg] = callPath.get("arguments");
             const location = getLocation(fs, messagePartsArg, expressionsArg);
-            const message = \u0275parseMessage2(messageParts, expressions, location, messagePartLocations, expressionLocations);
+            const message = parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations);
             messages.push(message);
           }
         } catch (e) {
@@ -104,6 +103,12 @@ function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.mjs
 var MessageExtractor = class {
+  fs;
+  logger;
+  basePath;
+  useSourceMaps;
+  localizeName;
+  loader;
   constructor(fs, logger, { basePath, useSourceMaps = true, localizeName = "$localize" }) {
     this.fs = fs;
     this.logger = logger;
@@ -212,6 +217,9 @@ function compareLocations({ location: location1 }, { location: location2 }) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/arb_translation_serializer.mjs
 var ArbTranslationSerializer = class {
+  sourceLocale;
+  basePath;
+  fs;
   constructor(sourceLocale, basePath, fs) {
     this.sourceLocale = sourceLocale;
     this.basePath = basePath;
@@ -273,6 +281,7 @@ function getMessageId(message) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/json_translation_serializer.mjs
 var SimpleJsonTranslationSerializer = class {
+  sourceLocale;
   constructor(sourceLocale) {
     this.sourceLocale = sourceLocale;
   }
@@ -287,6 +296,7 @@ var SimpleJsonTranslationSerializer = class {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/legacy_message_id_migration_serializer.mjs
 var LegacyMessageIdMigrationSerializer = class {
+  _diagnostics;
   constructor(_diagnostics) {
     this._diagnostics = _diagnostics;
   }
@@ -370,9 +380,7 @@ function extractIcuPlaceholders(text) {
   return pieces.toArray();
 }
 var IcuPieces = class {
-  constructor() {
-    this.pieces = [""];
-  }
+  pieces = [""];
   addText(text) {
     this.pieces[this.pieces.length - 1] += text;
   }
@@ -385,9 +393,7 @@ var IcuPieces = class {
   }
 };
 var StateStack = class {
-  constructor() {
-    this.stack = [];
-  }
+  stack = [];
   enterBlock() {
     const current = this.getCurrent();
     switch (current) {
@@ -436,12 +442,10 @@ function assert(test, message) {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xml_file.mjs
 var XmlFile = class {
-  constructor() {
-    this.output = '<?xml version="1.0" encoding="UTF-8" ?>\n';
-    this.indent = "";
-    this.elements = [];
-    this.preservingWhitespace = false;
-  }
+  output = '<?xml version="1.0" encoding="UTF-8" ?>\n';
+  indent = "";
+  elements = [];
+  preservingWhitespace = false;
   toString() {
     return this.output;
   }
@@ -519,6 +523,11 @@ function escapeXml(text) {
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.mjs
 var LEGACY_XLIFF_MESSAGE_LENGTH = 40;
 var Xliff1TranslationSerializer = class {
+  sourceLocale;
+  basePath;
+  useLegacyIds;
+  formatOptions;
+  fs;
   constructor(sourceLocale, basePath, useLegacyIds, formatOptions = {}, fs = getFileSystem()) {
     this.sourceLocale = sourceLocale;
     this.basePath = basePath;
@@ -668,13 +677,18 @@ var TAG_MAP = {
 import { getFileSystem as getFileSystem2 } from "@angular/compiler-cli/private/localize";
 var MAX_LEGACY_XLIFF_2_MESSAGE_LENGTH = 20;
 var Xliff2TranslationSerializer = class {
+  sourceLocale;
+  basePath;
+  useLegacyIds;
+  formatOptions;
+  fs;
+  currentPlaceholderId = 0;
   constructor(sourceLocale, basePath, useLegacyIds, formatOptions = {}, fs = getFileSystem2()) {
     this.sourceLocale = sourceLocale;
     this.basePath = basePath;
     this.useLegacyIds = useLegacyIds;
     this.formatOptions = formatOptions;
     this.fs = fs;
-    this.currentPlaceholderId = 0;
     validateOptions("Xliff1TranslationSerializer", [["xml:space", ["preserve"]]], formatOptions);
   }
   serialize(messages) {
@@ -810,6 +824,9 @@ function getTypeForPlaceholder(placeholder) {
 import { getFileSystem as getFileSystem3 } from "@angular/compiler-cli/private/localize";
 var XMB_HANDLER = "angular";
 var XmbTranslationSerializer = class {
+  basePath;
+  useLegacyIds;
+  fs;
   constructor(basePath, useLegacyIds, fs = getFileSystem3()) {
     this.basePath = basePath;
     this.useLegacyIds = useLegacyIds;
@@ -900,6 +917,6 @@ export {
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-URWRI34O.js.map
+//# sourceMappingURL=chunk-LXW6G5EF.js.map

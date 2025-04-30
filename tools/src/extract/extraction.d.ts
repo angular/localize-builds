@@ -3,10 +3,10 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 import { AbsoluteFsPath, Logger, ReadonlyFileSystem } from '@angular/compiler-cli/private/localize';
-import { ɵParsedMessage } from '@angular/localize';
+import { ɵParsedMessage } from '../../../index';
 export interface ExtractionOptions {
     basePath: AbsoluteFsPath;
     useSourceMaps?: boolean;

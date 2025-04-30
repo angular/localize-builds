@@ -12,14 +12,14 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-O2TTQMEC.js";
+} from "../../chunk-CTYX66SH.js";
 import {
   Diagnostics
-} from "../../chunk-GGL5GE7J.js";
+} from "../../chunk-P4CADDBI.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
-import glob from "fast-glob";
+import { globSync } from "tinyglobby";
 import yargs from "yargs";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/output_path.mjs
@@ -34,6 +34,7 @@ import { getFileSystem, relativeFrom } from "@angular/compiler-cli/private/local
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/asset_files/asset_translation_handler.mjs
 import { absoluteFrom } from "@angular/compiler-cli/private/localize";
 var AssetTranslationHandler = class {
+  fs;
   constructor(fs2) {
     this.fs = fs2;
   }
@@ -63,6 +64,9 @@ var AssetTranslationHandler = class {
 import { absoluteFrom as absoluteFrom2 } from "@angular/compiler-cli/private/localize";
 import babel from "@babel/core";
 var SourceFileTranslationHandler = class {
+  fs;
+  translationOptions;
+  sourceLocaleOptions;
   constructor(fs2, translationOptions = {}) {
     this.fs = fs2;
     this.translationOptions = translationOptions;
@@ -132,6 +136,10 @@ var SourceFileTranslationHandler = class {
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_loader.mjs
 var TranslationLoader = class {
+  fs;
+  translationParsers;
+  duplicateTranslation;
+  diagnostics;
   constructor(fs2, translationParsers, duplicateTranslation2, diagnostics2) {
     this.fs = fs2;
     this.translationParsers = translationParsers;
@@ -202,6 +210,9 @@ ${parser.constructor.name} cannot parse translation file.`));
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translator.mjs
 var Translator = class {
+  fs;
+  resourceHandlers;
+  diagnostics;
   constructor(fs2, resourceHandlers, diagnostics2) {
     this.fs = fs2;
     this.resourceHandlers = resourceHandlers;
@@ -287,7 +298,7 @@ var options = yargs(args).option("r", {
 var fs = new NodeJSFileSystem();
 setFileSystem(fs);
 var sourceRootPath = options.r;
-var sourceFilePaths = glob.sync(options.s, { cwd: sourceRootPath, onlyFiles: true });
+var sourceFilePaths = globSync(options.s, { cwd: sourceRootPath, onlyFiles: true });
 var translationFilePaths = convertArraysFromArgs(options.t);
 var outputPathFn = getOutputPathFn(fs, fs.resolve(options.o));
 var diagnostics = new Diagnostics();
@@ -316,6 +327,6 @@ function convertArraysFromArgs(args2) {
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 //# sourceMappingURL=cli.js.map
