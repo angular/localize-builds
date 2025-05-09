@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-12a5b7b
+ * @license Angular v20.1.0-next.0+sha-3c9b8d9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -330,7 +330,7 @@ declare function loadTranslations(translations: Record<MessageId, TargetMessage>
  */
 declare function clearTranslations(): void;
 
-/** @nodoc */
+/** @docs-private */
 interface LocalizeFn {
     (messageParts: TemplateStringsArray, ...expressions: readonly any[]): string;
     /**
@@ -361,7 +361,7 @@ interface LocalizeFn {
      */
     locale?: string;
 }
-/** @nodoc */
+/** @docs-private */
 interface TranslateFn {
     (messageParts: TemplateStringsArray, expressions: readonly any[]): [TemplateStringsArray, readonly any[]];
 }
