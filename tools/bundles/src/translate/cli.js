@@ -12,10 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-CTYX66SH.js";
+} from "../../chunk-KLH7RCUI.js";
 import {
   Diagnostics
-} from "../../chunk-P4CADDBI.js";
+} from "../../chunk-ESAMYFTS.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/cli.mjs
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -196,9 +196,8 @@ ${parser.constructor.name} cannot parse translation file.`));
         }
       }
       Object.keys(nextBundle.translations).forEach((messageId) => {
-        var _a;
         if (bundle.translations[messageId] !== void 0) {
-          (_a = this.diagnostics) == null ? void 0 : _a.add(this.duplicateTranslation, `Duplicate translations for message "${messageId}" when merging "${filePaths[i]}".`);
+          this.diagnostics?.add(this.duplicateTranslation, `Duplicate translations for message "${messageId}" when merging "${filePaths[i]}".`);
         } else {
           bundle.translations[messageId] = nextBundle.translations[messageId];
         }
