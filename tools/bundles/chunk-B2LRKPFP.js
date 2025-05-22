@@ -3,7 +3,7 @@
       const require = __cjsCompatRequire(import.meta.url);
     
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/diagnostics.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/diagnostics.js
 var Diagnostics = class {
   messages = [];
   get hasErrors() {
@@ -36,10 +36,10 @@ var Diagnostics = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.js
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/constants.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/constants.js
 var BLOCK_MARKER = ":";
 var MEANING_SEPARATOR = "|";
 var ID_SEPARATOR = "@@";
@@ -180,7 +180,7 @@ var Endian;
   Endian2[Endian2["Big"] = 1] = "Big";
 })(Endian || (Endian = {}));
 
-// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/messages.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/messages.js
 function parseMessage(messageParts, expressions, location, messagePartLocations, expressionLocations = []) {
   const substitutions = {};
   const substitutionLocations = {};
@@ -272,7 +272,7 @@ function findEndOfBlock(cooked, raw) {
   throw new Error(`Unterminated $localize metadata block in "${raw}".`);
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/translations.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/src/utils/src/translations.js
 var MissingTranslationError = class extends Error {
   parsedMessage;
   type = "MissingTranslationError";
@@ -343,7 +343,7 @@ function describeMessage(message) {
   return `"${message.id}"${legacy} ("${message.text}"${meaningString})`;
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/source_file_utils.js
 import { types as t } from "@babel/core";
 function isLocalize(expression, localizeName) {
   return isNamedIdentifier(expression, localizeName) && isGlobalIdentifier(expression);
@@ -622,4 +622,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-P4CADDBI.js.map
+//# sourceMappingURL=chunk-B2LRKPFP.js.map
