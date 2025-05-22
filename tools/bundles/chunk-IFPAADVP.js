@@ -15,7 +15,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-P4CADDBI.js";
+} from "./chunk-ESAMYFTS.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -166,7 +166,7 @@ var MessageExtractor = class {
     const originalEnd = sourceFile.getOriginalLocation(location.end.line, location.end.column);
     const start = { line: originalStart.line, column: originalStart.column };
     const end = originalEnd !== null && originalEnd.file === originalStart.file ? { line: originalEnd.line, column: originalEnd.column } : start;
-    const originalSourceFile = sourceFile.sources.find((sf) => (sf == null ? void 0 : sf.sourcePath) === originalStart.file);
+    const originalSourceFile = sourceFile.sources.find((sf) => sf?.sourcePath === originalStart.file);
     const startPos = originalSourceFile.startOfLinePositions[start.line] + start.column;
     const endPos = originalSourceFile.startOfLinePositions[end.line] + end.column;
     const text = originalSourceFile.contents.substring(startPos, endPos).trim();
@@ -571,14 +571,13 @@ var Xliff1TranslationSerializer = class {
     return xml.toString();
   }
   serializeMessage(xml, message) {
-    var _a;
     const length = message.messageParts.length - 1;
     for (let i = 0; i < length; i++) {
       this.serializeTextPart(xml, message.messageParts[i]);
       const name = message.placeholderNames[i];
-      const location = (_a = message.substitutionLocations) == null ? void 0 : _a[name];
+      const location = message.substitutionLocations?.[name];
       const associatedMessageId = message.associatedMessageIds && message.associatedMessageIds[name];
-      this.serializePlaceholder(xml, name, location == null ? void 0 : location.text, associatedMessageId);
+      this.serializePlaceholder(xml, name, location?.text, associatedMessageId);
     }
     this.serializeTextPart(xml, message.messageParts[length]);
   }
@@ -751,11 +750,10 @@ var Xliff2TranslationSerializer = class {
     xml.text(pieces[length]);
   }
   serializePlaceholder(xml, placeholderName, substitutionLocations, associatedMessageId) {
-    var _a, _b;
-    const text = (_a = substitutionLocations == null ? void 0 : substitutionLocations[placeholderName]) == null ? void 0 : _a.text;
+    const text = substitutionLocations?.[placeholderName]?.text;
     if (placeholderName.startsWith("START_")) {
       const closingPlaceholderName = placeholderName.replace(/^START/, "CLOSE").replace(/_\d+$/, "");
-      const closingText = (_b = substitutionLocations == null ? void 0 : substitutionLocations[closingPlaceholderName]) == null ? void 0 : _b.text;
+      const closingText = substitutionLocations?.[closingPlaceholderName]?.text;
       const attrs = {
         id: `${this.currentPlaceholderId++}`,
         equivStart: placeholderName,
@@ -919,4 +917,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-LXW6G5EF.js.map
+//# sourceMappingURL=chunk-IFPAADVP.js.map

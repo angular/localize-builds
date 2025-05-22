@@ -73,7 +73,7 @@ var _SerializerVisitor = class {
 };
 var serializerVisitor = new _SerializerVisitor();
 function fingerprint(str) {
-  textEncoder != null ? textEncoder : textEncoder = new TextEncoder();
+  textEncoder ??= new TextEncoder();
   const utf8 = textEncoder.encode(str);
   const view = new DataView(utf8.buffer, utf8.byteOffset, utf8.byteLength);
   let hi = hash32(view, utf8.length, 0);
@@ -581,14 +581,13 @@ function serializeLocationPosition(location) {
   return `${location.start.line + 1}${endLineString}`;
 }
 function getFileFromPath(fs, path) {
-  var _a, _b, _c;
-  const opts = (_a = (path == null ? void 0 : path.hub).file) == null ? void 0 : _a.opts;
-  const filename = opts == null ? void 0 : opts.filename;
+  const opts = (path?.hub).file?.opts;
+  const filename = opts?.filename;
   if (!filename || !opts.cwd) {
     return null;
   }
   const relativePath = fs.relative(opts.cwd, filename);
-  const root = (_c = (_b = opts.generatorOpts) == null ? void 0 : _b.sourceRoot) != null ? _c : opts.cwd;
+  const root = opts.generatorOpts?.sourceRoot ?? opts.cwd;
   const absPath = fs.resolve(root, relativePath);
   return absPath;
 }
@@ -622,4 +621,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-P4CADDBI.js.map
+//# sourceMappingURL=chunk-ESAMYFTS.js.map
