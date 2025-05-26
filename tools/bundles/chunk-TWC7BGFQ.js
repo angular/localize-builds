@@ -15,9 +15,9 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-ESAMYFTS.js";
+} from "./chunk-AWICHAV6.js";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.js
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
   const diagnostics = new Diagnostics();
   if (duplicateMessageHandling === "ignore")
@@ -51,11 +51,11 @@ function serializeMessage(fs, basePath, message) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.js
 import { SourceFileLoader } from "@angular/compiler-cli/private/localize";
 import { transformSync } from "@babel/core";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es2015_extract_plugin.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es2015_extract_plugin.js
 function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -74,7 +74,7 @@ function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
   };
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es5_extract_plugin.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es5_extract_plugin.js
 function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -101,7 +101,7 @@ function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
   };
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.js
 var MessageExtractor = class {
   fs;
   logger;
@@ -174,7 +174,7 @@ var MessageExtractor = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/utils.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/utils.js
 function consolidateMessages(messages, getMessageId2) {
   const messageGroups = /* @__PURE__ */ new Map();
   for (const message of messages) {
@@ -215,7 +215,7 @@ function compareLocations({ location: location1 }, { location: location2 }) {
   return 0;
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/arb_translation_serializer.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/arb_translation_serializer.js
 var ArbTranslationSerializer = class {
   sourceLocale;
   basePath;
@@ -279,7 +279,7 @@ function getMessageId(message) {
   return message.customId || message.id;
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/json_translation_serializer.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/json_translation_serializer.js
 var SimpleJsonTranslationSerializer = class {
   sourceLocale;
   constructor(sourceLocale) {
@@ -294,7 +294,7 @@ var SimpleJsonTranslationSerializer = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/legacy_message_id_migration_serializer.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/legacy_message_id_migration_serializer.js
 var LegacyMessageIdMigrationSerializer = class {
   _diagnostics;
   constructor(_diagnostics) {
@@ -324,7 +324,7 @@ function shouldMigrate(message) {
   return !message.customId && !!message.legacyIds && message.legacyIds.length > 0;
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/format_options.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/format_options.js
 function validateOptions(name, validOptions, options) {
   const validOptionsMap = new Map(validOptions);
   for (const option in options) {
@@ -344,10 +344,10 @@ function parseFormatOptions(optionString = "{}") {
   return JSON.parse(optionString);
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.js
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/icu_parsing.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/icu_parsing.js
 function extractIcuPlaceholders(text) {
   const state = new StateStack();
   const pieces = new IcuPieces();
@@ -440,7 +440,7 @@ function assert(test, message) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xml_file.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xml_file.js
 var XmlFile = class {
   output = '<?xml version="1.0" encoding="UTF-8" ?>\n';
   indent = "";
@@ -520,7 +520,7 @@ function escapeXml(text) {
   return _ESCAPED_CHARS.reduce((text2, entry) => text2.replace(entry[0], entry[1]), text);
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.js
 var LEGACY_XLIFF_MESSAGE_LENGTH = 40;
 var Xliff1TranslationSerializer = class {
   sourceLocale;
@@ -672,7 +672,7 @@ var TAG_MAP = {
   "UNORDERED_LIST": "ul"
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff2_translation_serializer.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff2_translation_serializer.js
 import { getFileSystem as getFileSystem2 } from "@angular/compiler-cli/private/localize";
 var MAX_LEGACY_XLIFF_2_MESSAGE_LENGTH = 20;
 var Xliff2TranslationSerializer = class {
@@ -818,7 +818,7 @@ function getTypeForPlaceholder(placeholder) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xmb_translation_serializer.mjs
+// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xmb_translation_serializer.js
 import { getFileSystem as getFileSystem3 } from "@angular/compiler-cli/private/localize";
 var XMB_HANDLER = "angular";
 var XmbTranslationSerializer = class {
@@ -917,4 +917,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-IFPAADVP.js.map
+//# sourceMappingURL=chunk-TWC7BGFQ.js.map
