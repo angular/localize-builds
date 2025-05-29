@@ -11,7 +11,7 @@ import {
   Xliff2TranslationSerializer,
   XmbTranslationSerializer,
   checkDuplicateMessages
-} from "./chunk-TWC7BGFQ.js";
+} from "./chunk-7UITC7I7.js";
 import {
   ArbTranslationParser,
   SimpleJsonTranslationParser,
@@ -21,7 +21,7 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "./chunk-LBO77K7G.js";
+} from "./chunk-7COYUM4Y.js";
 import {
   Diagnostics,
   buildLocalizeReplacement,
@@ -31,7 +31,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-AWICHAV6.js";
+} from "./chunk-ARKHNZ5Y.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/index.js
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";

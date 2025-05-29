@@ -13,8 +13,8 @@ import {
   XmbTranslationSerializer,
   checkDuplicateMessages,
   parseFormatOptions
-} from "../../chunk-TWC7BGFQ.js";
-import "../../chunk-AWICHAV6.js";
+} from "../../chunk-7UITC7I7.js";
+import "../../chunk-ARKHNZ5Y.js";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/cli.js
 import { ConsoleLogger, LogLevel, NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";

@@ -45,7 +45,7 @@ var MEANING_SEPARATOR = "|";
 var ID_SEPARATOR = "@@";
 var LEGACY_ID_INDICATOR = "\u241F";
 
-// bazel-out/k8-fastbuild/bin/packages/compiler/src/i18n/digest.mjs
+// bazel-out/k8-fastbuild/bin/packages/compiler/src/i18n/digest.js
 var textEncoder;
 var _SerializerVisitor = class {
   visitText(text, context) {
@@ -621,4 +621,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-AWICHAV6.js.map
+//# sourceMappingURL=chunk-ARKHNZ5Y.js.map
