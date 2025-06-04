@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-4178e82
+ * @license Angular v20.1.0-next.0+sha-b839d08
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -75,7 +75,7 @@ function fingerprint(str) {
     let lo = hash32(view, utf8.length, 102072);
     if (hi == 0 && (lo == 0 || lo == 1)) {
         hi = hi ^ 0x130f9bef;
-        lo = lo ^ -1801410264;
+        lo = lo ^ -0x6b5f56d8;
     }
     return (BigInt.asUintN(32, BigInt(hi)) << BigInt(32)) | BigInt.asUintN(32, BigInt(lo));
 }
@@ -493,4 +493,4 @@ function stripBlock(messagePart, rawMessagePart) {
 }
 
 export { $localize, BLOCK_MARKER$1 as BLOCK_MARKER, computeMsgId, findEndOfBlock, parseMessage, parseMetadata, splitBlock };
-//# sourceMappingURL=localize-CajB9YLv.mjs.map
+//# sourceMappingURL=localize-GIKF7LQz.mjs.map
