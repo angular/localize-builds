@@ -1,10 +1,10 @@
 /**
- * @license Angular v20.0.1+sha-49e273a
+ * @license Angular v20.0.1+sha-e98ef80
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { $localize } from './localize-CajB9YLv.mjs';
+import { $localize } from './localize-GIKF7LQz.mjs';
 
 // Attach $localize to the global context, as a side-effect of this module.
 globalThis.$localize = $localize;
