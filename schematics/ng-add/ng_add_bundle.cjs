@@ -90,7 +90,7 @@ function addTypeScriptConfigTypes(projectName) {
         if (typeof value === "string") {
           addTripleSlashType(host, value);
         }
-      } else if (target.builder === import_utility.AngularBuilder.Application) {
+      } else if (target.builder === import_utility.AngularBuilder.Application || target.builder === import_utility.AngularBuilder.BuildApplication) {
         const value = target.options?.["browser"];
         if (typeof value === "string") {
           addTripleSlashType(host, value);
@@ -126,7 +126,7 @@ function moveToDependencies(host) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  return (0, import_utility.addDependency)("@angular/localize", `~20.1.0-next.1+sha-be2747e`);
+  return (0, import_utility.addDependency)("@angular/localize", `~20.1.0-next.1+sha-2e3925a`);
 }
 function ng_add_default(options) {
   const projectName = options.project;
