@@ -190,7 +190,7 @@ var SimpleJsonTranslationParser = class {
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xliff1_translation_parser.js
-import { ParseErrorLevel as ParseErrorLevel3, visitAll as visitAll2 } from "@angular/compiler";
+import { ParseErrorLevel as ParseErrorLevel2, visitAll as visitAll2 } from "@angular/compiler";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/base_visitor.js
 var BaseVisitor = class {
@@ -219,39 +219,14 @@ var BaseVisitor = class {
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.js
-import { Element as Element2, visitAll } from "@angular/compiler";
-
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/translation_parse_error.js
-import { ParseErrorLevel } from "@angular/compiler";
-var TranslationParseError = class extends Error {
-  span;
-  msg;
-  level;
-  constructor(span, msg, level = ParseErrorLevel.ERROR) {
-    super(contextualMessage(span, msg, level));
-    this.span = span;
-    this.msg = msg;
-    this.level = level;
-  }
-};
-function contextualMessage(span, msg, level) {
-  const ctx = span.start.getContext(100, 2);
-  msg += `
-At ${span.start}${span.details ? `, ${span.details}` : ""}:
-`;
-  if (ctx) {
-    msg += `...${ctx.before}[${ParseErrorLevel[level]} ->]${ctx.after}...
-`;
-  }
-  return msg;
-}
+import { Element as Element2, ParseError as ParseError2, visitAll } from "@angular/compiler";
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/translation_utils.js
-import { Element, ParseError, ParseErrorLevel as ParseErrorLevel2, XmlParser } from "@angular/compiler";
+import { Element, ParseError, ParseErrorLevel, XmlParser } from "@angular/compiler";
 function getAttrOrThrow(element, attrName) {
   const attrValue = getAttribute(element, attrName);
   if (attrValue === void 0) {
-    throw new TranslationParseError(element.sourceSpan, `Missing required "${attrName}" attribute:`);
+    throw new ParseError(element.sourceSpan, `Missing required "${attrName}" attribute:`);
   }
   return attrValue;
 }
@@ -278,7 +253,7 @@ function canParseXml(filePath, contents, rootNodeName, attributes) {
   const diagnostics = new Diagnostics();
   const xmlParser = new XmlParser();
   const xml = xmlParser.parse(contents, filePath);
-  if (xml.rootNodes.length === 0 || xml.errors.some((error) => error.level === ParseErrorLevel2.ERROR)) {
+  if (xml.rootNodes.length === 0 || xml.errors.some((error) => error.level === ParseErrorLevel.ERROR)) {
     xml.errors.forEach((e) => addParseError(diagnostics, e));
     return { canParse: false, diagnostics };
   }
@@ -291,12 +266,12 @@ function canParseXml(filePath, contents, rootNodeName, attributes) {
   for (const attrKey of Object.keys(attributes)) {
     const attr = rootElement.attrs.find((attr2) => attr2.name === attrKey);
     if (attr === void 0 || attr.value !== attributes[attrKey]) {
-      addParseDiagnostic(diagnostics, rootElement.sourceSpan, `The <${rootNodeName}> node does not have the required attribute: ${attrKey}="${attributes[attrKey]}".`, ParseErrorLevel2.WARNING);
+      addParseDiagnostic(diagnostics, rootElement.sourceSpan, `The <${rootNodeName}> node does not have the required attribute: ${attrKey}="${attributes[attrKey]}".`, ParseErrorLevel.WARNING);
       return { canParse: false, diagnostics };
     }
   }
   if (rootElements.length > 1) {
-    xml.errors.push(new ParseError(xml.rootNodes[1].sourceSpan, "Unexpected root node. XLIFF 1.2 files should only have a single <xliff> root node.", ParseErrorLevel2.WARNING));
+    xml.errors.push(new ParseError(xml.rootNodes[1].sourceSpan, "Unexpected root node. XLIFF 1.2 files should only have a single <xliff> root node.", ParseErrorLevel.WARNING));
   }
   return { canParse: true, diagnostics, hint: { element: rootElement, errors: xml.errors } };
 }
@@ -310,7 +285,7 @@ function addParseDiagnostic(diagnostics, sourceSpan, message, level) {
   addParseError(diagnostics, new ParseError(sourceSpan, message, level));
 }
 function addParseError(diagnostics, parseError) {
-  if (parseError.level === ParseErrorLevel2.ERROR) {
+  if (parseError.level === ParseErrorLevel.ERROR) {
     diagnostics.error(parseError.toString());
   } else {
     diagnostics.warn(parseError.toString());
@@ -349,7 +324,7 @@ var MessageSerializer = class extends BaseVisitor {
     } else if (this.config.inlineElements.indexOf(element.name) !== -1) {
       visitAll(this, element.children);
     } else {
-      throw new TranslationParseError(element.sourceSpan, `Invalid element found in message.`);
+      throw new ParseError2(element.sourceSpan, `Invalid element found in message.`);
     }
   }
   visitText(text) {
@@ -465,14 +440,14 @@ var Xliff1TranslationParser = class {
     const diagnostics = new Diagnostics();
     errors.forEach((e) => addParseError(diagnostics, e));
     if (element.children.length === 0) {
-      addParseDiagnostic(diagnostics, element.sourceSpan, "Missing expected <file> element", ParseErrorLevel3.WARNING);
+      addParseDiagnostic(diagnostics, element.sourceSpan, "Missing expected <file> element", ParseErrorLevel2.WARNING);
       return { locale: void 0, translations: {}, diagnostics };
     }
     const files = element.children.filter(isNamedElement("file"));
     if (files.length === 0) {
-      addParseDiagnostic(diagnostics, element.sourceSpan, "No <file> elements found in <xliff>", ParseErrorLevel3.WARNING);
+      addParseDiagnostic(diagnostics, element.sourceSpan, "No <file> elements found in <xliff>", ParseErrorLevel2.WARNING);
     } else if (files.length > 1) {
-      addParseDiagnostic(diagnostics, files[1].sourceSpan, "More than one <file> element found in <xliff>", ParseErrorLevel3.WARNING);
+      addParseDiagnostic(diagnostics, files[1].sourceSpan, "More than one <file> element found in <xliff>", ParseErrorLevel2.WARNING);
     }
     const bundle = { locale: void 0, translations: {}, diagnostics };
     const translationVisitor = new XliffTranslationVisitor();
@@ -486,7 +461,7 @@ var Xliff1TranslationParser = class {
       visitAll2(translationVisitor, file.children, bundle);
     }
     if (localesFound.size > 1) {
-      addParseDiagnostic(diagnostics, element.sourceSpan, `More than one locale found in translation file: ${JSON.stringify(Array.from(localesFound))}. Using "${bundle.locale}"`, ParseErrorLevel3.WARNING);
+      addParseDiagnostic(diagnostics, element.sourceSpan, `More than one locale found in translation file: ${JSON.stringify(Array.from(localesFound))}. Using "${bundle.locale}"`, ParseErrorLevel2.WARNING);
     }
     return bundle;
   }
@@ -502,19 +477,19 @@ var XliffTranslationVisitor = class extends BaseVisitor {
   visitTransUnitElement(element, bundle) {
     const id = getAttribute(element, "id");
     if (id === void 0) {
-      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Missing required "id" attribute on <trans-unit> element.`, ParseErrorLevel3.ERROR);
+      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Missing required "id" attribute on <trans-unit> element.`, ParseErrorLevel2.ERROR);
       return;
     }
     if (bundle.translations[id] !== void 0) {
-      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Duplicated translations for message "${id}"`, ParseErrorLevel3.ERROR);
+      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Duplicated translations for message "${id}"`, ParseErrorLevel2.ERROR);
       return;
     }
     let targetMessage = element.children.find(isNamedElement("target"));
     if (targetMessage === void 0) {
-      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing <target> element", ParseErrorLevel3.WARNING);
+      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing <target> element", ParseErrorLevel2.WARNING);
       targetMessage = element.children.find(isNamedElement("source"));
       if (targetMessage === void 0) {
-        addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing required element: one of <target> or <source> is required", ParseErrorLevel3.ERROR);
+        addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing required element: one of <target> or <source> is required", ParseErrorLevel2.ERROR);
         return;
       }
     }
@@ -531,7 +506,7 @@ var XliffTranslationVisitor = class extends BaseVisitor {
 };
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xliff2_translation_parser.js
-import { Element as Element3, ParseErrorLevel as ParseErrorLevel4, visitAll as visitAll3 } from "@angular/compiler";
+import { Element as Element3, ParseErrorLevel as ParseErrorLevel3, visitAll as visitAll3 } from "@angular/compiler";
 var Xliff2TranslationParser = class {
   analyze(filePath, contents) {
     return canParseXml(filePath, contents, "xliff", { version: "2.0" });
@@ -545,9 +520,9 @@ var Xliff2TranslationParser = class {
     const locale = getAttribute(element, "trgLang");
     const files = element.children.filter(isFileElement);
     if (files.length === 0) {
-      addParseDiagnostic(diagnostics, element.sourceSpan, "No <file> elements found in <xliff>", ParseErrorLevel4.WARNING);
+      addParseDiagnostic(diagnostics, element.sourceSpan, "No <file> elements found in <xliff>", ParseErrorLevel3.WARNING);
     } else if (files.length > 1) {
-      addParseDiagnostic(diagnostics, files[1].sourceSpan, "More than one <file> element found in <xliff>", ParseErrorLevel4.WARNING);
+      addParseDiagnostic(diagnostics, files[1].sourceSpan, "More than one <file> element found in <xliff>", ParseErrorLevel3.WARNING);
     }
     const bundle = { locale, translations: {}, diagnostics };
     const translationVisitor = new Xliff2TranslationVisitor();
@@ -570,26 +545,26 @@ var Xliff2TranslationVisitor = class extends BaseVisitor {
   visitUnitElement(element, bundle) {
     const externalId = getAttribute(element, "id");
     if (externalId === void 0) {
-      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Missing required "id" attribute on <trans-unit> element.`, ParseErrorLevel4.ERROR);
+      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Missing required "id" attribute on <trans-unit> element.`, ParseErrorLevel3.ERROR);
       return;
     }
     if (bundle.translations[externalId] !== void 0) {
-      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Duplicated translations for message "${externalId}"`, ParseErrorLevel4.ERROR);
+      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Duplicated translations for message "${externalId}"`, ParseErrorLevel3.ERROR);
       return;
     }
     visitAll3(this, element.children, { bundle, unit: externalId });
   }
   visitSegmentElement(element, bundle, unit) {
     if (unit === void 0) {
-      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Invalid <segment> element: should be a child of a <unit> element.", ParseErrorLevel4.ERROR);
+      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Invalid <segment> element: should be a child of a <unit> element.", ParseErrorLevel3.ERROR);
       return;
     }
     let targetMessage = element.children.find(isNamedElement("target"));
     if (targetMessage === void 0) {
-      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing <target> element", ParseErrorLevel4.WARNING);
+      addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing <target> element", ParseErrorLevel3.WARNING);
       targetMessage = element.children.find(isNamedElement("source"));
       if (targetMessage === void 0) {
-        addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing required element: one of <target> or <source> is required", ParseErrorLevel4.ERROR);
+        addParseDiagnostic(bundle.diagnostics, element.sourceSpan, "Missing required element: one of <target> or <source> is required", ParseErrorLevel3.ERROR);
         return;
       }
     }
@@ -614,7 +589,7 @@ function isFileElement(node) {
 }
 
 // bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xtb_translation_parser.js
-import { ParseErrorLevel as ParseErrorLevel5, visitAll as visitAll4 } from "@angular/compiler";
+import { ParseErrorLevel as ParseErrorLevel4, visitAll as visitAll4 } from "@angular/compiler";
 import { extname as extname2 } from "path";
 var XtbTranslationParser = class {
   analyze(filePath, contents) {
@@ -648,11 +623,11 @@ var XtbVisitor = class extends BaseVisitor {
       case "translation":
         const id = getAttribute(element, "id");
         if (id === void 0) {
-          addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Missing required "id" attribute on <translation> element.`, ParseErrorLevel5.ERROR);
+          addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Missing required "id" attribute on <translation> element.`, ParseErrorLevel4.ERROR);
           return;
         }
         if (bundle.translations[id] !== void 0) {
-          addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Duplicated translations for message "${id}"`, ParseErrorLevel5.ERROR);
+          addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Duplicated translations for message "${id}"`, ParseErrorLevel4.ERROR);
           return;
         }
         const { translation, parseErrors, serializeErrors } = serializeTranslationMessage(element, {
@@ -667,7 +642,7 @@ var XtbVisitor = class extends BaseVisitor {
         addErrorsToBundle(bundle, serializeErrors);
         break;
       default:
-        addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Unexpected <${element.name}> tag.`, ParseErrorLevel5.ERROR);
+        addParseDiagnostic(bundle.diagnostics, element.sourceSpan, `Unexpected <${element.name}> tag.`, ParseErrorLevel4.ERROR);
     }
   }
 };
@@ -694,4 +669,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-7COYUM4Y.js.map
+//# sourceMappingURL=chunk-6WAVAPO6.js.map

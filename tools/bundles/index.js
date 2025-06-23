@@ -21,7 +21,7 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "./chunk-7COYUM4Y.js";
+} from "./chunk-6WAVAPO6.js";
 import {
   Diagnostics,
   buildLocalizeReplacement,
