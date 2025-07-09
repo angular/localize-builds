@@ -1,3 +1,4 @@
+"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -16,7 +17,7 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// bazel-out/k8-fastbuild/bin/packages/localize/schematics/ng-add/index.js
+// packages/localize/schematics/ng-add/index.ts
 var ng_add_exports = {};
 __export(ng_add_exports, {
   default: () => ng_add_default
@@ -105,9 +106,13 @@ function addTypeScriptConfigTypes(projectName) {
       const json = new import_json_file.JSONFile(host, path);
       const types = json.get(typesJsonPath) ?? [];
       if (!Array.isArray(types)) {
-        throw new import_schematics.SchematicsException(`TypeScript configuration file '${path}' has an invalid 'types' property. It must be an array.`);
+        throw new import_schematics.SchematicsException(
+          `TypeScript configuration file '${path}' has an invalid 'types' property. It must be an array.`
+        );
       }
-      const hasLocalizeType = types.some((t) => t === localizeType || t === "@angular/localize/init");
+      const hasLocalizeType = types.some(
+        (t) => t === localizeType || t === "@angular/localize/init"
+      );
       if (hasLocalizeType) {
         continue;
       }
@@ -126,7 +131,7 @@ function moveToDependencies(host) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  return (0, import_utility.addDependency)("@angular/localize", `~20.2.0-next.0+sha-1b895e1`);
+  return (0, import_utility.addDependency)("@angular/localize", `~20.2.0-next.0+sha-75a5d08`);
 }
 function ng_add_default(options) {
   const projectName = options.project;
@@ -136,11 +141,11 @@ function ng_add_default(options) {
   return (0, import_schematics.chain)([
     addTypeScriptConfigTypes(projectName),
     addPolyfillToConfig(projectName),
+    // If `$localize` will be used at runtime then must install `@angular/localize`
+    // into `dependencies`, rather than the default of `devDependencies`.
     options.useAtRuntime ? moveToDependencies : (0, import_schematics.noop)()
   ]);
 }
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {});
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
