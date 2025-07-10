@@ -4,15 +4,20 @@
       const require = __cjsCompatRequire(import.meta.url);
     
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/cli.js
-import { ConsoleLogger, LogLevel, NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
+// packages/localize/tools/src/migrate/cli.ts
+import {
+  ConsoleLogger,
+  LogLevel,
+  NodeJSFileSystem,
+  setFileSystem
+} from "@angular/compiler-cli/private/localize";
 import { globSync } from "tinyglobby";
 import yargs from "yargs";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/index.js
+// packages/localize/tools/src/migrate/index.js
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/migrate.js
+// packages/localize/tools/src/migrate/migrate.js
 function migrateFile(sourceCode, mapping) {
   const legacyIds = Object.keys(mapping);
   for (const legacyId of legacyIds) {
@@ -26,7 +31,7 @@ function escapeRegExp(str) {
   return str.replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1");
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/index.js
+// packages/localize/tools/src/migrate/index.js
 function migrateFiles({ rootPath: rootPath2, translationFilePaths: translationFilePaths2, mappingFilePath, logger: logger2 }) {
   const fs2 = getFileSystem();
   const absoluteMappingPath = fs2.resolve(rootPath2, mappingFilePath);
@@ -42,7 +47,7 @@ function migrateFiles({ rootPath: rootPath2, translationFilePaths: translationFi
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/migrate/cli.js
+// packages/localize/tools/src/migrate/cli.ts
 var args = process.argv.slice(2);
 var options = yargs(args).option("r", {
   alias: "root",
@@ -74,4 +79,3 @@ process.exit(0);
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=cli.js.map
