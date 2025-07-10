@@ -15,9 +15,9 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-ARKHNZ5Y.js";
+} from "./chunk-HR5KPXEW.js";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/duplicates.js
+// packages/localize/tools/src/extract/duplicates.js
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
   const diagnostics = new Diagnostics();
   if (duplicateMessageHandling === "ignore")
@@ -51,11 +51,11 @@ function serializeMessage(fs, basePath, message) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.js
+// packages/localize/tools/src/extract/extraction.js
 import { SourceFileLoader } from "@angular/compiler-cli/private/localize";
 import { transformSync } from "@babel/core";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es2015_extract_plugin.js
+// packages/localize/tools/src/extract/source_files/es2015_extract_plugin.js
 function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -74,7 +74,7 @@ function makeEs2015ExtractPlugin(fs, messages, localizeName = "$localize") {
   };
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/source_files/es5_extract_plugin.js
+// packages/localize/tools/src/extract/source_files/es5_extract_plugin.js
 function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
   return {
     visitor: {
@@ -101,7 +101,7 @@ function makeEs5ExtractPlugin(fs, messages, localizeName = "$localize") {
   };
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/extraction.js
+// packages/localize/tools/src/extract/extraction.js
 var MessageExtractor = class {
   fs;
   logger;
@@ -137,6 +137,10 @@ var MessageExtractor = class {
     }
     return messages;
   }
+  /**
+   * Update the location of each message to point to the source-mapped original source location, if
+   * available.
+   */
   updateSourceLocations(filename, contents, messages) {
     const sourceFile = this.loader.loadSourceFile(this.fs.resolve(this.basePath, filename), contents);
     if (sourceFile === null) {
@@ -158,6 +162,15 @@ var MessageExtractor = class {
       }
     }
   }
+  /**
+   * Find the original location using source-maps if available.
+   *
+   * @param sourceFile The generated `sourceFile` that contains the `location`.
+   * @param location The location within the generated `sourceFile` that needs mapping.
+   *
+   * @returns A new location that refers to the original source location mapped from the given
+   *     `location` in the generated `sourceFile`.
+   */
   getOriginalLocation(sourceFile, location) {
     const originalStart = sourceFile.getOriginalLocation(location.start.line, location.start.column);
     if (originalStart === null) {
@@ -174,7 +187,7 @@ var MessageExtractor = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/utils.js
+// packages/localize/tools/src/extract/translation_files/utils.js
 function consolidateMessages(messages, getMessageId2) {
   const messageGroups = /* @__PURE__ */ new Map();
   for (const message of messages) {
@@ -215,7 +228,7 @@ function compareLocations({ location: location1 }, { location: location2 }) {
   return 0;
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/arb_translation_serializer.js
+// packages/localize/tools/src/extract/translation_files/arb_translation_serializer.js
 var ArbTranslationSerializer = class {
   sourceLocale;
   basePath;
@@ -279,7 +292,7 @@ function getMessageId(message) {
   return message.customId || message.id;
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/json_translation_serializer.js
+// packages/localize/tools/src/extract/translation_files/json_translation_serializer.js
 var SimpleJsonTranslationSerializer = class {
   sourceLocale;
   constructor(sourceLocale) {
@@ -294,7 +307,7 @@ var SimpleJsonTranslationSerializer = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/legacy_message_id_migration_serializer.js
+// packages/localize/tools/src/extract/translation_files/legacy_message_id_migration_serializer.js
 var LegacyMessageIdMigrationSerializer = class {
   _diagnostics;
   constructor(_diagnostics) {
@@ -324,7 +337,7 @@ function shouldMigrate(message) {
   return !message.customId && !!message.legacyIds && message.legacyIds.length > 0;
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/format_options.js
+// packages/localize/tools/src/extract/translation_files/format_options.js
 function validateOptions(name, validOptions, options) {
   const validOptionsMap = new Map(validOptions);
   for (const option in options) {
@@ -344,10 +357,10 @@ function parseFormatOptions(optionString = "{}") {
   return JSON.parse(optionString);
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.js
+// packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.js
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/icu_parsing.js
+// packages/localize/tools/src/extract/translation_files/icu_parsing.js
 function extractIcuPlaceholders(text) {
   const state = new StateStack();
   const pieces = new IcuPieces();
@@ -381,19 +394,38 @@ function extractIcuPlaceholders(text) {
 }
 var IcuPieces = class {
   pieces = [""];
+  /**
+   * Add the given `text` to the current "static text" piece.
+   *
+   * Sequential calls to `addText()` will append to the current text piece.
+   */
   addText(text) {
     this.pieces[this.pieces.length - 1] += text;
   }
+  /**
+   * Add the given placeholder `name` to the stored pieces.
+   */
   addPlaceholder(name) {
     this.pieces.push(name);
     this.pieces.push("");
   }
+  /**
+   * Return the stored pieces as an array of strings.
+   *
+   * Even values are static strings (e.g. 0, 2, 4, etc)
+   * Odd values are placeholder names (e.g. 1, 3, 5, etc)
+   */
   toArray() {
     return this.pieces;
   }
 };
 var StateStack = class {
   stack = [];
+  /**
+   * Update the state upon entering a block.
+   *
+   * The new state is computed from the current state and added to the stack.
+   */
   enterBlock() {
     const current = this.getCurrent();
     switch (current) {
@@ -411,14 +443,28 @@ var StateStack = class {
         break;
     }
   }
+  /**
+   * Update the state upon leaving a block.
+   *
+   * The previous state is popped off the stack.
+   */
   leaveBlock() {
     return this.stack.pop();
   }
+  /**
+   * Update the state upon arriving at a nested ICU.
+   *
+   * In this case, the current state of "placeholder" is incorrect, so this is popped off and the
+   * correct "icu" state is stored.
+   */
   nestedIcu() {
     const current = this.stack.pop();
     assert(current === "placeholder", "A nested ICU must replace a placeholder but got " + current);
     this.stack.push("icu");
   }
+  /**
+   * Get the current (most recent) state from the stack.
+   */
   getCurrent() {
     return this.stack[this.stack.length - 1];
   }
@@ -440,7 +486,7 @@ function assert(test, message) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xml_file.js
+// packages/localize/tools/src/extract/translation_files/xml_file.js
 var XmlFile = class {
   output = '<?xml version="1.0" encoding="UTF-8" ?>\n';
   indent = "";
@@ -520,7 +566,7 @@ function escapeXml(text) {
   return _ESCAPED_CHARS.reduce((text2, entry) => text2.replace(entry[0], entry[1]), text);
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.js
+// packages/localize/tools/src/extract/translation_files/xliff1_translation_serializer.js
 var LEGACY_XLIFF_MESSAGE_LENGTH = 40;
 var Xliff1TranslationSerializer = class {
   sourceLocale;
@@ -621,6 +667,19 @@ var Xliff1TranslationSerializer = class {
     xml.text(value);
     xml.endTag("context", { preserveWhitespace: false });
   }
+  /**
+   * Get the id for the given `message`.
+   *
+   * If there was a custom id provided, use that.
+   *
+   * If we have requested legacy message ids, then try to return the appropriate id
+   * from the list of legacy ids that were extracted.
+   *
+   * Otherwise return the canonical message id.
+   *
+   * An Xliff 1.2 legacy message id is a hex encoded SHA-1 string, which is 40 characters long. See
+   * https://csrc.nist.gov/csrc/media/publications/fips/180/4/final/documents/fips180-4-draft-aug2014.pdf
+   */
   getMessageId(message) {
     return message.customId || this.useLegacyIds && message.legacyIds !== void 0 && message.legacyIds.find((id) => id.length === LEGACY_XLIFF_MESSAGE_LENGTH) || message.id;
   }
@@ -672,7 +731,7 @@ var TAG_MAP = {
   "UNORDERED_LIST": "ul"
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xliff2_translation_serializer.js
+// packages/localize/tools/src/extract/translation_files/xliff2_translation_serializer.js
 import { getFileSystem as getFileSystem2 } from "@angular/compiler-cli/private/localize";
 var MAX_LEGACY_XLIFF_2_MESSAGE_LENGTH = 20;
 var Xliff2TranslationSerializer = class {
@@ -795,6 +854,20 @@ var Xliff2TranslationSerializer = class {
     xml.text(value);
     xml.endTag("note", { preserveWhitespace: false });
   }
+  /**
+   * Get the id for the given `message`.
+   *
+   * If there was a custom id provided, use that.
+   *
+   * If we have requested legacy message ids, then try to return the appropriate id
+   * from the list of legacy ids that were extracted.
+   *
+   * Otherwise return the canonical message id.
+   *
+   * An Xliff 2.0 legacy message id is a 64 bit number encoded as a decimal string, which will have
+   * at most 20 digits, since 2^65-1 = 36,893,488,147,419,103,231. This digest is based on:
+   * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/GoogleJsMessageIdGenerator.java
+   */
   getMessageId(message) {
     return message.customId || this.useLegacyIds && message.legacyIds !== void 0 && message.legacyIds.find((id) => id.length <= MAX_LEGACY_XLIFF_2_MESSAGE_LENGTH && !/[^0-9]/.test(id)) || message.id;
   }
@@ -818,7 +891,7 @@ function getTypeForPlaceholder(placeholder) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/extract/translation_files/xmb_translation_serializer.js
+// packages/localize/tools/src/extract/translation_files/xmb_translation_serializer.js
 import { getFileSystem as getFileSystem3 } from "@angular/compiler-cli/private/localize";
 var XMB_HANDLER = "angular";
 var XmbTranslationSerializer = class {
@@ -894,6 +967,20 @@ var XmbTranslationSerializer = class {
     }
     xml.text(pieces[length]);
   }
+  /**
+   * Get the id for the given `message`.
+   *
+   * If there was a custom id provided, use that.
+   *
+   * If we have requested legacy message ids, then try to return the appropriate id
+   * from the list of legacy ids that were extracted.
+   *
+   * Otherwise return the canonical message id.
+   *
+   * An XMB legacy message id is a 64 bit number encoded as a decimal string, which will have
+   * at most 20 digits, since 2^65-1 = 36,893,488,147,419,103,231. This digest is based on:
+   * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/GoogleJsMessageIdGenerator.java
+   */
   getMessageId(message) {
     return message.customId || this.useLegacyIds && message.legacyIds !== void 0 && message.legacyIds.find((id) => id.length <= 20 && !/[^0-9]/.test(id)) || message.id;
   }
@@ -917,4 +1004,3 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-7UITC7I7.js.map

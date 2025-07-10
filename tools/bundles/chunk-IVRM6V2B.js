@@ -14,9 +14,9 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-ARKHNZ5Y.js";
+} from "./chunk-HR5KPXEW.js";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es2015_translate_plugin.js
+// packages/localize/tools/src/translate/source_files/es2015_translate_plugin.js
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
 function makeEs2015TranslatePlugin(diagnostics, translations, { missingTranslation = "error", localizeName = "$localize" } = {}, fs = getFileSystem()) {
   return {
@@ -41,7 +41,7 @@ function makeEs2015TranslatePlugin(diagnostics, translations, { missingTranslati
   };
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/es5_translate_plugin.js
+// packages/localize/tools/src/translate/source_files/es5_translate_plugin.js
 import { getFileSystem as getFileSystem2 } from "@angular/compiler-cli/private/localize";
 function makeEs5TranslatePlugin(diagnostics, translations, { missingTranslation = "error", localizeName = "$localize" } = {}, fs = getFileSystem2()) {
   return {
@@ -67,7 +67,7 @@ function makeEs5TranslatePlugin(diagnostics, translations, { missingTranslation 
   };
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/source_files/locale_plugin.js
+// packages/localize/tools/src/translate/source_files/locale_plugin.js
 import { types as t } from "@babel/core";
 function makeLocalePlugin(locale, { localizeName = "$localize" } = {}) {
   return {
@@ -107,7 +107,7 @@ function isLocalizeGuard(expression, localizeName) {
   return left.isUnaryExpression({ operator: "typeof" }) && isLocalize(left.get("argument"), localizeName) && right.isStringLiteral({ value: "undefined" }) || right.isUnaryExpression({ operator: "typeof" }) && isLocalize(right.get("argument"), localizeName) && left.isStringLiteral({ value: "undefined" });
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/arb_translation_parser.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/arb_translation_parser.js
 var ArbTranslationParser = class {
   analyze(_filePath, contents) {
     const diagnostics = new Diagnostics();
@@ -145,7 +145,7 @@ var ArbTranslationParser = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/simple_json_translation_parser.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/simple_json_translation_parser.js
 import { extname } from "path";
 var SimpleJsonTranslationParser = class {
   analyze(filePath, contents) {
@@ -189,10 +189,10 @@ var SimpleJsonTranslationParser = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xliff1_translation_parser.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/xliff1_translation_parser.js
 import { ParseErrorLevel as ParseErrorLevel2, visitAll as visitAll2 } from "@angular/compiler";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/base_visitor.js
+// packages/localize/tools/src/translate/translation_files/base_visitor.js
 var BaseVisitor = class {
   visitElement(_element, _context) {
   }
@@ -218,10 +218,10 @@ var BaseVisitor = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.js
+// packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.js
 import { Element as Element2, ParseError as ParseError2, visitAll } from "@angular/compiler";
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/translation_utils.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/translation_utils.js
 import { Element, ParseError, ParseErrorLevel, XmlParser } from "@angular/compiler";
 function getAttrOrThrow(element, attrName) {
   const attrValue = getAttribute(element, attrName);
@@ -297,7 +297,7 @@ function addErrorsToBundle(bundle, errors) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.js
+// packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.js
 var MessageSerializer = class extends BaseVisitor {
   renderer;
   config;
@@ -361,7 +361,7 @@ var MessageSerializer = class extends BaseVisitor {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/message_serialization/target_message_renderer.js
+// packages/localize/tools/src/translate/translation_files/message_serialization/target_message_renderer.js
 var TargetMessageRenderer = class {
   current = { messageParts: [], placeholderNames: [], text: "" };
   icuDepth = 0;
@@ -416,7 +416,7 @@ var TargetMessageRenderer = class {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/serialize_translation_message.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/serialize_translation_message.js
 function serializeTranslationMessage(element, config) {
   const { rootNodes, errors: parseErrors } = parseInnerRange(element);
   try {
@@ -428,7 +428,7 @@ function serializeTranslationMessage(element, config) {
   }
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xliff1_translation_parser.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/xliff1_translation_parser.js
 var Xliff1TranslationParser = class {
   analyze(filePath, contents) {
     return canParseXml(filePath, contents, "xliff", { version: "1.2" });
@@ -505,7 +505,7 @@ var XliffTranslationVisitor = class extends BaseVisitor {
   }
 };
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xliff2_translation_parser.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/xliff2_translation_parser.js
 import { Element as Element3, ParseErrorLevel as ParseErrorLevel3, visitAll as visitAll3 } from "@angular/compiler";
 var Xliff2TranslationParser = class {
   analyze(filePath, contents) {
@@ -588,7 +588,7 @@ function isFileElement(node) {
   return node instanceof Element3 && node.name === "file";
 }
 
-// bazel-out/k8-fastbuild/bin/packages/localize/tools/src/translate/translation_files/translation_parsers/xtb_translation_parser.js
+// packages/localize/tools/src/translate/translation_files/translation_parsers/xtb_translation_parser.js
 import { ParseErrorLevel as ParseErrorLevel4, visitAll as visitAll4 } from "@angular/compiler";
 import { extname as extname2 } from "path";
 var XtbTranslationParser = class {
@@ -669,4 +669,3 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-6WAVAPO6.js.map
