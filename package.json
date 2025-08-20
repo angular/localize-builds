@@ -1,6 +1,6 @@
 {
   "name": "@angular/localize",
-  "version": "20.2.0-rc.1+sha-d76a911",
+  "version": "20.2.0-rc.1+sha-9655ea7",
   "description": "Angular - library for localizing messages",
   "bin": {
     "localize-translate": "./tools/bundles/src/translate/cli.js",
@@ -67,8 +67,8 @@
     "yargs": "^18.0.0"
   },
   "peerDependencies": {
-    "@angular/compiler": "20.2.0-rc.1+sha-d76a911",
-    "@angular/compiler-cli": "20.2.0-rc.1+sha-d76a911"
+    "@angular/compiler": "20.2.0-rc.1+sha-9655ea7",
+    "@angular/compiler-cli": "20.2.0-rc.1+sha-9655ea7"
   },
   "module": "./fesm2022/localize.mjs",
   "typings": "./index.d.ts",
