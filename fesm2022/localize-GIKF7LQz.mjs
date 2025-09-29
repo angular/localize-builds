@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.5+sha-377d1a0
+ * @license Angular v21.0.0-next.5+sha-fc643c9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -493,4 +493,4 @@ function stripBlock(messagePart, rawMessagePart) {
 }
 
 export { $localize, BLOCK_MARKER$1 as BLOCK_MARKER, computeMsgId, findEndOfBlock, parseMessage, parseMetadata, splitBlock };
-//# sourceMappingURL=localize2.mjs.map
+//# sourceMappingURL=localize-GIKF7LQz.mjs.map
