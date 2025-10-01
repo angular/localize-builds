@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.0.0-next.5+sha-51a0b59
+ * @license Angular v21.0.0-next.5+sha-2f6caef
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { parseMessage, BLOCK_MARKER } from './localize-GIKF7LQz.mjs';
-export { $localize as ɵ$localize, computeMsgId as ɵcomputeMsgId, findEndOfBlock as ɵfindEndOfBlock, parseMetadata as ɵparseMetadata, splitBlock as ɵsplitBlock } from './localize-GIKF7LQz.mjs';
+import { parseMessage, BLOCK_MARKER } from './_localize-chunk.mjs';
+export { $localize as ɵ$localize, computeMsgId as ɵcomputeMsgId, findEndOfBlock as ɵfindEndOfBlock, parseMetadata as ɵparseMetadata, splitBlock as ɵsplitBlock } from './_localize-chunk.mjs';
 
 class MissingTranslationError extends Error {
     parsedMessage;
