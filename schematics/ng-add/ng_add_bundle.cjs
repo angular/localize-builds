@@ -79,12 +79,23 @@ function addTypeScriptConfigTypes(projectName) {
         case import_utility.AngularBuilder.BrowserEsbuild:
         case import_utility.AngularBuilder.Browser:
         case import_utility.AngularBuilder.Application:
-        case import_utility.AngularBuilder.BuildApplication:
+        case import_utility.AngularBuilder.BuildKarma:
+        case import_utility.AngularBuilder.BuildApplication: {
           const value = target.options?.["tsConfig"];
           if (typeof value === "string") {
             tsConfigFiles.add(value);
           }
           break;
+        }
+        case import_utility.AngularBuilder.BuildUnitTest: {
+          const value = target.options?.["tsConfig"];
+          if (typeof value === "string") {
+            tsConfigFiles.add(value);
+          } else {
+            tsConfigFiles.add((project.root || ".") + "/tsconfig.spec.json");
+          }
+          break;
+        }
       }
       if (target.builder === import_utility.AngularBuilder.Browser || target.builder === import_utility.AngularBuilder.BrowserEsbuild) {
         const value = target.options?.["main"];
@@ -131,7 +142,7 @@ function moveToDependencies(host) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  return (0, import_utility.addDependency)("@angular/localize", `~21.2.0-next.1+sha-0e04233`);
+  return (0, import_utility.addDependency)("@angular/localize", `~21.2.0-next.1+sha-6990f88`);
 }
 function ng_add_default(options) {
   const projectName = options.project;
