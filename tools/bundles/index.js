@@ -11,7 +11,7 @@ import {
   Xliff2TranslationSerializer,
   XmbTranslationSerializer,
   checkDuplicateMessages
-} from "./chunk-TZHZOBVD.js";
+} from "./chunk-VVP7L7WP.js";
 import {
   ArbTranslationParser,
   SimpleJsonTranslationParser,
@@ -21,7 +21,7 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "./chunk-IVRM6V2B.js";
+} from "./chunk-7PXQZPIU.js";
 import {
   Diagnostics,
   buildLocalizeReplacement,
@@ -31,7 +31,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-HR5KPXEW.js";
+} from "./chunk-BNVRZOYA.js";
 
 // packages/localize/tools/index.ts
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -69,3 +69,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
+//# sourceMappingURL=index.js.map

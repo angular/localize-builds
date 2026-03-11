@@ -13,8 +13,8 @@ import {
   XmbTranslationSerializer,
   checkDuplicateMessages,
   parseFormatOptions
-} from "../../chunk-TZHZOBVD.js";
-import "../../chunk-HR5KPXEW.js";
+} from "../../chunk-VVP7L7WP.js";
+import "../../chunk-BNVRZOYA.js";
 
 // packages/localize/tools/src/extract/cli.ts
 import {
@@ -160,3 +160,4 @@ extractTranslations({
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
+//# sourceMappingURL=cli.js.map

@@ -12,10 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-IVRM6V2B.js";
+} from "../../chunk-7PXQZPIU.js";
 import {
   Diagnostics
-} from "../../chunk-HR5KPXEW.js";
+} from "../../chunk-BNVRZOYA.js";
 
 // packages/localize/tools/src/translate/cli.ts
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -359,3 +359,4 @@ function convertArraysFromArgs(args2) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
+//# sourceMappingURL=cli.js.map
