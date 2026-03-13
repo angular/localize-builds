@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.3+sha-412788f
+ * @license Angular v22.0.0-next.3+sha-e127927
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -18,7 +18,7 @@ function fingerprint(str) {
   let lo = hash32(view, utf8.length, 102072);
   if (hi == 0 && (lo == 0 || lo == 1)) {
     hi = hi ^ 0x130f9bef;
-    lo = lo ^ -0x6b5f56d8;
+    lo = lo ^ -1801410264;
   }
   return BigInt.asUintN(32, BigInt(hi)) << BigInt(32) | BigInt.asUintN(32, BigInt(lo));
 }
