@@ -25,7 +25,18 @@ import yargs from "yargs";
 // packages/localize/tools/src/translate/output_path.js
 function getOutputPathFn(fs2, outputFolder) {
   const [pre, post] = outputFolder.split("{{LOCALE}}");
-  return post === void 0 ? (_locale, relativePath) => fs2.join(pre, relativePath) : (locale, relativePath) => fs2.join(pre + locale + post, relativePath);
+  return post === void 0 ? (_locale, relativePath) => fs2.join(pre, relativePath) : (locale, relativePath) => {
+    if (/[\/\\]|\.\./.test(locale)) {
+      throw new Error(`Invalid Locale: '${locale}' is not a valid locale.`);
+    }
+    const outputPath = fs2.join(pre + locale + post, relativePath);
+    const resolvedOutputPath = fs2.resolve(outputPath);
+    const resolvedPre = fs2.resolve(pre);
+    if (!resolvedOutputPath.startsWith(resolvedPre)) {
+      throw new Error(`Invalid Locale: '${locale}' would cause path traversal.`);
+    }
+    return outputPath;
+  };
 }
 
 // packages/localize/tools/src/translate/index.js
