@@ -142,7 +142,7 @@ function moveToDependencies(host) {
     return;
   }
   (0, import_dependencies.removePackageJsonDependency)(host, "@angular/localize");
-  return (0, import_utility.addDependency)("@angular/localize", `~21.2.14+sha-582a417`);
+  return (0, import_utility.addDependency)("@angular/localize", `~21.2.14+sha-8538bdc`);
 }
 function ng_add_default(options) {
   const projectName = options.project;
