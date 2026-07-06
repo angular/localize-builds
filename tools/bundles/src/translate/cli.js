@@ -12,10 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-7PXQZPIU.js";
+} from "../../chunk-NWNYYWCO.js";
 import {
   Diagnostics
-} from "../../chunk-BNVRZOYA.js";
+} from "../../chunk-JDMV2576.js";
 
 // packages/localize/tools/src/translate/cli.ts
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
@@ -73,7 +73,7 @@ var AssetTranslationHandler = class {
 
 // packages/localize/tools/src/translate/source_files/source_file_translation_handler.js
 import { absoluteFrom as absoluteFrom2 } from "@angular/compiler-cli/private/localize";
-import babel from "@babel/core";
+import { parseSync, transformFromAstSync } from "@babel/core";
 var SourceFileTranslationHandler = class {
   fs;
   translationOptions;
@@ -99,7 +99,7 @@ var SourceFileTranslationHandler = class {
         this.writeSourceFile(diagnostics2, outputPathFn2, sourceLocale2, relativeFilePath, contents);
       }
     } else {
-      const ast = babel.parseSync(sourceCode, { sourceRoot, filename: relativeFilePath });
+      const ast = parseSync(sourceCode, { sourceRoot, filename: relativeFilePath });
       if (!ast) {
         diagnostics2.error(`Unable to parse source file: ${this.fs.join(sourceRoot, relativeFilePath)}`);
         return;
@@ -113,13 +113,13 @@ var SourceFileTranslationHandler = class {
     }
   }
   translateFile(diagnostics2, ast, translationBundle, sourceRoot, filename, outputPathFn2, options2) {
-    const translated = babel.transformFromAstSync(ast, void 0, {
+    const translated = transformFromAstSync(ast, "", {
       compact: true,
       generatorOpts: { minified: true },
       plugins: [
-        makeLocalePlugin(translationBundle.locale),
-        makeEs2015TranslatePlugin(diagnostics2, translationBundle.translations, options2, this.fs),
-        makeEs5TranslatePlugin(diagnostics2, translationBundle.translations, options2, this.fs)
+        () => makeLocalePlugin(translationBundle.locale),
+        () => makeEs2015TranslatePlugin(diagnostics2, translationBundle.translations, options2, this.fs),
+        () => makeEs5TranslatePlugin(diagnostics2, translationBundle.translations, options2, this.fs)
       ],
       cwd: sourceRoot,
       filename

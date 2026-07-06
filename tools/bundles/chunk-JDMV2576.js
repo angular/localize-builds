@@ -38,6 +38,7 @@ var Diagnostics = class {
 
 // packages/localize/tools/src/source_file_utils.js
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
+import { types as t } from "@babel/core";
 
 // packages/localize/src/utils/src/constants.js
 var BLOCK_MARKER = ":";
@@ -344,7 +345,6 @@ function describeMessage(message) {
 }
 
 // packages/localize/tools/src/source_file_utils.js
-import { types as t } from "@babel/core";
 function isLocalize(expression, localizeName) {
   return isNamedIdentifier(expression, localizeName) && isGlobalIdentifier(expression);
 }
@@ -375,9 +375,6 @@ function unwrapMessagePartsFromLocalizeCall(call, fs = getFileSystem()) {
     const right = cooked.get("right");
     if (right.isAssignmentExpression()) {
       cooked = right.get("right");
-      if (!cooked.isExpression()) {
-        throw new BabelParseError(cooked.node, 'Unexpected "makeTemplateObject()" function (expected an expression).');
-      }
     } else if (right.isSequenceExpression()) {
       const expressions = right.get("expressions");
       if (expressions.length > 2) {
@@ -559,7 +556,7 @@ function buildCodeFrameError(fs, path, file, e) {
   } else {
     filename = "(unknown file)";
   }
-  const { message } = file.hub.buildError(e.node, e.message);
+  const { message } = file.hub.buildError(e.node, e.message, Error);
   return `${filename}: ${message}`;
 }
 function getLocation(fs, startPath, endPath) {
@@ -621,4 +618,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-BNVRZOYA.js.map
+//# sourceMappingURL=chunk-JDMV2576.js.map
