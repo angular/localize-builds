@@ -14,7 +14,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-BNVRZOYA.js";
+} from "./chunk-PW3KGLCH.js";
 
 // packages/localize/tools/src/translate/source_files/es2015_translate_plugin.js
 import { getFileSystem } from "@angular/compiler-cli/private/localize";
@@ -669,4 +669,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-7PXQZPIU.js.map
+//# sourceMappingURL=chunk-DGZQ3C7F.js.map

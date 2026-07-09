@@ -12,10 +12,10 @@ import {
   makeEs2015TranslatePlugin,
   makeEs5TranslatePlugin,
   makeLocalePlugin
-} from "../../chunk-7PXQZPIU.js";
+} from "../../chunk-DGZQ3C7F.js";
 import {
   Diagnostics
-} from "../../chunk-BNVRZOYA.js";
+} from "../../chunk-PW3KGLCH.js";
 
 // packages/localize/tools/src/translate/cli.ts
 import { NodeJSFileSystem, setFileSystem } from "@angular/compiler-cli/private/localize";
