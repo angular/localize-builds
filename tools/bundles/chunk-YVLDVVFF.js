@@ -15,7 +15,7 @@ import {
   unwrapMessagePartsFromLocalizeCall,
   unwrapMessagePartsFromTemplateLiteral,
   unwrapSubstitutionsFromLocalizeCall
-} from "./chunk-JDMV2576.js";
+} from "./chunk-IFAGRJJI.js";
 
 // packages/localize/tools/src/extract/duplicates.js
 function checkDuplicateMessages(fs, messages, duplicateMessageHandling, basePath) {
@@ -1004,4 +1004,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-EDFXX4B6.js.map
+//# sourceMappingURL=chunk-YVLDVVFF.js.map

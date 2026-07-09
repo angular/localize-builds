@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.0-next.5+sha-454af71
+ * @license Angular v22.1.0-next.5+sha-2a4f582
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -30,7 +30,7 @@ function translate$1(translations, messageParts, substitutions) {
     throw new MissingTranslationError(message);
   }
   return [translation.messageParts, translation.placeholderNames.map(placeholder => {
-    if (message.substitutions.hasOwnProperty(placeholder)) {
+    if (Object.hasOwn(message.substitutions, placeholder)) {
       return message.substitutions[placeholder];
     } else {
       throw new Error(`There is a placeholder name mismatch with the translation provided for the message ${describeMessage(message)}.\n` + `The translation contains a placeholder with name ${placeholder}, which does not exist in the message.`);

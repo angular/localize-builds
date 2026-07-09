@@ -299,7 +299,7 @@ function translate(translations, messageParts, substitutions) {
   return [
     translation.messageParts,
     translation.placeholderNames.map((placeholder) => {
-      if (message.substitutions.hasOwnProperty(placeholder)) {
+      if (Object.hasOwn(message.substitutions, placeholder)) {
         return message.substitutions[placeholder];
       } else {
         throw new Error(`There is a placeholder name mismatch with the translation provided for the message ${describeMessage(message)}.
@@ -618,4 +618,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-JDMV2576.js.map
+//# sourceMappingURL=chunk-IFAGRJJI.js.map
