@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.6+sha-89e2c77
+ * @license Angular v22.0.6+sha-aa03cb9
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -80,7 +80,7 @@ function loadTranslations(translations) {
     $localize.translate = translate;
   }
   if (!$localize.TRANSLATIONS) {
-    $localize.TRANSLATIONS = {};
+    $localize.TRANSLATIONS = Object.create(null);
   }
   Object.keys(translations).forEach(key => {
     $localize.TRANSLATIONS[key] = parseTranslation(translations[key]);
@@ -88,7 +88,7 @@ function loadTranslations(translations) {
 }
 function clearTranslations() {
   $localize.translate = undefined;
-  $localize.TRANSLATIONS = {};
+  $localize.TRANSLATIONS = Object.create(null);
 }
 function translate(messageParts, substitutions) {
   try {
