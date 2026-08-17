@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.2+sha-5cb4ea7
+ * @license Angular v22.1.2+sha-b3c78a5
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -16,7 +16,7 @@ class MissingTranslationError extends Error {
   }
 }
 function isMissingTranslationError(e) {
-  return e.type === 'MissingTranslationError';
+  return typeof e === 'object' && e !== null && e.type === 'MissingTranslationError';
 }
 function translate$1(translations, messageParts, substitutions) {
   const message = parseMessage(messageParts, substitutions);

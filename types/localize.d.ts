@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.2+sha-5cb4ea7
+ * @license Angular v22.1.2+sha-b3c78a5
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -128,7 +128,7 @@ interface ParsedMessage extends MessageMetadata {
     /**
      * A mapping of placeholder names to substitution values.
      */
-    substitutions: Record<string, any>;
+    substitutions: Record<string, unknown>;
     /**
      * An optional mapping of placeholder names to associated MessageIds.
      * This can be used to match ICU placeholders to the message that contains the ICU.
@@ -157,7 +157,7 @@ interface ParsedMessage extends MessageMetadata {
  *
  * See `ParsedMessage` for an example.
  */
-declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly any[], location?: SourceLocation, messagePartLocations?: (SourceLocation | undefined)[], expressionLocations?: (SourceLocation | undefined)[]): ParsedMessage;
+declare function parseMessage(messageParts: TemplateStringsArray, expressions?: readonly unknown[], location?: SourceLocation, messagePartLocations?: (SourceLocation | undefined)[], expressionLocations?: (SourceLocation | undefined)[]): ParsedMessage;
 /**
  * Parse the given message part (`cooked` + `raw`) to extract the message metadata from the text.
  *
@@ -233,10 +233,10 @@ interface ParsedTranslation extends MessageMetadata {
 type ParsedTranslations = Record<MessageId, ParsedTranslation>;
 declare class MissingTranslationError extends Error {
     readonly parsedMessage: ParsedMessage;
-    private readonly type;
+    readonly type = "MissingTranslationError";
     constructor(parsedMessage: ParsedMessage);
 }
-declare function isMissingTranslationError(e: any): e is MissingTranslationError;
+declare function isMissingTranslationError(e: unknown): e is MissingTranslationError;
 /**
  * Translate the text of the `$localize` tagged-string (i.e. `messageParts` and
  * `substitutions`) using the given `translations`.
@@ -253,7 +253,7 @@ declare function isMissingTranslationError(e: any): e is MissingTranslationError
  * If a translation contains a placeholder that is not found in the message being translated then an
  * error is thrown.
  */
-declare function translate(translations: Record<string, ParsedTranslation>, messageParts: TemplateStringsArray, substitutions: readonly any[]): [TemplateStringsArray, readonly any[]];
+declare function translate(translations: Record<string, ParsedTranslation>, messageParts: TemplateStringsArray, substitutions: readonly unknown[]): [TemplateStringsArray, readonly unknown[]];
 /**
  * Parse the `messageParts` and `placeholderNames` out of a target `message`.
  *
