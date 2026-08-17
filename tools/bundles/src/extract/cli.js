@@ -13,8 +13,8 @@ import {
   XmbTranslationSerializer,
   checkDuplicateMessages,
   parseFormatOptions
-} from "../../chunk-YVLDVVFF.js";
-import "../../chunk-IFAGRJJI.js";
+} from "../../chunk-MUJHDTHE.js";
+import "../../chunk-ZEJXFODC.js";
 
 // packages/localize/tools/src/extract/cli.ts
 import {

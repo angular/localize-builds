@@ -283,7 +283,7 @@ var MissingTranslationError = class extends Error {
   }
 };
 function isMissingTranslationError(e) {
-  return e.type === "MissingTranslationError";
+  return typeof e === "object" && e !== null && e.type === "MissingTranslationError";
 }
 function translate(translations, messageParts, substitutions) {
   const message = parseMessage(messageParts, substitutions);
@@ -618,4 +618,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-IFAGRJJI.js.map
+//# sourceMappingURL=chunk-ZEJXFODC.js.map
