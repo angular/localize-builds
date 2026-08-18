@@ -318,7 +318,7 @@ var LegacyMessageIdMigrationSerializer = class {
     const mapping = messages.reduce((output, message) => {
       if (shouldMigrate(message)) {
         for (const legacyId of message.legacyIds) {
-          if (output.hasOwnProperty(legacyId)) {
+          if (Object.hasOwn(output, legacyId)) {
             this._diagnostics.warn(`Detected duplicate legacy ID ${legacyId}.`);
           }
           output[legacyId] = message.id;
@@ -1004,4 +1004,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-MUJHDTHE.js.map
+//# sourceMappingURL=chunk-IRKVQEM7.js.map
