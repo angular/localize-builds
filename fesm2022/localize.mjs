@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.1+sha-0474258
+ * @license Angular v22.2.1+sha-725ffcf
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -38,6 +38,7 @@ function translate$1(translations, messageParts, substitutions) {
   })];
 }
 function parseTranslation(messageString) {
+  messageString = messageString.replace(/\uFFFD/g, '');
   const parts = messageString.split(/{\$([^}]*)}/);
   const messageParts = [parts[0]];
   const placeholderNames = [];
@@ -53,6 +54,7 @@ function parseTranslation(messageString) {
   };
 }
 function makeParsedTranslation(messageParts, placeholderNames = []) {
+  messageParts = messageParts.map(part => part.replace(/\uFFFD/g, ''));
   let messageString = messageParts[0];
   for (let i = 0; i < placeholderNames.length; i++) {
     messageString += `{$${placeholderNames[i]}}${messageParts[i + 1]}`;

@@ -309,6 +309,7 @@ The translation contains a placeholder with name ${placeholder}, which does not 
   ];
 }
 function parseTranslation(messageString) {
+  messageString = messageString.replace(/\uFFFD/g, "");
   const parts = messageString.split(/{\$([^}]*)}/);
   const messageParts = [parts[0]];
   const placeholderNames = [];
@@ -324,6 +325,7 @@ function parseTranslation(messageString) {
   };
 }
 function makeParsedTranslation(messageParts, placeholderNames = []) {
+  messageParts = messageParts.map((part) => part.replace(/\uFFFD/g, ""));
   let messageString = messageParts[0];
   for (let i = 0; i < placeholderNames.length; i++) {
     messageString += `{$${placeholderNames[i]}}${messageParts[i + 1]}`;
@@ -618,4 +620,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-ZEJXFODC.js.map
+//# sourceMappingURL=chunk-IV3OFVAV.js.map
