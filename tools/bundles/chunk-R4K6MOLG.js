@@ -212,10 +212,6 @@ var BaseVisitor = class {
   }
   visitLetDeclaration(_decl, _context) {
   }
-  visitComponent(_component, _context) {
-  }
-  visitDirective(_directive, _context) {
-  }
 };
 
 // packages/localize/tools/src/translate/translation_files/message_serialization/message_serializer.js
@@ -669,4 +665,4 @@ export {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-//# sourceMappingURL=chunk-WCT7ACRI.js.map
+//# sourceMappingURL=chunk-R4K6MOLG.js.map
